@@ -9,14 +9,21 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    beforeEnter(to, from, next) {
+      if (localStorage.getItem('token')) {
+        next(); // to valid authenticated user
+      } else {
+        next({ path: '/login' });
+      }
+    },
   },
   {
-    path: '/about',
-    name: 'About',
+    path: '/login',
+    name: 'Login',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
 ];
 
