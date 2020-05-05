@@ -8,11 +8,30 @@
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 
-// Set your colors
-$primary: #8c67ef;
+$white: #FFFFFF;// White - #FFFFFF
+$black: #2D2926; // Black - #2D2926
+$primary: #1CABE2; // UNICEF Blue - #1CABE2
 $primary-invert: findColorInvert($primary);
+$danger: #E2231A; // Red - #E2231A
+$danger-inverter: findColorInvert($danger);
+$warning: #FFC20E; // Yellow - #FFC20E
+$warning-inverter: findColorInvert($warning);
+$light: #F5F6FA; // Light Grey - #F5F6FA
+$light-inverter: findColorInvert($light);
 $twitter: #4099FF;
-$twitter-invert: findColorInvert($twitter);
+$twitter-inverter: findColorInvert($twitter);
+$success: #00833D; // Dark Green - #00833D
+$success-inverter: findColorInvert($success);
+$info: $primary;
+$info-inverter: findColorInvert($info);
+// Light Green - #80BD41
+// Orange - #F26A21
+// Magenta - #961A49
+// Violet - #6A1E74
+// Warm Grey - #D8D1C9
+// Cool Grey - #777779
+// Dark Blue - #374EA2
+
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -25,7 +44,7 @@ $colors: (
   "success": ($success, $success-invert),
   "warning": ($warning, $warning-invert),
   "danger": ($danger, $danger-invert),
-  "twitter": ($twitter, $twitter-invert)
+  "twitter": ($twitter, $twitter-inverter)
 );
 
 // Links

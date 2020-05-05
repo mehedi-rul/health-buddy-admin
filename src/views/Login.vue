@@ -10,6 +10,11 @@
                        placeholder="Enter a username or email"
                        maxlength="30"></b-input>
             </b-field>
+            <b-field label="Error"
+                     type="is-info"
+                     message="You can have a message too">
+              <b-input placeholder="Error"></b-input>
+            </b-field>
 
             <b-field label="Password">
               <b-input type="password"
