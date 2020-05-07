@@ -1,7 +1,7 @@
 <template>
-  <section class="login container section">
+  <section class="login">
     <div class="container">
-      <div class="columns">
+      <div class="columns section">
         <div class="column is-half login__form">
           <div class="box">
             <h3 class="subtitle">Login to Admin Management</h3>
@@ -40,29 +40,46 @@ export default {
     return {
       username: undefined,
       password: undefined,
+      htmlHeightLast: undefined,
     };
+  },
+  methods: {
+    updateViewStyle(mounted) {
+      const { body } = document;
+      const html = body.parentNode;
+
+      if (mounted) {
+        body.classList.add('login');
+        this.htmlHeightLast = html.style.height;
+        html.style.height = '100%';
+      } else {
+        body.classList.remove('login');
+        html.style.height = this.htmlHeightLast;
+      }
+    },
+  },
+  mounted() {
+    this.updateViewStyle(true);
+  },
+  destroyed() {
+    this.updateViewStyle(false);
   },
 };
 </script>
 
-<style lang="scss">
-html, body, #app {
+<style lang="scss" scoped="true">
+
+.login {
   height: 100%;
-  width: 100%;
-}
-body {
   background: url('../assets/imgs/login-background.png') no-repeat;
   background-size: cover;
-}
-#app {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.login {
-  /*flex: 1;*/
-  width: 100%;
-  max-width: 650px;
+  > .container {
+    width: 100%;
+    max-width: 650px;
+  }
 
   .box {
     box-shadow: 0px 10px 17px -5px rgba(0,0,0,0.75);

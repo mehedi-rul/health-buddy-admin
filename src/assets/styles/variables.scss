@@ -1,0 +1,18 @@
+$white: #FFFFFF;// White - #FFFFFF
+$black: #2D2926; // Black - #2D2926
+$primary: #1CABE2; // UNICEF Blue - #1CABE2
+$primary-invert: findColorInvert($primary);
+$danger: #E2231A; // Red - #E2231A
+$danger-inverter: findColorInvert($danger);
+$warning: #FFC20E; // Yellow - #FFC20E
+$warning-inverter: findColorInvert($warning);
+$light: #F5F6FA; // Light Grey - #F5F6FA
+$light-inverter: findColorInvert($light);
+$twitter: #4099FF;
+$twitter-inverter: findColorInvert($twitter);
+$success: #00833D; // Dark Green - #00833D
+$success-inverter: findColorInvert($success);
+$info: $primary;
+$info-inverter: findColorInvert($info);
+$text: hsl(0, 0%, 29%);
+$text-invert: findColorInvert($text);

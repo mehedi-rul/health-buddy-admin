@@ -7,23 +7,8 @@
 <style lang="scss">
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
+@import "assets/styles/variables";
 
-$white: #FFFFFF;// White - #FFFFFF
-$black: #2D2926; // Black - #2D2926
-$primary: #1CABE2; // UNICEF Blue - #1CABE2
-$primary-invert: findColorInvert($primary);
-$danger: #E2231A; // Red - #E2231A
-$danger-inverter: findColorInvert($danger);
-$warning: #FFC20E; // Yellow - #FFC20E
-$warning-inverter: findColorInvert($warning);
-$light: #F5F6FA; // Light Grey - #F5F6FA
-$light-inverter: findColorInvert($light);
-$twitter: #4099FF;
-$twitter-inverter: findColorInvert($twitter);
-$success: #00833D; // Dark Green - #00833D
-$success-inverter: findColorInvert($success);
-$info: $primary;
-$info-inverter: findColorInvert($info);
 // Light Green - #80BD41
 // Orange - #F26A21
 // Magenta - #961A49
@@ -44,7 +29,8 @@ $colors: (
   "success": ($success, $success-invert),
   "warning": ($warning, $warning-invert),
   "danger": ($danger, $danger-invert),
-  "twitter": ($twitter, $twitter-inverter)
+  "twitter": ($twitter, $twitter-inverter),
+  "text": ($text, $text-invert),
 );
 
 // Links
@@ -55,4 +41,18 @@ $link-focus-border: $primary;
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+
+body.login, body.login #app {
+  height: 100%;
+  width: 100%;
+}
+.form-admin {
+  margin-left: 260px;
+}
+
+@media screen and (max-width: 1023px) {
+  .form-admin {
+    margin-left: 80px;
+  }
+}
 </style>
