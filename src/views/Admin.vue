@@ -22,10 +22,15 @@
                   <span>Dashboard</span>
                 </template>
               </b-menu-item>
-              <b-menu-item icon="account" label="Content Manager" tag="router-link"
-                           to="/admin/content-manager">
+              <b-menu-item icon="account" tag="router-link" to="/admin/content-manager">
+                <template v-slot:label>
+                  <span>Content Manager</span>
+                </template>
               </b-menu-item>
-              <b-menu-item icon="account" label="Users" tag="router-link" to="/admin/users">
+              <b-menu-item icon="account" tag="router-link" to="/admin/users">
+                <template v-slot:label>
+                  <span>Users</span>
+                </template>
               </b-menu-item>
             </b-menu-list>
           </b-menu>
