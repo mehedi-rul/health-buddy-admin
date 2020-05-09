@@ -11,9 +11,10 @@
         open
       >
 
-        <b-notification class="notification is-primary is-marginless" :closable="false">
-          Dashboard admin
-        </b-notification >
+        <div class="menu-header p-1 is-primary">
+          <span class="menu-header__title">Dashboard admin</span>
+          <b-icon icon="menu" class="menu-header__icon icon is-medium"/>
+        </div>
         <div class="">
           <b-menu class="is-custom-mobile">
             <b-menu-list>
@@ -21,18 +22,21 @@
                 <template v-slot:label>
                   <Icon type="dashboard" class="icon is-medium"/>
                   <span>Dashboard</span>
+                  <b-icon icon="chevron-right"/>
                 </template>
               </b-menu-item>
               <b-menu-item tag="router-link" to="/admin/content-manager">
                 <template v-slot:label>
                   <Icon type="tables" class="icon is-medium"/>
                   <span>Content Manager</span>
+                  <b-icon icon="chevron-right" />
                 </template>
               </b-menu-item>
               <b-menu-item tag="router-link" to="/admin/users">
                 <template v-slot:label>
                   <Icon type="users" class="icon is-medium"/>
                   <span>Users</span>
+                  <b-icon icon="chevron-right" />
                 </template>
               </b-menu-item>
             </b-menu-list>
@@ -69,11 +73,26 @@ export default {
   padding: 1em;
 }
 
-.notification {
-  border-radius: 0;
+.menu-header {
+  padding-left: 1.7em;
   text-transform: uppercase;
   font-weight: bold;
+  display: flex;
+  background-color: $primary;
+  color: $white;
+  &__title {
+    flex: 9;
+  }
+  &__icon {
+    flex: 1;
+  }
+  @media screen and (max-width: 1023px) {
+    &__title {
+      display: none;
+    }
+  }
 }
+/*}*/
 
 .menu-list /deep/ {
   li {
@@ -87,6 +106,10 @@ export default {
 
       span:nth-child(2) {
         margin-left: 1.5em;
+      }
+
+      span:nth-child(3) {
+        margin-left: auto;
       }
 
       &.router-link-exact-active {
