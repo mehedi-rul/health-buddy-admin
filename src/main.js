@@ -1,11 +1,15 @@
 import Vue from 'vue';
 import Buefy from 'buefy';
+import InlineSvg from 'vue-inline-svg';
+import Icon from '@/components/Icon.vue';
 
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
 Vue.use(Buefy);
+Vue.component('inline-svg', InlineSvg);
+Vue.component('Icon', Icon);
 
 Vue.config.productionTip = false;
 
