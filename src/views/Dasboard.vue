@@ -1,18 +1,15 @@
 <template>
-  <section class="users">
-    Dashboard
+  <section class="dashboard">
+    <ManagerPanel>
+      <template v-slot:title>
+        Dashboard
+      </template>
+    </ManagerPanel>
   </section>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      username: undefined,
-      password: undefined,
-      htmlHeightLast: undefined,
-    };
-  },
 };
 </script>
 

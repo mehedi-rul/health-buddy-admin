@@ -48,16 +48,6 @@ html {
 
 .form-admin {
   margin-left: $sidebar-width;
-
-  .search-field {
-    background-color: white;
-    padding: calc(1em - 2px);
-
-    input {
-      border: none;
-      box-shadow: none;
-    }
-  }
 }
 
 @media screen and (max-width: 1023px) {

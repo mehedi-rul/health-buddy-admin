@@ -1,6 +1,10 @@
 <template>
-  <section class="users">
-    Content manager
+  <section class="content-manager">
+    <ManagerPanel>
+      <template v-slot:title>
+        Content manager
+      </template>
+    </ManagerPanel>
   </section>
 </template>
 
