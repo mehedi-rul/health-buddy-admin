@@ -3,6 +3,7 @@ import Buefy from 'buefy';
 import InlineSvg from 'vue-inline-svg';
 import Icon from '@/components/Icon.vue';
 import ManagerPanel from '@/components/ManagerPanel.vue';
+import ContentList from '@/components/ContentList.vue';
 
 import App from './App.vue';
 import router from './router';
@@ -12,6 +13,7 @@ Vue.use(Buefy);
 Vue.component('inline-svg', InlineSvg);
 Vue.component('Icon', Icon);
 Vue.component('ManagerPanel', ManagerPanel);
+Vue.component('ContentList', ContentList);
 
 Vue.config.productionTip = false;
 
