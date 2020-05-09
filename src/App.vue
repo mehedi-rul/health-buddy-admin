@@ -38,13 +38,37 @@ body.login, body.login #app {
   height: 100%;
   width: 100%;
 }
-html {
+html, .table {
   background-color: $light;
+}
+
+.table {
+  &.is-striped {
+    tbody, thead {
+      tr:not(.is-selected):nth-child(odd), th {
+        background-color: $white;
+      }
+    }
+  }
+
 }
 
 .p-1 {
   padding: 1em;
 }
+
+.m-1 {
+  margin: 1em;
+}
+
+.m-2 {
+  margin: 2em;
+}
+
+.m-3 {
+  margin: 3em;
+}
+
 
 .form-admin {
   margin-left: $sidebar-width;
