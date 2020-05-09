@@ -1,9 +1,7 @@
 <template>
-  <span class="">
-    <i class="">
-      <inline-svg :src="icon" :width="size" :height="size"/>
-    </i>
-  </span>
+  <i>
+    <inline-svg :src="icon" :width="size" :height="size"/>
+  </i>
 </template>
 
 <script>
@@ -46,4 +44,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+i.icon {
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+}
 </style>

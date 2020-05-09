@@ -17,18 +17,21 @@
         <div class="">
           <b-menu class="is-custom-mobile">
             <b-menu-list>
-              <b-menu-item icon="information-outline" tag="router-link" to="/admin/dashboard">
+              <b-menu-item tag="router-link" to="/admin/dashboard" class="dashboard-link">
                 <template v-slot:label>
+                  <Icon type="dashboard" class="icon is-medium"/>
                   <span>Dashboard</span>
                 </template>
               </b-menu-item>
-              <b-menu-item icon="account" tag="router-link" to="/admin/content-manager">
+              <b-menu-item tag="router-link" to="/admin/content-manager">
                 <template v-slot:label>
+                  <Icon type="tables" class="icon is-medium"/>
                   <span>Content Manager</span>
                 </template>
               </b-menu-item>
-              <b-menu-item icon="account" tag="router-link" to="/admin/users">
+              <b-menu-item tag="router-link" to="/admin/users">
                 <template v-slot:label>
+                  <Icon type="users" class="icon is-medium"/>
                   <span>Users</span>
                 </template>
               </b-menu-item>
@@ -68,22 +71,37 @@ export default {
 
 .notification {
   border-radius: 0;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .menu-list /deep/ {
   li {
+    margin: 1em 0;
+
     a {
-      margin: 1.5em 0;
+      display: flex;
+      align-items: center;
+      padding-left: 1.5em;
+      border-left: 5px $white solid;
 
       span:nth-child(2) {
         margin-left: 1.5em;
       }
-      border-left: 5px $white solid;
 
       &.router-link-exact-active {
         background-color: $white;
         color: $text;
         border-left: 5px $primary solid;
+      }
+    }
+
+    &.dashboard-link {
+      &:after {
+        display: block;
+        border-bottom: 1px solid $divider;
+        content: '';
+        margin: 10px 20px;
       }
     }
   }

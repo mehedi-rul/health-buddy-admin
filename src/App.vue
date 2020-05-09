@@ -9,14 +9,6 @@
 @import "~bulma/sass/utilities/_all";
 @import "assets/styles/variables";
 
-// Light Green - #80BD41
-// Orange - #F26A21
-// Magenta - #961A49
-// Violet - #6A1E74
-// Warm Grey - #D8D1C9
-// Cool Grey - #777779
-// Dark Blue - #374EA2
-
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -47,12 +39,12 @@ body.login, body.login #app {
   width: 100%;
 }
 .form-admin {
-  margin-left: 260px;
+  margin-left: $sidebar-width;
 }
 
 @media screen and (max-width: 1023px) {
   .form-admin {
-    margin-left: 80px;
+    margin-left: $sidebar-mobile-width;
   }
 }
 </style>
