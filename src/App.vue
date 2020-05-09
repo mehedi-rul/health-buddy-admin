@@ -69,6 +69,10 @@ html, .table {
   margin: 3em;
 }
 
+.m-t-1 {
+  margin-top: 1em;
+}
+
 
 .form-admin {
   margin-left: $sidebar-width;

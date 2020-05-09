@@ -31,7 +31,7 @@ export default {
     background-color: white;
     padding: calc((4em - 2.25em) / 2);
 
-    input {
+    /deep/ input {
       border: none;
       box-shadow: none;
     }
