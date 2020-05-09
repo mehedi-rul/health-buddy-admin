@@ -1,6 +1,14 @@
 <template>
   <section class="users">
-    Users
+    <b-field class="search-field">
+      <b-input placeholder="Search..."
+               type="search"
+               icon="magnify"
+               icon-clickable
+               @icon-click="searchIconClick">
+      </b-input>
+    </b-field>
+    <h1>Users</h1>
   </section>
 </template>
 
@@ -12,6 +20,10 @@ export default {
       password: undefined,
       htmlHeightLast: undefined,
     };
+  },
+  methods: {
+    searchIconClick() {
+    },
   },
 };
 </script>

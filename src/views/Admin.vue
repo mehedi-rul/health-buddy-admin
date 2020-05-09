@@ -44,7 +44,7 @@
         </div>
       </b-sidebar>
     </section>
-    <div class="p-1 form-admin">
+    <div class="form-admin">
       <router-view />
     </div>
   </div>
@@ -67,10 +67,6 @@ export default {
 
 <style lang="scss" scoped="true">
 @import "../assets/styles/variables";
-
-.p-1 {
-  padding: 1em;
-}
 
 .menu-header {
   display: flex;

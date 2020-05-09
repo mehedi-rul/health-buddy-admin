@@ -38,8 +38,26 @@ body.login, body.login #app {
   height: 100%;
   width: 100%;
 }
+html {
+  background-color: $light;
+}
+
+.p-1 {
+  padding: 1em;
+}
+
 .form-admin {
   margin-left: $sidebar-width;
+
+  .search-field {
+    background-color: white;
+    padding: calc(1em - 2px);
+
+    input {
+      border: none;
+      box-shadow: none;
+    }
+  }
 }
 
 @media screen and (max-width: 1023px) {
