@@ -74,10 +74,11 @@ export default {
 }
 
 .menu-header {
+  display: flex;
+  align-items: center;
   padding-left: 1.7em;
   text-transform: uppercase;
   font-weight: bold;
-  display: flex;
   background-color: $primary;
   color: $white;
   &__title {
@@ -116,6 +117,12 @@ export default {
         background-color: $white;
         color: $text;
         border-left: 5px $primary solid;
+      }
+
+      @media screen and (max-width: 1023px) {
+        span:nth-child(3)  {
+          display: none;
+        }
       }
     }
 
