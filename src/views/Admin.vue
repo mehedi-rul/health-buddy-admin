@@ -43,11 +43,10 @@
           </b-menu>
         </div>
       </b-sidebar>
-
-      <div class="p-1 form-admin">
-        <router-view />
-      </div>
     </section>
+    <div class="p-1 form-admin">
+      <router-view />
+    </div>
   </div>
 </template>
 
