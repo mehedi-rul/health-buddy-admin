@@ -1,30 +1,43 @@
 <template>
-  <section class="content-list m-3 m-t-1">
+  <section class="content-list m-3 m-t-1 p-2">
     <b-table
-      :data="isEmpty ? [] : data"
-      :bordered="isBordered"
-      :striped="isStriped"
-      :narrowed="isNarrowed"
-      :hoverable="isHoverable"
-      :loading="isLoading"
-      :focusable="isFocusable"
-      :mobile-cards="hasMobileCards"
+      :data="data"
+      :loading="loading"
+
+      :striped="true"
+      :narrowed="false"
+      :hoverable="true"
+      :focusable="false"
+      :mobile-cards="true"
+
+      paginated
+      backend-pagination
+      :per-page="perPage"
+      :total="total"
+      @page-change="onPageChange"
+      aria-next-label="Next page"
+      aria-previous-label="Previous page"
+      aria-page-label="Page"
+      aria-current-label="Current page"
+
+      backend-sorting
+      :default-sort-direction="defaultSortOrder"
+      :default-sort="[sortField, sortOrder]"
+      @sort="onSort"
+
       class="table-container">
 
       <template slot-scope="props">
-        <b-table-column field="id" label="ID" width="40" numeric>
-          {{ props.row.id }}
-        </b-table-column>
 
-        <b-table-column field="name" label="Name">
+        <b-table-column field="name" label="Name" sortable>
           {{ props.row.name }}
         </b-table-column>
 
-        <b-table-column field="email" label="Email">
+        <b-table-column field="email" label="Email" sortable>
           {{ props.row.email }}
         </b-table-column>
 
-        <b-table-column field="contact" label="Contact" centered>
+        <b-table-column field="contact" label="Contact" centered sortable>
           {{ props.row.contact }}
         </b-table-column>
 
@@ -62,7 +75,7 @@ export default {
     for (let i = 0; i < 10; i += 1) {
       data.push(
         {
-          id: 1,
+          id: i + 1,
           name: 'John Doe',
           email: 'john.doe@email.com',
           contact: '+55.82.99999.1234',
@@ -73,32 +86,67 @@ export default {
 
     return {
       data,
-      isEmpty: false,
-      isBordered: false,
-      isStriped: true,
-      isNarrowed: false,
-      isHoverable: true,
-      isFocusable: false,
-      isLoading: false,
-      hasMobileCards: true,
+
+      loading: false,
+
+      total: 100,
+      page: 1,
+      perPage: 10,
+
+      sortField: 'id',
+      sortOrder: 'desc',
+      defaultSortOrder: 'desc',
     };
+  },
+  methods: {
+    onPageChange(page) {
+      this.page = page;
+      this.loadAsyncData();
+    },
+    onSort(field, order) {
+      this.sortField = field;
+      this.sortOrder = order;
+      this.loadAsyncData();
+    },
+    loadAsyncData() {
+      const params = [
+        `sort_by=${this.sortField}.${this.sortOrder}`,
+        `page=${this.page}`,
+        `pageSize:${this.perPage}`,
+      ].join('&');
+
+      console.log(params);
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/styles/variables';
+
 .content-list {
+  background-color: $white;
   &__actions {
     .icon {
       margin: 0 0.1em;
       cursor: pointer;
     }
   }
+  /deep/ table {
+    border: 0;
+  }
 
   @media screen and (max-width: 768px) {
     &.m-3 {
       margin-left: 0;
       margin-right: 0;
+    }
+    &.p-2 {
+      padding: 0;
     }
   }
 }

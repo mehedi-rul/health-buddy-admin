@@ -57,6 +57,14 @@ html, .table {
   padding: 1em;
 }
 
+.p-2 {
+  padding: 2em;
+}
+
+.p-3 {
+  padding: 3em;
+}
+
 .m-1 {
   margin: 1em;
 }
