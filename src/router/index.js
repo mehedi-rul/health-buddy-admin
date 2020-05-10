@@ -32,17 +32,17 @@ const routes = [
     children: [
       {
         path: 'dashboard',
-        name: 'Dashboard',
+        name: 'DashboardAdmin',
         component: () => import('../views/Dasboard.vue'),
       },
       {
         path: 'content-manager',
-        name: 'ContentManager',
+        name: 'ContentManagerAdmin',
         component: () => import(/* webpackChunkName: "login" */ '../views/ContentManager.vue'),
       },
       {
         path: 'users',
-        name: 'User',
+        name: 'UsersAdmin',
         component: () => import(/* webpackChunkName: "login" */ '../views/Users.vue'),
       },
     ],

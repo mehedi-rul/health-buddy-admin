@@ -22,7 +22,14 @@
               </b-input>
             </b-field>
             <div class="buttons">
-              <b-button type="is-info" expanded>Info</b-button>
+              <b-button
+                type="is-info"
+                :disabled="!canLogin"
+                @click="tryLogin"
+                expanded>Login</b-button>
+            </div>
+            <div class="has-text-centered">
+              <a class="has-text-danger">Forgot your password?</a>
             </div>
           </div>
         </div>
@@ -43,7 +50,15 @@ export default {
       htmlHeightLast: undefined,
     };
   },
+  computed: {
+    canLogin() {
+      return this.username && this.password;
+    },
+  },
   methods: {
+    tryLogin() {
+      this.$router.push('admin/users');
+    },
     updateViewStyle(mounted) {
       const { body } = document;
       const html = body.parentNode;
