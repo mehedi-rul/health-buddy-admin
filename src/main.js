@@ -12,10 +12,10 @@ import store from './store';
 
 Vue.use(Buefy);
 Vue.component('inline-svg', InlineSvg);
-Vue.component('IlhaLogin', IlhaLogin);
-Vue.component('IlhaIcon', IlhaIcon);
-Vue.component('IlhaHeader', IlhaHeader);
-Vue.component('IlhaTable', IlhaTable);
+Vue.component('ilha-login', IlhaLogin);
+Vue.component('ilha-icon', IlhaIcon);
+Vue.component('ilha-header', IlhaHeader);
+Vue.component('ilha-table', IlhaTable);
 
 Vue.config.productionTip = false;
 

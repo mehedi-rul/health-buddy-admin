@@ -43,8 +43,8 @@
 
         <b-table-column label="" centered>
           <span class="content-list__actions">
-            <IlhaIcon type="edit" class="icon is-medium"/>
-            <IlhaIcon type="trash" class="icon is-medium"/>
+            <ilha-icon type="edit" class="icon is-medium"/>
+            <ilha-icon type="trash" class="icon is-medium"/>
           </span>
         </b-table-column>
       </template>

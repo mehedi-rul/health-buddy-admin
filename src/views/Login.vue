@@ -1,5 +1,5 @@
 <template>
-  <IlhaLogin :app-logo="appLogo"/>
+  <ilha-login :app-logo="appLogo"/>
 </template>
 
 <script>
