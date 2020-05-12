@@ -20,21 +20,21 @@
             <b-menu-list>
               <b-menu-item tag="router-link" to="/admin/dashboard" class="dashboard-link">
                 <template v-slot:label>
-                  <Icon type="dashboard" class="icon is-medium"/>
+                  <IlhaIcon type="dashboard" class="icon is-medium"/>
                   <span>Dashboard</span>
                   <b-icon icon="chevron-right"/>
                 </template>
               </b-menu-item>
               <b-menu-item tag="router-link" to="/admin/content-manager">
                 <template v-slot:label>
-                  <Icon type="tables" class="icon is-medium"/>
+                  <IlhaIcon type="tables" class="icon is-medium"/>
                   <span>Content Manager</span>
                   <b-icon icon="chevron-right" />
                 </template>
               </b-menu-item>
               <b-menu-item tag="router-link" to="/admin/users">
                 <template v-slot:label>
-                  <Icon type="users" class="icon is-medium"/>
+                  <IlhaIcon type="users" class="icon is-medium"/>
                   <span>Users</span>
                   <b-icon icon="chevron-right" />
                 </template>

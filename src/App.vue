@@ -33,6 +33,10 @@ $link-focus-border: $primary;
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+@import "assets/styles/header";
+@import "assets/styles/table";
+@import "assets/styles/icon";
+@import "assets/styles/login";
 
 body.login, body.login #app {
   height: 100%;

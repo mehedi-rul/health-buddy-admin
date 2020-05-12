@@ -1,0 +1,25 @@
+.ilha-content-list {
+  background-color: $white;
+  &__actions {
+    .icon {
+      margin: 0 0.1em;
+      cursor: pointer;
+    }
+  }
+  .table-container {
+    overflow: hidden;
+    table {
+      border: 0;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    &.m-3 {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    &.p-2 {
+      padding: 0;
+    }
+  }
+}

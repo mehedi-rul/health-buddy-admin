@@ -24,22 +24,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.manager-panel {
-  .search-field {
-    background-color: white;
-    padding: calc((4em - 2.25em) / 2);
-
-    /deep/ input {
-      border: none;
-      box-shadow: none;
-    }
-  }
-  .subtitle {
-    font-weight: bold;
-  }
-}
-
-
-</style>

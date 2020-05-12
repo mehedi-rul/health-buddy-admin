@@ -1,10 +1,10 @@
 <template>
   <section class="dashboard">
-    <ManagerPanel>
+    <IlhaHeader>
       <template v-slot:title>
         Dashboard
       </template>
-    </ManagerPanel>
+    </IlhaHeader>
   </section>
 </template>
 

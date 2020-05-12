@@ -1,5 +1,5 @@
 <template>
-  <section class="content-list m-3 m-t-1 p-2">
+  <section class="ilha-content-list m-3 m-t-1 p-2">
     <b-table
       :data="data"
       :loading="loading"
@@ -43,8 +43,8 @@
 
         <b-table-column label="" centered>
           <span class="content-list__actions">
-            <Icon type="edit" class="icon is-medium"/>
-            <Icon type="trash" class="icon is-medium"/>
+            <IlhaIcon type="edit" class="icon is-medium"/>
+            <IlhaIcon type="trash" class="icon is-medium"/>
           </span>
         </b-table-column>
       </template>
@@ -124,30 +124,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import '../assets/styles/variables';
-
-.content-list {
-  background-color: $white;
-  &__actions {
-    .icon {
-      margin: 0 0.1em;
-      cursor: pointer;
-    }
-  }
-  /deep/ table {
-    border: 0;
-  }
-
-  @media screen and (max-width: 768px) {
-    &.m-3 {
-      margin-left: 0;
-      margin-right: 0;
-    }
-    &.p-2 {
-      padding: 0;
-    }
-  }
-}
-</style>

@@ -1,0 +1,12 @@
+.ilha-icon {
+  &.icon {
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      height: 100% !important;
+      width: 100% !important;
+    }
+  }
+}

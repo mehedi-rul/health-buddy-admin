@@ -1,11 +1,11 @@
 <template>
   <section class="users">
-    <ManagerPanel>
+    <IlhaHeader>
       <template v-slot:title>
         Users
       </template>
-    </ManagerPanel>
-    <ContentList></ContentList>
+    </IlhaHeader>
+    <IlhaTable></IlhaTable>
   </section>
 </template>
 
