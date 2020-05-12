@@ -41,8 +41,12 @@
 
         <b-table-column v-if="hasActions" label="" centered>
           <span class="content-list__actions">
-            <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
-            <ilha-icon v-if="canDelete" type="trash" class="icon is-medium"/>
+            <router-link :to="adminUrl + props.row.id">
+              <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
+            </router-link>
+            <router-link :to="adminUrl + props.row.id + '/delete'">
+              <ilha-icon v-if="canDelete" type="trash" class="icon is-medium"/>
+            </router-link>
           </span>
         </b-table-column>
       </template>
@@ -68,6 +72,10 @@
 
 export default {
   props: {
+    adminUrl: {
+      type: String,
+      default: '',
+    },
     header: {
       type: Array,
       default: () => [],
@@ -147,7 +155,7 @@ export default {
       const params = [
         `sort_by=${this.sortField}.${this.sortOrder}`,
         `page=${this.currentPage}`,
-        `pageSize:${this.perPage}`,
+        `page_size:${this.perPage}`,
       ].join('&');
 
       this.loading = true;

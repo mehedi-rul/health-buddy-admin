@@ -6,6 +6,7 @@
       </template>
     </ilha-header>
     <ilha-table
+      :admin-url="userUrl"
       :header="header"
       :data="data"
       can-edit
@@ -34,6 +35,7 @@ export default {
 
     return {
       data,
+      userUrl: '/admin/users/',
       header: [
         {
           property: 'name',
