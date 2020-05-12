@@ -1,7 +1,7 @@
 <template>
   <section class="ilha-content-list m-3 m-t-1 p-2">
     <b-table
-      :data="data"
+      :data="innerData"
       :loading="loading"
 
       :striped="true"
@@ -13,7 +13,7 @@
       paginated
       backend-pagination
       :per-page="perPage"
-      :total="total"
+      :total="totalLines"
       @page-change="onPageChange"
       aria-next-label="Next page"
       aria-previous-label="Previous page"
@@ -29,22 +29,20 @@
 
       <template slot-scope="props">
 
-        <b-table-column field="name" label="Name" sortable>
-          {{ props.row.name }}
+        <b-table-column
+          v-for="(field, index) in header"
+          :key="index"
+          :field="field.property"
+          :label="field.label"
+          :sortable="field.sortable"
+          :centered="field.centered">
+          {{ props.row[field.property] }}
         </b-table-column>
 
-        <b-table-column field="email" label="Email" sortable>
-          {{ props.row.email }}
-        </b-table-column>
-
-        <b-table-column field="contact" label="Contact" centered sortable>
-          {{ props.row.contact }}
-        </b-table-column>
-
-        <b-table-column label="" centered>
+        <b-table-column v-if="hasActions" label="" centered>
           <span class="content-list__actions">
-            <ilha-icon type="edit" class="icon is-medium"/>
-            <ilha-icon type="trash" class="icon is-medium"/>
+            <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
+            <ilha-icon v-if="canDelete" type="trash" class="icon is-medium"/>
           </span>
         </b-table-column>
       </template>
@@ -69,58 +67,114 @@
 <script>
 
 export default {
+  props: {
+    header: {
+      type: Array,
+      default: () => [],
+    },
+    canDelete: {
+      type: Boolean,
+      default: false,
+    },
+    canEdit: {
+      type: Boolean,
+      default: false,
+    },
+    data: {
+      type: Array,
+      default: () => [],
+    },
+    url: {
+      type: String,
+    },
+    perPage: {
+      type: Number,
+      default: 10,
+    },
+  },
   data() {
-    const data = [];
-
-    for (let i = 0; i < 10; i += 1) {
-      data.push(
-        {
-          id: i + 1,
-          name: 'John Doe',
-          email: 'john.doe@email.com',
-          contact: '+55.82.99999.1234',
-          gender: 'Male',
-        },
-      );
-    }
-
     return {
-      data,
+      innerData: [],
 
       loading: false,
 
-      total: 100,
-      page: 1,
-      perPage: 10,
+      totalLines: 0,
+      currentPage: 1,
 
       sortField: 'id',
       sortOrder: 'desc',
       defaultSortOrder: 'desc',
     };
   },
+  computed: {
+    isAsyncTable() {
+      return !this.data && this.url;
+    },
+    hasActions() {
+      return this.canEdit || this.canDelete;
+    },
+  },
   methods: {
+    initTable() {
+      this.currentPage = 0;
+      this.totalLines = 0;
+      if (this.isAsyncTable) {
+        this.loadAsyncData();
+      } else {
+        this.innerData = [...this.data];
+        this.totalLines = this.innerData.length;
+      }
+    },
     onPageChange(page) {
-      this.page = page;
-      this.loadAsyncData();
+      this.currentPage = page;
+      if (this.isAsyncTable) {
+        this.loadAsyncData();
+      }
     },
     onSort(field, order) {
       this.sortField = field;
       this.sortOrder = order;
-      this.loadAsyncData();
+      if (this.isAsyncTable) {
+        this.loadAsyncData();
+      } else {
+        // TODO sort if table is not async.
+      }
     },
     loadAsyncData() {
+      if (!this.isAsyncTable) {
+        return;
+      }
       const params = [
         `sort_by=${this.sortField}.${this.sortOrder}`,
-        `page=${this.page}`,
+        `page=${this.currentPage}`,
         `pageSize:${this.perPage}`,
       ].join('&');
 
-      console.log(params);
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
+      this.$http.get(`${this.url}?${params}`)
+        .then(({ data }) => {
+          this.innerData = [...data.results];
+          this.totalLines = data.totalResults;
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.data = [];
+          this.totalLines = 0;
+          this.loading = false;
+          throw error;
+        });
     },
+  },
+  watch: {
+    data() {
+      this.initTable();
+    },
+    url() {
+      this.initTable();
+    },
+  },
+  mounted() {
+    this.initTable();
   },
 };
 </script>
