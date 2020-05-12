@@ -40,13 +40,15 @@
         </b-table-column>
 
         <b-table-column v-if="hasActions" label="" centered>
-          <span class="content-list__actions">
+          <span class="ilha-content-list__actions">
             <router-link :to="adminUrl + props.row.id">
               <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
             </router-link>
-            <router-link :to="adminUrl + props.row.id + '/delete'">
-              <ilha-icon v-if="canDelete" type="trash" class="icon is-medium"/>
-            </router-link>
+            <ilha-icon
+              v-if="canDelete"
+              @click.native="confirmDelete(props.row)"
+              type="trash"
+              class="icon is-medium"/>
           </span>
         </b-table-column>
       </template>
@@ -171,6 +173,19 @@ export default {
           this.loading = false;
           throw error;
         });
+    },
+    confirmDelete(data) {
+      this.$buefy.dialog.confirm({
+        title: 'Deleting account',
+        message: 'Are you sure you want to <b>delete</b> your account? This action cannot be undone.',
+        confirmText: 'Delete Account',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => {
+          // this.$buefy.toast.open('Account deleted!');
+          this.$router.push(`${this.adminUrl}${data.id}/delete`);
+        },
+      });
     },
   },
   watch: {

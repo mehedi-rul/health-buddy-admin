@@ -42,19 +42,12 @@ body.login, body.login #app {
   height: 100%;
   width: 100%;
 }
-html, .table {
+html {
   background-color: $light;
 }
 
-.table {
-  &.is-striped {
-    tbody, thead {
-      tr:not(.is-selected):nth-child(odd), th {
-        background-color: $white;
-      }
-    }
-  }
-
+.dialog.modal.is-active {
+  z-index: 999999;
 }
 
 .p-1 {
