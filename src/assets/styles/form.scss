@@ -1,0 +1,15 @@
+.ilha-form {
+  background-color: $white;
+
+  button {
+    text-transform: uppercase;
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: 768px) {
+    &.m-3 {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}

@@ -37,6 +37,7 @@ $link-focus-border: $primary;
 @import "assets/styles/table";
 @import "assets/styles/icon";
 @import "assets/styles/login";
+@import "assets/styles/form";
 
 body.login, body.login #app {
   height: 100%;
@@ -76,6 +77,14 @@ html {
 
 .m-t-1 {
   margin-top: 1em;
+}
+
+.m-l-1 {
+  margin-left: 1em;
+}
+
+.m-r-1 {
+  margin-right: 1em;
 }
 
 
