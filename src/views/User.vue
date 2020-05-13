@@ -33,7 +33,6 @@ export default {
           label: 'Username',
           placeholder: 'Username',
           maxlength: 30,
-          required: true,
           rules: 'required',
         },
         {
@@ -42,7 +41,6 @@ export default {
           label: 'First name',
           placeholder: 'First name',
           maxlength: 30,
-          required: true,
           rules: 'required',
         },
         {
@@ -51,7 +49,6 @@ export default {
           label: 'Last name',
           placeholder: 'Last name',
           maxlength: 30,
-          required: true,
           rules: 'required',
         },
         {
@@ -60,7 +57,6 @@ export default {
           label: 'Email',
           placeholder: 'Email',
           maxlength: 30,
-          required: true,
           rules: 'required|email',
         },
       ],

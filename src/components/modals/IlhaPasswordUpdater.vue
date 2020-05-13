@@ -1,56 +1,20 @@
 <template>
-  <form action="">
+  <section>
     <div class="modal-card" style="width: auto">
       <header class="modal-card-head">
         <p class="modal-card-title">Change password</p>
       </header>
-      <section class="modal-card-body">
-        <b-field label="Old password"
-                 :type="{ 'is-danger': !password, 'is-success': password}">
-          <b-input
-            type="password"
-            v-model="password"
-            placeholder="Old password"
-            password-reveal
-            required>
-          </b-input>
-        </b-field>
-
-        <b-field label="New password"
-                 :type="{ 'is-danger': !newPassword, 'is-success': newPassword}">
-          <b-input
-            type="password"
-            v-model="newPassword"
-            password-reveal
-            placeholder="New password"
-            required>
-          </b-input>
-        </b-field>
-
-        <b-field label="Confirm new password"
-                 :type="{ 'is-danger': !confirmationPassword || newPassword != confirmationPassword,
-                 'is-success': confirmationPassword && newPassword == confirmationPassword}"
-                 :message="newPassword != confirmationPassword
-                 ? 'This field confirmation does not match' : undefined">
-          <b-input
-            type="password"
-            v-model="confirmationPassword"
-            password-reveal
-            placeholder="Confirm new password"
-            required>
-          </b-input>
-        </b-field>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button" type="button" @click="$parent.close()">Cancel</button>
-        <b-button
-          type="is-info"
-          :disabled="!canSave"
-          @click="changePassword">Save
-        </b-button>
-      </footer>
+      <ilha-form
+        :fields="fields"
+        :has-spacing="false"
+        :inputs-container-classes="['modal-card-body']"
+        :actions-classes="['modal-card-foot']">
+        <template v-slot:button>
+          <b-button type="button" @click="$parent.close()">Cancel</b-button>
+        </template>
+      </ilha-form>
     </div>
-  </form>
+  </section>
 </template>
 <script>
 export default {
@@ -59,6 +23,29 @@ export default {
       password: undefined,
       newPassword: undefined,
       confirmationPassword: undefined,
+      fields: [
+        {
+          property: 'oldPassword',
+          type: 'password',
+          label: 'Old Password',
+          placeholder: 'Old Password',
+          rules: 'required',
+        },
+        {
+          property: 'newPassword',
+          type: 'password',
+          label: 'New Password',
+          placeholder: 'New Password',
+          rules: 'required',
+        },
+        {
+          property: 'confirmationPassword',
+          type: 'password',
+          label: 'Confirm New Password',
+          placeholder: 'Confirm New Password',
+          rules: 'required|confirmed:newPassword',
+        },
+      ],
     };
   },
   computed: {
