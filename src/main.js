@@ -9,6 +9,8 @@ import IlhaLogin from '@/components/views/IlhaLogin.vue';
 import IlhaIcon from '@/components/core/IlhaIcon.vue';
 import IlhaHeader from '@/components/core/IlhaHeader.vue';
 import IlhaTable from '@/components/core/IlhaTable.vue';
+import IlhaForm from '@/components/core/IlhaForm.vue';
+import '@/components/core/vee-validate';
 
 import App from './App.vue';
 import router from './router';
@@ -21,6 +23,7 @@ Vue.component('ilha-login', IlhaLogin);
 Vue.component('ilha-icon', IlhaIcon);
 Vue.component('ilha-header', IlhaHeader);
 Vue.component('ilha-table', IlhaTable);
+Vue.component('ilha-form', IlhaForm);
 
 Vue.config.productionTip = false;
 

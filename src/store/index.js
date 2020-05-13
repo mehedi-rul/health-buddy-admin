@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    url: 'http://ilhasoft.com.br/api',
   },
   mutations: {
   },

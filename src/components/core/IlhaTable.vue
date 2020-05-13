@@ -27,7 +27,7 @@
 
       class="table-container">
 
-      <template slot-scope="props">
+      <template v-slot="props">
 
         <b-table-column
           v-for="(field, index) in header"

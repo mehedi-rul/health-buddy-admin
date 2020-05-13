@@ -5,59 +5,73 @@
         Users / Edit
       </template>
     </ilha-header>
-    <div class="ilha-form  m-3 m-t-1 p-2">
-      <b-field label="Username">
-        <b-input v-model="username"
-                 placeholder="Usernamename"
-                 maxlength="30"
-                 required></b-input>
-      </b-field>
-      <b-field label="First name">
-        <b-input v-model="firstName"
-                 placeholder="First name"
-                 maxlength="30"
-                 required></b-input>
-      </b-field>
-      <b-field label="Last name">
-        <b-input v-model="lastName"
-                 placeholder="Last name"
-                 maxlength="30"
-                 required></b-input>
-      </b-field>
-      <b-field label="Email">
-        <b-input type="email"
-                 value="john@"
-                 maxlength="30">
-        </b-input>
-      </b-field>
-      <div class="actions has-text-right">
+    <ilha-form
+      :url="url"
+      :fields="fields">
+      <template v-slot:button>
         <b-button
           type="is-info"
-          :disabled="!hasChanges"
           class="m-t-1"
           @click="changePassword"
           outlined>Change password</b-button>
-
-        <b-button
-          type="is-info"
-          class="m-l-1 m-t-1"
-          :disabled="!hasChanges"
-          @click="save">Login</b-button>
-      </div>
-    </div>
+      </template>
+    </ilha-form>
   </section>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState(['url']),
+  },
   data() {
     return {
-      id: '-',
-      hasChanges: true,
+      id: undefined,
+      fields: [
+        {
+          property: 'username',
+          type: 'text',
+          label: 'Username',
+          placeholder: 'Username',
+          maxlength: 30,
+          required: true,
+          rules: 'required',
+        },
+        {
+          property: 'firstName',
+          type: 'text',
+          label: 'First name',
+          placeholder: 'First name',
+          maxlength: 30,
+          required: true,
+          rules: 'required',
+        },
+        {
+          property: 'lastName',
+          type: 'text',
+          label: 'Last name',
+          placeholder: 'Last name',
+          maxlength: 30,
+          required: true,
+          rules: 'required',
+        },
+        {
+          property: 'Email',
+          type: 'email',
+          label: 'Email',
+          placeholder: 'Email',
+          maxlength: 30,
+          required: true,
+          rules: 'required|email',
+        },
+      ],
     };
   },
   methods: {
+    changePassword() {
+    },
     updateId() {
       this.id = this.$route.params.id;
     },
