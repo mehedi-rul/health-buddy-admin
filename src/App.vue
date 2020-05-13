@@ -47,7 +47,7 @@ html {
   background-color: $light;
 }
 
-.dialog.modal.is-active {
+.modal.is-active {
   z-index: 999999;
 }
 

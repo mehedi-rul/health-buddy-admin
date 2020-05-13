@@ -9,11 +9,8 @@
       :url="url"
       :fields="fields">
       <template v-slot:button>
-        <b-button
-          type="is-info"
-          class="m-t-1"
-          @click="changePassword"
-          outlined>Change password</b-button>
+        <ilha-password-updater-btn
+          :url="'s'"></ilha-password-updater-btn>
       </template>
     </ilha-form>
   </section>
