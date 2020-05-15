@@ -3,10 +3,13 @@ import store from '../store/index';
 
 export default {
   getUsersUrl() {
-    return `${store.state.api}users/`;
+    return `${store.state.api}users`;
   },
   getCurrentUser() {
-    return Vue.axios.get(`${this.getUsersUrl()}my_profile`);
+    return Vue.axios.get(`${this.getUsersUrl()}/my_profile`);
+  },
+  list() {
+    return Vue.axios.get(`${this.getUsersUrl()}`);
   },
   login(credentials) {
     return Vue.axios.post(`${store.state.serverUrl}token/`, credentials).then(({ data }) => {
@@ -16,6 +19,6 @@ export default {
     });
   },
   getAdminUrl() {
-    return store.state.adminUrl;
+    return store.state.serverUrl;
   },
 };

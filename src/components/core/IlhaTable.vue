@@ -41,7 +41,7 @@
 
         <b-table-column v-if="hasActions" label="" centered>
           <span class="ilha-content-list__actions">
-            <router-link :to="adminUrl + props.row.id">
+            <router-link :to="editUrl + props.row.id">
               <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
             </router-link>
             <ilha-icon
@@ -76,6 +76,9 @@ export default {
   props: {
     adminUrl: {
       type: String,
+    },
+    editUrl: {
+      type: String,
       default: '',
     },
     header: {
@@ -92,7 +95,6 @@ export default {
     },
     data: {
       type: Array,
-      default: () => [],
     },
     url: {
       type: String,
@@ -118,7 +120,7 @@ export default {
   },
   computed: {
     isAsyncTable() {
-      return !this.data && this.url;
+      return !this.data && this.adminUrl;
     },
     hasActions() {
       return this.canEdit || this.canDelete;
@@ -126,11 +128,13 @@ export default {
   },
   methods: {
     initTable() {
-      this.currentPage = 0;
+      this.currentPage = 1;
       this.totalLines = 0;
+      console.log(this.isAsyncTable);
+      console.log(this.data, this.adminUrl);
       if (this.isAsyncTable) {
         this.loadAsyncData();
-      } else {
+      } else if (this.data) {
         this.innerData = [...this.data];
         this.totalLines = this.innerData.length;
       }
@@ -155,16 +159,14 @@ export default {
         return;
       }
       const params = [
-        `sort_by=${this.sortField}.${this.sortOrder}`,
         `page=${this.currentPage}`,
-        `page_size:${this.perPage}`,
       ].join('&');
 
       this.loading = true;
-      this.$http.get(`${this.url}?${params}`)
+      this.$http.get(`${this.adminUrl}?${params}`)
         .then(({ data }) => {
           this.innerData = [...data.results];
-          this.totalLines = data.totalResults;
+          this.totalLines = data.count;
           this.loading = false;
         })
         .catch((error) => {
@@ -192,7 +194,7 @@ export default {
     data() {
       this.initTable();
     },
-    url() {
+    adminUrl() {
       this.initTable();
     },
   },

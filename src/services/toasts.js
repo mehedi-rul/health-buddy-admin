@@ -17,4 +17,28 @@ export default {
       type: 'is-danger',
     });
   },
+  alertSaveSuccess() {
+    Toast.open({
+      duration: 2000,
+      message: 'Success save',
+      position: 'is-bottom',
+      type: 'is-success',
+    });
+  },
+  alertSaveError() {
+    Toast.open({
+      duration: 2000,
+      message: 'Save error',
+      position: 'is-bottom',
+      type: 'is-danger',
+    });
+  },
+  alertFetchError() {
+    Toast.open({
+      duration: 2000,
+      message: 'Entity not found',
+      position: 'is-bottom',
+      type: 'is-danger',
+    });
+  },
 };

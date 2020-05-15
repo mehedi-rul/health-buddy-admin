@@ -39,6 +39,7 @@
         type="is-info"
         :class="hasSpacing ? ['m-l-1', 'm-t-1'] : []"
         :disabled="!canSave"
+        :loading="loading"
         @click="passes(requestSave)">Save
       </b-button>
     </div>
@@ -50,7 +51,7 @@ import {
   ValidationObserver,
   ValidationProvider,
 } from 'vee-validate';
-import alertService from '@/services/alerts';
+import toastsService from '@/services/toasts';
 
 
 export default {
@@ -66,9 +67,7 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    idProperty: {
-      type: String,
-      default: 'id',
+    id: {
     },
     fields: {
       type: Array,
@@ -96,7 +95,7 @@ export default {
   methods: {
     requestSave() {
       if (this.url) {
-        if ({}.hasOwnProperty.call(this.data, this.idProperty)) {
+        if (this.id === undefined || this.id === null) {
           this.saveData();
         } else {
           this.updateData();
@@ -107,16 +106,15 @@ export default {
     },
     saveData() {
       this.loading = true;
-      this.$http.post(`${this.url}`, this.data).then(this.fetchSuccess.bind(this)).catch(this.saveError.bind(this));
+      this.$http.post(`${this.url}`, this.data).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
     },
     updateData() {
       this.loading = true;
-      const id = this.data[this.idProperty];
-      this.$http.put(`${this.url}${id}`, this.data).then(this.fetchSuccess.bind(this)).catch(this.saveError.bind(this));
+      this.$http.put(`${this.url}/${this.id}`, this.data).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
     },
     fetchData() {
       this.loading = true;
-      this.$http.get(`${this.url}`).then(this.fetchSuccess.bind(this)).catch(this.fetchError.bind(this));
+      this.$http.get(`${this.url}/${this.id}`).then(this.fetchSuccess.bind(this)).catch(this.fetchError.bind(this));
     },
     changed() {
       this.canSave = false;
@@ -125,29 +123,39 @@ export default {
       });
     },
     initData() {
-      if (this.url) {
+      if (this.url && this.id) {
         this.fetchData();
       } else {
         this.$refs.observer.validate();
       }
     },
+    saveSuccess({ data }) {
+      Object.assign(this.data, data);
+      this.loading = false;
+      toastsService.alertSaveSuccess();
+    },
+    saveError(error) {
+      console.error(error);
+      this.loading = false;
+      toastsService.alertSaveError();
+    },
     fetchSuccess({ data }) {
-      this.data = data;
+      Object.assign(this.data, data);
       this.loading = false;
       setTimeout(() => {
         this.$refs.observer.validate();
       }, 0);
     },
-    saveError(error) {
-      console.error(error);
-      this.loading = false;
-      alertService.alertSaveError();
-    },
     fetchError(error) {
       console.error(error);
       this.loading = false;
-      alertService.alertFetchError();
+      toastsService.alertFetchError();
       this.$refs.observer.validate();
+    },
+  },
+  watch: {
+    id() {
+      this.initData();
     },
   },
   mounted() {

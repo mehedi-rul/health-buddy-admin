@@ -6,7 +6,8 @@
       </template>
     </ilha-header>
     <ilha-form
-      :url="url"
+      :url="adminUrl"
+      :id="id"
       :fields="fields">
       <template v-slot:button>
         <ilha-password-updater-btn
@@ -17,14 +18,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import usersService from '../services/users';
 
 export default {
-  computed: {
-    ...mapState(['url']),
-  },
   data() {
     return {
+      adminUrl: usersService.getUsersUrl(),
       id: undefined,
       fields: [
         {
@@ -36,7 +35,7 @@ export default {
           rules: 'required',
         },
         {
-          property: 'firstName',
+          property: 'first_name',
           type: 'text',
           label: 'First name',
           placeholder: 'First name',
@@ -44,7 +43,7 @@ export default {
           rules: 'required',
         },
         {
-          property: 'lastName',
+          property: 'last_name',
           type: 'text',
           label: 'Last name',
           placeholder: 'Last name',
@@ -52,7 +51,7 @@ export default {
           rules: 'required',
         },
         {
-          property: 'Email',
+          property: 'email',
           type: 'email',
           label: 'Email',
           placeholder: 'Email',
