@@ -1,9 +1,9 @@
-import { DialogProgrammatic as dialog } from 'buefy';
+import { DialogProgrammatic as Dialog } from 'buefy';
 
 
 class AlertService {
   alertFetchError = () => {
-    dialog.alert({
+    Dialog.alert({
       title: 'Error',
       message: 'Fetch error',
       type: 'is-danger',
@@ -16,7 +16,7 @@ class AlertService {
   }
 
   alertSaveError = () => {
-    dialog.alert({
+    Dialog.alert({
       title: 'Error',
       message: 'Save error',
       type: 'is-danger',

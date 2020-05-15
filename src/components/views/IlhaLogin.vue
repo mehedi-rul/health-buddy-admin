@@ -26,6 +26,7 @@
                 type="is-info"
                 :disabled="!canLogin"
                 @click="tryLogin"
+                :loading="loading"
                 expanded>Login</b-button>
             </div>
             <div class="has-text-centered">
@@ -42,11 +43,17 @@
 </template>
 
 <script>
+import toastsService from '../../services/toasts';
+
 export default {
   props: {
     appLogo: {
       type: String,
       default: '',
+    },
+    userService: {
+      type: Object,
+      required: true,
     },
   },
   data() {
@@ -54,6 +61,7 @@ export default {
       username: undefined,
       password: undefined,
       htmlHeightLast: undefined,
+      loading: false,
     };
   },
   computed: {
@@ -63,7 +71,15 @@ export default {
   },
   methods: {
     tryLogin() {
-      this.$router.push('admin/users');
+      this.loading = true;
+      this.userService.login({ username: this.username, password: this.password }).then(() => {
+        toastsService.successLoginAlert();
+        this.$router.push('admin');
+      }).catch((error) => {
+        this.loading = false;
+        toastsService.errorLoginAlert();
+        console.error(error);
+      });
     },
     updateViewStyle(mounted) {
       const { body } = document;

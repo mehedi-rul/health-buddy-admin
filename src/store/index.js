@@ -5,7 +5,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    url: 'http://ilhasoft.com.br/api',
+    serverUrl: 'http://localhost:8000/',
+    api: 'http://localhost:8000/api/',
+    authTokenKey: 'healthHuddy:authToken',
+    refreshTokenKey: 'healthHuddy:refreshToken',
   },
   mutations: {
   },

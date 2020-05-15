@@ -33,6 +33,20 @@ Vue.component('ilha-password-updater-btn', IlhaPasswordUpdaterBtn);
 
 Vue.config.productionTip = false;
 
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem(store.state.authTokenKey);
+    if (token) {
+      // eslint-disable-next-line
+      config.headers['Authorization'] = `Bearer ${ token }`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+
 new Vue({
   router,
   store,

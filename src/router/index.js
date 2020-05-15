@@ -1,21 +1,32 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import userService from '../services/users';
 
 Vue.use(VueRouter);
+
+const checkAuth = (to, from, next) => {
+  userService.getCurrentUser().then(() => {
+    next();
+  }).catch(() => {
+    next({ path: '/login' });
+  });
+};
+
+const checkLogged = (to, from, next) => {
+  userService.getCurrentUser().then(() => {
+    next({ path: '/admin' });
+    next();
+  }).catch(() => {
+    next();
+  });
+};
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
-    beforeEnter(to, from, next) {
-      if (localStorage.getItem('token')) {
-        next(); // to valid authenticated user
-      } else {
-        next({ path: '/login' });
-      }
-    },
+    redirect: '/login',
+    beforeEnter: checkLogged,
   },
   {
     path: '/login',
@@ -24,10 +35,12 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+    beforeEnter: checkLogged,
   },
   {
     path: '/admin',
     name: 'Admin',
+    beforeEnter: checkAuth,
     component: () => import(/* webpackChunkName: "login" */ '../views/Admin.vue'),
     children: [
       {
