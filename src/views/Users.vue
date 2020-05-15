@@ -6,7 +6,7 @@
       </template>
     </ilha-header>
     <ilha-table
-      :admin-url="userUrl"
+      :resource-url="userUrl"
       :edit-url="editUserUrl"
       :header="header"
       can-edit

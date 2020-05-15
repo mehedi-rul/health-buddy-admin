@@ -9,7 +9,7 @@ export default {
     return Vue.axios.get(`${this.getUsersUrl()}/my_profile`);
   },
   list() {
-    return Vue.axios.get(`${this.getUsersUrl()}`);
+    return Vue.axios.get(`${this.getUsersUrl()}/`);
   },
   login(credentials) {
     return Vue.axios.post(`${store.state.serverUrl}token/`, credentials).then(({ data }) => {

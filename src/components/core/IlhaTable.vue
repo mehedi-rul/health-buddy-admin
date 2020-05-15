@@ -74,7 +74,7 @@
 
 export default {
   props: {
-    adminUrl: {
+    resourceUrl: {
       type: String,
     },
     editUrl: {
@@ -120,7 +120,7 @@ export default {
   },
   computed: {
     isAsyncTable() {
-      return !this.data && this.adminUrl;
+      return !this.data && this.resourceUrl;
     },
     hasActions() {
       return this.canEdit || this.canDelete;
@@ -131,7 +131,7 @@ export default {
       this.currentPage = 1;
       this.totalLines = 0;
       console.log(this.isAsyncTable);
-      console.log(this.data, this.adminUrl);
+      console.log(this.data, this.resourceUrl);
       if (this.isAsyncTable) {
         this.loadAsyncData();
       } else if (this.data) {
@@ -163,7 +163,7 @@ export default {
       ].join('&');
 
       this.loading = true;
-      this.$http.get(`${this.adminUrl}?${params}`)
+      this.$http.get(`${this.resourceUrl}?${params}`)
         .then(({ data }) => {
           this.innerData = [...data.results];
           this.totalLines = data.count;
@@ -185,7 +185,7 @@ export default {
         hasIcon: true,
         onConfirm: () => {
           // this.$buefy.toast.open('Account deleted!');
-          this.$router.push(`${this.adminUrl}${data.id}/delete`);
+          this.$router.push(`${this.resourceUrl}${data.id}/delete`);
         },
       });
     },
@@ -194,7 +194,7 @@ export default {
     data() {
       this.initTable();
     },
-    adminUrl() {
+    resourceUrl() {
       this.initTable();
     },
   },

@@ -19,7 +19,7 @@
           :type="{ 'is-danger': errors[0], 'is-success': valid }"
           :message="errors">
           <b-input
-            v-model="data[field.property]"
+            v-model="innerData[field.property]"
             :type="field.type ? field.type : 'text'"
             :placeholder="field.placeholder"
             :maxlength="field.maxlength"
@@ -40,7 +40,7 @@
         :class="hasSpacing ? ['m-l-1', 'm-t-1'] : []"
         :disabled="!canSave"
         :loading="loading"
-        @click="passes(requestSave)">Save
+        @click="passes(requestSave.bind(this))">Save
       </b-button>
     </div>
     </ValidationObserver>
@@ -60,12 +60,14 @@ export default {
     ValidationProvider,
   },
   props: {
-    url: {
+    resourceUrl: {
+      type: String,
+    },
+    editUrl: {
       type: String,
     },
     data: {
       type: Object,
-      default: () => ({}),
     },
     id: {
     },
@@ -90,31 +92,43 @@ export default {
     return {
       loading: false,
       canSave: false,
+      innerData: {},
     };
   },
   methods: {
+    initData() {
+      this.innerData = {};
+      if (this.resourceUrl && this.id) {
+        this.fetchData();
+      } else {
+        if (this.data) {
+          this.innerData = { ...this.data };
+        }
+        this.$refs.observer.validate();
+      }
+    },
     requestSave() {
-      if (this.url) {
+      if (this.resourceUrl) {
         if (this.id === undefined || this.id === null) {
           this.saveData();
         } else {
           this.updateData();
         }
       } else {
-        this.$event.emit('onSaveRequest', this.data);
+        this.$emit('onSaveRequest', this.innerData);
       }
     },
     saveData() {
       this.loading = true;
-      this.$http.post(`${this.url}`, this.data).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
+      this.$http.post(`${this.resourceUrl}`, this.innerData).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
     },
     updateData() {
       this.loading = true;
-      this.$http.put(`${this.url}/${this.id}`, this.data).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
+      this.$http.put(`${this.resourceUrl}/${this.id}`, this.innerData).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
     },
     fetchData() {
       this.loading = true;
-      this.$http.get(`${this.url}/${this.id}`).then(this.fetchSuccess.bind(this)).catch(this.fetchError.bind(this));
+      this.$http.get(`${this.resourceUrl}/${this.id}`).then(this.fetchSuccess.bind(this)).catch(this.fetchError.bind(this));
     },
     changed() {
       this.canSave = false;
@@ -122,15 +136,9 @@ export default {
         this.canSave = valid;
       });
     },
-    initData() {
-      if (this.url && this.id) {
-        this.fetchData();
-      } else {
-        this.$refs.observer.validate();
-      }
-    },
     saveSuccess({ data }) {
-      Object.assign(this.data, data);
+      Object.assign(this.innerData, data);
+      this.$emit('onSaveSuccess', this.innerData);
       this.loading = false;
       toastsService.alertSaveSuccess();
     },
@@ -140,7 +148,7 @@ export default {
       toastsService.alertSaveError();
     },
     fetchSuccess({ data }) {
-      Object.assign(this.data, data);
+      Object.assign(this.innerData, data);
       this.loading = false;
       setTimeout(() => {
         this.$refs.observer.validate();
@@ -155,6 +163,12 @@ export default {
   },
   watch: {
     id() {
+      this.initData();
+    },
+    fields() {
+      this.initData();
+    },
+    data() {
       this.initData();
     },
   },

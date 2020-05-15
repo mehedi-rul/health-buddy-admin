@@ -3,6 +3,8 @@ import {
   confirmed,
   length,
   email,
+  min,
+  max,
 } from 'vee-validate/dist/rules';
 import { extend } from 'vee-validate';
 
@@ -24,3 +26,10 @@ extend('length', {
   ...length,
   message: 'This field must have 2 options',
 });
+
+extend('min', {
+  ...min,
+  message: 'The min length is {length}',
+});
+
+extend('max', max);
