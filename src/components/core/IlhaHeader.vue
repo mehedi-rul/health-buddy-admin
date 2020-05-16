@@ -1,13 +1,24 @@
 <template>
   <section class="manager-panel">
-    <b-field class="search-field">
-      <b-input placeholder="Search..."
-               type="search"
-               icon="magnify"
-               icon-clickable
-               @icon-click="searchIconClick">
-      </b-input>
-    </b-field>
+    <div class="manager-panel__query-container">
+      <b-field class="search-field">
+        <b-input placeholder="Search..."
+                 type="search"
+                 icon="magnify"
+                 icon-clickable
+                 @icon-click="searchIconClick">
+        </b-input>
+      </b-field>
+      <div class="actions">
+        <b-button
+          outlined
+          @click="logout()"
+          type="is-info"
+          class="">
+          Log out
+        </b-button>
+      </div>
+    </div>
     <h1 class="m-3 m-b-1 subtitle">
       <span>
         <slot name="title"/>
@@ -39,6 +50,10 @@ export default {
   },
   methods: {
     searchIconClick() {
+    },
+    logout() {
+      localStorage.clear();
+      this.$router.push({ path: '/' });
     },
   },
 };
