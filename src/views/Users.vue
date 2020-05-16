@@ -8,9 +8,18 @@
       </template>
     </ilha-header>
     <ilha-table
-      :resource-url="userUrl"
-      :edit-url="editUserUrl"
+      :resource-url="resourceUrl"
+      :edit-url="editUrl"
       :header="header"
+      :loading="loading"
+      :data="data"
+      :total-rows="totalRows"
+      :sort-field="sortField"
+      :sort-order="sortOrder"
+      :default-sorter-order="defaultSortOrder"
+      @onPageChange="changePage"
+      @onSort="sort"
+      @onDelete="requestDelete"
       can-edit
       can-delete
     ></ilha-table>
@@ -19,12 +28,14 @@
 
 <script>
 import usersService from '../services/users';
+import tableMixin from '../mixins/table';
 
 export default {
+  mixins: [tableMixin],
   data() {
     return {
-      userUrl: usersService.getUsersUrl(),
-      editUserUrl: '/admin/users/',
+      resourceUrl: usersService.getUsersUrl(),
+      editUrl: '/admin/users/',
       newUserUrl: '/admin/users/novo',
       header: [
         {

@@ -13,7 +13,7 @@
       paginated
       backend-pagination
       :per-page="perPage"
-      :total="totalLines"
+      :total="totalRows"
       @page-change="onPageChange"
       aria-next-label="Next page"
       aria-previous-label="Previous page"
@@ -46,7 +46,7 @@
             </router-link>
             <ilha-icon
               v-if="canDelete"
-              @click.native="confirmDelete(props.row)"
+              @click.native="delete(props.row)"
               type="trash"
               class="icon is-medium"/>
           </span>
@@ -74,9 +74,6 @@
 
 export default {
   props: {
-    resourceUrl: {
-      type: String,
-    },
     editUrl: {
       type: String,
       default: '',
@@ -85,116 +82,68 @@ export default {
       type: Array,
       default: () => [],
     },
-    canDelete: {
+    canEdit: {
       type: Boolean,
       default: false,
     },
-    canEdit: {
+    canDelete: {
       type: Boolean,
       default: false,
     },
     data: {
       type: Array,
     },
-    url: {
-      type: String,
-    },
     perPage: {
       type: Number,
       default: 10,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    totalRows: {
+      type: Number,
+      default: 0,
+    },
+    sortField: {
+      type: String,
+      default: 'id',
+    },
+    sortOrder: {
+      type: String,
+      default: 'desc',
+    },
+    defaultSortOrder: {
+      type: String,
+      default: 'desc',
     },
   },
   data() {
     return {
       innerData: [],
-
-      loading: false,
-
-      totalLines: 0,
-      currentPage: 1,
-
-      sortField: 'id',
-      sortOrder: 'desc',
-      defaultSortOrder: 'desc',
     };
   },
   computed: {
-    isAsyncTable() {
-      return !this.data && this.resourceUrl;
-    },
     hasActions() {
       return this.canEdit || this.canDelete;
     },
   },
   methods: {
     initTable() {
-      this.currentPage = 1;
-      this.totalLines = 0;
-      console.log(this.isAsyncTable);
-      console.log(this.data, this.resourceUrl);
-      if (this.isAsyncTable) {
-        this.loadAsyncData();
-      } else if (this.data) {
-        this.innerData = [...this.data];
-        this.totalLines = this.innerData.length;
-      }
+      this.innerData = this.data;
     },
     onPageChange(page) {
-      this.currentPage = page;
-      if (this.isAsyncTable) {
-        this.loadAsyncData();
-      }
+      this.$emit('onPageChange', page);
     },
     onSort(field, order) {
-      this.sortField = field;
-      this.sortOrder = order;
-      if (this.isAsyncTable) {
-        this.loadAsyncData();
-      } else {
-        // TODO sort if table is not async.
-      }
+      this.$emit('onSort', { field, order });
     },
-    loadAsyncData() {
-      if (!this.isAsyncTable) {
-        return;
-      }
-      const params = [
-        `page=${this.currentPage}`,
-      ].join('&');
-
-      this.loading = true;
-      this.$http.get(`${this.resourceUrl}?${params}`)
-        .then(({ data }) => {
-          this.innerData = [...data.results];
-          this.totalLines = data.count;
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.data = [];
-          this.totalLines = 0;
-          this.loading = false;
-          throw error;
-        });
-    },
-    confirmDelete(data) {
-      this.$buefy.dialog.confirm({
-        title: 'Deleting account',
-        message: 'Are you sure you want to <b>delete</b> your account? This action cannot be undone.',
-        confirmText: 'Delete Account',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: () => {
-          // this.$buefy.toast.open('Account deleted!');
-          this.$router.push(`${this.resourceUrl}${data.id}/delete`);
-        },
-      });
+    delete(data) {
+      this.$emit('onDelete', data);
     },
   },
   watch: {
     data() {
-      this.initTable();
-    },
-    resourceUrl() {
       this.initTable();
     },
   },
