@@ -13,6 +13,11 @@ export default {
       loading: true,
     };
   },
+  computed: {
+    order() {
+      return this.sortOrder === 'desc' ? '-' : '';
+    },
+  },
   methods: {
     initTable() {
       this.currentPage = 1;
@@ -31,6 +36,7 @@ export default {
     loadAsyncData() {
       const params = [
         `page=${this.currentPage}`,
+        `ordering=${this.order}${this.sortField}`,
       ].join('&');
 
       this.loading = true;

@@ -13,6 +13,7 @@
       :header="header"
       :loading="loading"
       :data="data"
+      :current-page="currentPage"
       :total-rows="totalRows"
       :sort-field="sortField"
       :sort-order="sortOrder"
@@ -38,6 +39,11 @@ export default {
       editUrl: '/admin/users/',
       newUserUrl: '/admin/users/novo',
       header: [
+        {
+          property: 'id',
+          label: '#',
+          sortable: true,
+        },
         {
           property: 'first_name',
           label: 'First name',

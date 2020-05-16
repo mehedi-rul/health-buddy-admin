@@ -13,6 +13,7 @@
       paginated
       backend-pagination
       :per-page="perPage"
+      :current-page="currentPage"
       :total="totalRows"
       @page-change="onPageChange"
       aria-next-label="Next page"
@@ -46,7 +47,7 @@
             </router-link>
             <ilha-icon
               v-if="canDelete"
-              @click.native="delete(props.row)"
+              @click.native="requestDelete(props.row)"
               type="trash"
               class="icon is-medium"/>
           </span>
@@ -97,6 +98,10 @@ export default {
       type: Number,
       default: 10,
     },
+    currentPage: {
+      type: Number,
+      default: 1,
+    },
     loading: {
       type: Boolean,
       default: false,
@@ -138,7 +143,7 @@ export default {
     onSort(field, order) {
       this.$emit('onSort', { field, order });
     },
-    delete(data) {
+    requestDelete(data) {
       this.$emit('onDelete', data);
     },
   },
