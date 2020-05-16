@@ -12,6 +12,18 @@ const checkAuth = (to, from, next) => {
   });
 };
 
+const checkAdmin = (to, from, next) => {
+  userService.getCurrentUser().then((user) => {
+    if (user.is_staff) {
+      next();
+    } else {
+      next({ path: '/admin' });
+    }
+  }).catch(() => {
+    next({ path: '/login' });
+  });
+};
+
 const checkLogged = (to, from, next) => {
   userService.getCurrentUser().then(() => {
     next({ path: '/admin' });
@@ -56,11 +68,13 @@ const routes = [
       {
         path: 'users',
         name: 'UsersAdmin',
+        beforeEnter: checkAdmin,
         component: () => import(/* webpackChunkName: "login" */ '../views/Users.vue'),
       },
       {
         path: 'users/:id',
         name: 'UserEdit',
+        beforeEnter: checkAdmin,
         component: () => import(/* webpackChunkName: "login" */ '../views/User.vue'),
       },
     ],

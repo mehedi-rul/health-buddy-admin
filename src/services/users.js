@@ -6,7 +6,7 @@ export default {
     return `${store.state.api}users`;
   },
   getCurrentUser() {
-    return Vue.axios.get(`${this.getUsersUrl()}/my_profile`);
+    return Vue.axios.get(`${this.getUsersUrl()}/my_profile`).then(({ data }) => data);
   },
   list() {
     return Vue.axios.get(`${this.getUsersUrl()}/`);
