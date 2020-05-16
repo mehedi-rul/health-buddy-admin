@@ -6,11 +6,10 @@
       </template>
     </ilha-header>
     <ilha-form
-      :resource-url="userUrl"
-      :edit-url="userUrl"
-      :id="id"
+      :data="data"
+      :loading="loading"
       :fields="fields"
-      @onSaveSuccess="saveSuccess"
+      @onSaveRequest="save"
     >
       <template v-slot:button>
         <ilha-password-updater-btn
@@ -23,6 +22,7 @@
 
 <script>
 import usersService from '../services/users';
+import formMixin from '../mixins/form';
 
 const fields = [
   {
@@ -77,38 +77,23 @@ const passwordFields = [
 ];
 
 export default {
+  mixins: [formMixin],
   data() {
     return {
-      userUrl: usersService.getUsersUrl(),
-      editUserUrl: '/admin/users',
-      id: undefined,
+      resourceUrl: usersService.getUsersUrl(),
       fields: [...fields],
     };
   },
   methods: {
     changePassword() {
     },
-    updateId() {
-      const id = +this.$route.params.id;
-      if (!Number.isNaN(id)) {
-        this.id = id;
+    updatedId() {
+      if (this.id) {
         this.fields = [...fields];
       } else {
         this.fields = [...fields, ...passwordFields];
       }
     },
-    saveSuccess(data) {
-      this.$router.replace({ params: { id: data.id } });
-    },
-  },
-  watch: {
-    // eslint-disable-next-line
-    '$route.params.id'() {
-      this.updateId();
-    },
-  },
-  mounted() {
-    this.updateId();
   },
 };
 

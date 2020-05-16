@@ -53,7 +53,6 @@ import {
   ValidationObserver,
   ValidationProvider,
 } from 'vee-validate';
-import toastsService from '@/services/toasts';
 
 
 export default {
@@ -62,16 +61,8 @@ export default {
     ValidationProvider,
   },
   props: {
-    resourceUrl: {
-      type: String,
-    },
-    editUrl: {
-      type: String,
-    },
     data: {
       type: Object,
-    },
-    id: {
     },
     fields: {
       type: Array,
@@ -100,77 +91,22 @@ export default {
   methods: {
     initData() {
       this.innerData = {};
-      if (this.resourceUrl && this.id) {
-        this.fetchData();
-      } else {
-        if (this.data) {
-          this.innerData = { ...this.data };
-        }
-        this.$refs.observer.validate();
+      if (this.data) {
+        this.innerData = { ...this.data };
       }
+      this.$refs.observer.validate();
     },
     requestSave() {
-      if (this.resourceUrl) {
-        if (this.id === undefined || this.id === null) {
-          this.saveData();
-        } else {
-          this.updateData();
-        }
-      } else {
-        this.$emit('onSaveRequest', this.innerData);
-      }
-    },
-    saveData() {
-      this.loading = true;
-      this.$http.post(`${this.resourceUrl}`, this.innerData).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
-    },
-    updateData() {
-      this.loading = true;
-      this.$http.put(`${this.resourceUrl}/${this.id}`, this.innerData).then(this.saveSuccess.bind(this)).catch(this.saveError.bind(this));
-    },
-    fetchData() {
-      this.loading = true;
-      this.$http.get(`${this.resourceUrl}/${this.id}`).then(this.fetchSuccess.bind(this)).catch(this.fetchError.bind(this));
+      this.$emit('onSaveRequest', this.innerData);
     },
     changed() {
       this.canSave = false;
       this.$refs.observer.validate().then((valid) => {
-        console.log('oi', valid);
         this.canSave = valid;
       });
     },
-    saveSuccess({ data }) {
-      Object.assign(this.innerData, data);
-      this.$emit('onSaveSuccess', this.innerData);
-      this.loading = false;
-      toastsService.alertSaveSuccess();
-    },
-    saveError(error) {
-      console.error(error);
-      this.loading = false;
-      toastsService.alertSaveError();
-    },
-    fetchSuccess({ data }) {
-      Object.assign(this.innerData, data);
-      this.loading = false;
-      setTimeout(() => {
-        this.$refs.observer.validate();
-      }, 0);
-    },
-    fetchError(error) {
-      console.error(error);
-      this.loading = false;
-      toastsService.alertFetchError();
-      this.$refs.observer.validate();
-    },
   },
   watch: {
-    id() {
-      this.initData();
-    },
-    fields() {
-      this.initData();
-    },
     data() {
       this.initData();
     },
