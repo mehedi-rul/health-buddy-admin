@@ -8,7 +8,6 @@
       </template>
     </ilha-header>
     <ilha-table
-      :resource-url="resourceUrl"
       :edit-url="editUrl"
       :header="header"
       :loading="loading"
