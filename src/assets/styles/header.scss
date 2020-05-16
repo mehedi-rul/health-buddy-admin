@@ -10,5 +10,11 @@
   }
   .subtitle {
     font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    .btn-add {
+      font-size: 0.7em;
+      text-transform: uppercase;
+    }
   }
 }

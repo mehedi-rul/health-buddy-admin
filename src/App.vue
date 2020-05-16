@@ -76,6 +76,10 @@ html {
   margin: 3em;
 }
 
+.m-b-1 {
+  margin-bottom: 1em;
+}
+
 .m-t-1 {
   margin-top: 1em;
 }

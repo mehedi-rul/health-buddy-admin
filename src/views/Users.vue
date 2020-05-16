@@ -1,6 +1,8 @@
 <template>
   <section class="users">
-    <ilha-header>
+    <ilha-header
+      :new-entity-url="newUserUrl"
+      add-btn-label="New user">
       <template v-slot:title>
         Users
       </template>
@@ -23,6 +25,7 @@ export default {
     return {
       userUrl: usersService.getUsersUrl(),
       editUserUrl: '/admin/users/',
+      newUserUrl: '/admin/users/novo',
       header: [
         {
           property: 'first_name',

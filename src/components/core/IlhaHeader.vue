@@ -8,8 +8,19 @@
                @icon-click="searchIconClick">
       </b-input>
     </b-field>
-    <h1 class="p-1 subtitle">
-      <slot name="title"/>
+    <h1 class="m-3 m-b-1 subtitle">
+      <span>
+        <slot name="title"/>
+      </span>
+      <b-button
+        v-if="newEntityUrl"
+        :to="newEntityUrl"
+        tag="router-link"
+        type="is-info"
+        class="btn-add p-1"
+      >
+        {{ addBtnLabel }}
+      </b-button>
     </h1>
   </section>
 </template>
@@ -17,7 +28,15 @@
 <script>
 
 export default {
-  name: 'ManagerPanel',
+  props: {
+    newEntityUrl: {
+      type: String,
+    },
+    addBtnLabel: {
+      type: String,
+      default: 'New',
+    },
+  },
   methods: {
     searchIconClick() {
     },

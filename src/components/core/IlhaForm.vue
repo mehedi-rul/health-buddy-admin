@@ -38,9 +38,11 @@
       <b-button
         type="is-info"
         :class="hasSpacing ? ['m-l-1', 'm-t-1'] : []"
-        :disabled="!canSave"
         :loading="loading"
-        @click="passes(requestSave.bind(this))">Save
+        @click="passes(requestSave.bind(this))"
+        tabindex="0"
+      >
+        Save
       </b-button>
     </div>
     </ValidationObserver>
@@ -133,6 +135,7 @@ export default {
     changed() {
       this.canSave = false;
       this.$refs.observer.validate().then((valid) => {
+        console.log('oi', valid);
         this.canSave = valid;
       });
     },
