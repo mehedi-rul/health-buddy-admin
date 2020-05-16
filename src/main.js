@@ -10,8 +10,10 @@ import IlhaIcon from '@/components/core/IlhaIcon.vue';
 import IlhaHeader from '@/components/core/IlhaHeader.vue';
 import IlhaTable from '@/components/core/IlhaTable.vue';
 import IlhaForm from '@/components/core/IlhaForm.vue';
+import IlhaSidebar from '@/components/core/IlhaSidebar.vue';
 import IlhaPasswordUpdater from '@/components/modals/IlhaPasswordUpdater.vue';
 import IlhaPasswordUpdaterBtn from '@/components/core/IlhaPasswordUpdaterBtn.vue';
+
 
 import App from './App.vue';
 import router from './router';
@@ -28,6 +30,7 @@ Vue.component('ilha-icon', IlhaIcon);
 Vue.component('ilha-header', IlhaHeader);
 Vue.component('ilha-table', IlhaTable);
 Vue.component('ilha-form', IlhaForm);
+Vue.component('ilha-sidebar', IlhaSidebar);
 Vue.component('ilha-password-updater', IlhaPasswordUpdater);
 Vue.component('ilha-password-updater-btn', IlhaPasswordUpdaterBtn);
 

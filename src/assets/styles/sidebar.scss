@@ -1,49 +1,3 @@
-<template>
-  <div class="admin-page">
-    <ilha-sidebar
-      :links="links"
-    ></ilha-sidebar>
-    <div class="form-admin">
-      <router-view />
-    </div>
-  </div>
-</template>
-
-<script>
-
-export default {
-  data() {
-    return {
-      expandOnHover: false,
-      mobile: 'reduce',
-      reduce: false,
-      fullheight: true,
-      fullwidth: false,
-      links: [
-        {
-          to: '/admin/dashboard',
-          label: 'Dashboard',
-          icon: 'dashboard',
-          class: 'dashboard-link',
-        },
-        {
-          to: '/admin/content-manager',
-          label: 'Content Manager',
-          icon: 'tables',
-        },
-        {
-          to: '/admin/users',
-          label: 'Users',
-          icon: 'users',
-        },
-      ],
-    };
-  },
-};
-</script>
-
-<style lang="scss" scoped="true">
-@import "../assets/styles/variables";
 
 .menu-header {
   display: flex;
@@ -67,7 +21,7 @@ export default {
 }
 /*}*/
 
-.menu-list /deep/ {
+.menu-list {
   li {
     margin: 1em 0;
 
@@ -172,4 +126,3 @@ export default {
     }
   }
 }
-</style>

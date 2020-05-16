@@ -38,6 +38,7 @@ $link-focus-border: $primary;
 @import "assets/styles/icon";
 @import "assets/styles/login";
 @import "assets/styles/form";
+@import "assets/styles/sidebar";
 
 body.login, body.login #app {
   height: 100%;
