@@ -47,7 +47,6 @@ export default {
   },
   mounted() {
     usersService.getCurrentUser().then((user) => {
-      console.log(user);
       if (user.is_staff) {
         this.links = [...links, ...adminLinks];
       }

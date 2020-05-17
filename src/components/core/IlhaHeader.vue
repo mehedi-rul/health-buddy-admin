@@ -2,11 +2,15 @@
   <section class="manager-panel">
     <div class="manager-panel__query-container">
       <b-field class="search-field">
-        <b-input placeholder="Search..."
-                 type="search"
-                 icon="magnify"
-                 icon-clickable
-                 @icon-click="searchIconClick">
+        <b-input
+          :value="query"
+          @input="$emit('update:query', $event)"
+          @keyup.native.enter="$emit('search', $event.target.value)"
+          placeholder="Search..."
+          type="search"
+          icon="magnify"
+          icon-clickable
+          @icon-click="searchIconClick">
         </b-input>
       </b-field>
       <div class="actions">
@@ -24,8 +28,8 @@
         <slot name="title"/>
       </span>
       <b-button
-        v-if="newEntityUrl"
-        :to="newEntityUrl"
+        v-if="newEntityRoute"
+        :to="newEntityRoute"
         tag="router-link"
         type="is-info"
         class="btn-add p-1"
@@ -40,12 +44,15 @@
 
 export default {
   props: {
-    newEntityUrl: {
-      type: String,
+    newEntityRoute: {
+      type: Object,
     },
     addBtnLabel: {
       type: String,
       default: 'New',
+    },
+    query: {
+      type: String,
     },
   },
   methods: {

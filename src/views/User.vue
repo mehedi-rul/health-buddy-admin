@@ -1,6 +1,8 @@
 <template>
   <section class="ilha-user">
-    <ilha-header>
+    <ilha-header
+      :query="query"
+      @search="search">
       <template v-slot:title>
         Users / Edit
       </template>
@@ -22,6 +24,7 @@
 
 <script>
 import usersService from '../services/users';
+import searchMixin from '../mixins/search';
 import formMixin from '../mixins/form';
 
 const fields = [
@@ -77,10 +80,11 @@ const passwordFields = [
 ];
 
 export default {
-  mixins: [formMixin],
+  mixins: [searchMixin, formMixin],
   data() {
     return {
       resourceUrl: usersService.getUsersUrl(),
+      searchRouteName: 'UsersAdmin',
       fields: [...fields],
     };
   },

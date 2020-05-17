@@ -3,7 +3,7 @@ export default {
   data() {
     return {
       resourceUrl: undefined,
-      editUrl: undefined,
+      editRouteName: undefined,
       data: [],
       currentPage: 1,
       totalRows: 0,
@@ -11,6 +11,7 @@ export default {
       sortOrder: 'desc',
       defaultSortOrder: 'desc',
       loading: true,
+      query: '',
     };
   },
   computed: {
@@ -37,10 +38,14 @@ export default {
       const params = [
         `page=${this.currentPage}`,
         `ordering=${this.order}${this.sortField}`,
-      ].join('&');
+      ];
+
+      if (this.query) {
+        params.push(`search=${this.query}`);
+      }
 
       this.loading = true;
-      this.$http.get(`${this.resourceUrl}?${params}`)
+      this.$http.get(`${this.resourceUrl}?${params.join('&')}`)
         .then(({ data }) => {
           this.data = data.results;
           this.totalRows = data.count;
@@ -69,6 +74,9 @@ export default {
   },
   watch: {
     resourceUrl() {
+      this.initTable();
+    },
+    query() {
       this.initTable();
     },
   },

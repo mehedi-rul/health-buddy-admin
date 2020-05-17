@@ -42,7 +42,7 @@
 
         <b-table-column v-if="hasActions" label="" centered>
           <span class="ilha-content-list__actions">
-            <router-link :to="editUrl + props.row.id">
+            <router-link :to="{ name: editRouteName, params: {id: props.row.id}}">
               <ilha-icon v-if="canEdit" type="edit" class="icon is-medium"/>
             </router-link>
             <ilha-icon
@@ -75,7 +75,7 @@
 
 export default {
   props: {
-    editUrl: {
+    editRouteName: {
       type: String,
       default: '',
     },

@@ -110,6 +110,9 @@ export default {
     data() {
       this.initData();
     },
+    fields() {
+      this.initData();
+    },
   },
   mounted() {
     this.initData();

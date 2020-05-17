@@ -53,8 +53,5 @@ export default {
       fullwidth: false,
     };
   },
-  mounted() {
-    console.log(this.links);
-  },
 };
 </script>

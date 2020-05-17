@@ -1,14 +1,16 @@
 <template>
   <section class="users">
     <ilha-header
-      :new-entity-url="newUserUrl"
+      :new-entity-route="newUserRoute"
+      :query="query"
+      @search="search"
       add-btn-label="New user">
       <template v-slot:title>
         Users
       </template>
     </ilha-header>
     <ilha-table
-      :edit-url="editUrl"
+      :edit-route-name="editRouteName"
       :header="header"
       :loading="loading"
       :data="data"
@@ -28,15 +30,17 @@
 
 <script>
 import usersService from '../services/users';
+import searchMixin from '../mixins/search';
 import tableMixin from '../mixins/table';
 
 export default {
-  mixins: [tableMixin],
+  mixins: [searchMixin, tableMixin],
   data() {
     return {
       resourceUrl: usersService.getUsersUrl(),
-      editUrl: '/admin/users/',
-      newUserUrl: '/admin/users/novo',
+      editRouteName: 'UserEdit',
+      searchRouteName: 'UsersAdmin',
+      newUserRoute: { name: 'UserEdit', params: { id: 'new' } },
       header: [
         {
           property: 'id',
