@@ -36,7 +36,8 @@
           :field="field.property"
           :label="field.label"
           :sortable="field.sortable"
-          :centered="field.centered">
+          :centered="field.centered"
+          :width="cellWidth">
           {{ props.row[field.property] }}
         </b-table-column>
 
@@ -131,6 +132,13 @@ export default {
   computed: {
     hasActions() {
       return this.canEdit || this.canDelete;
+    },
+    cellWidth() {
+      if (!this.header || this.header.length === 0) {
+        return undefined;
+      }
+      const headerLength = this.header.length + (this.hasActions ? 1 : 0);
+      return `${(1 / (headerLength)) * 100}%`;
     },
   },
   methods: {

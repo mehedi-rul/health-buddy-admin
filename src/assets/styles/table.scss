@@ -11,6 +11,9 @@
     table {
       border: 0;
       background-color: $light;
+      td {
+        word-break: break-all;
+      }
       &.is-striped {
         tbody, thead {
           tr:not(.is-selected):nth-child(odd), th {
