@@ -13,11 +13,11 @@
       :fields="fields"
       @onSaveRequest="save"
     >
-      <template v-slot:button>
-        <ilha-password-updater-btn
-          v-if="id"
-          :url="'s'"></ilha-password-updater-btn>
-      </template>
+<!--      <template v-slot:button>-->
+<!--        <ilha-password-updater-btn-->
+<!--          v-if="id"-->
+<!--          :url="changePasswordUrl"></ilha-password-updater-btn>-->
+<!--      </template>-->
     </ilha-form>
   </section>
 </template>
@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       resourceUrl: usersService.getUsersUrl(),
+      changePasswordUrl: `${usersService.getUsersUrl()}/change_password`,
       searchRouteName: 'UsersAdmin',
       fields: [...fields],
     };
