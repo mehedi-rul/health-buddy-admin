@@ -66,15 +66,15 @@ const passwordFields = [
   {
     property: 'password',
     type: 'password',
-    label: 'New Password',
+    label: 'Password',
     placeholder: 'New Password',
     rules: 'required|min:8',
   },
   {
     property: 'confirmationPassword',
     type: 'password',
-    label: 'Confirm New Password',
-    placeholder: 'Confirm New Password',
+    label: 'Confirm Password',
+    placeholder: 'Confirm Password',
     rules: 'required|min:8|confirmed:password',
   },
 ];
