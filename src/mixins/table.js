@@ -1,3 +1,4 @@
+import toastsService from '../services/toasts';
 
 export default {
   data() {
@@ -61,14 +62,21 @@ export default {
     requestDelete(data) {
       this.$buefy.dialog.confirm({
         title: 'Deleting account',
-        message: 'Are you sure you want to <b>delete</b> your account? This action cannot be undone.',
+        message: 'Are you sure you want to <b>delete</b>? This action cannot be undone.',
         confirmText: 'Delete Account',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => {
-          // this.$buefy.toast.open('Account deleted!');
-          this.$router.push(`${this.resourceUrl}${data.id}/delete`);
+          this.deleteData(data);
         },
+      });
+    },
+    deleteData(data) {
+      this.$http.delete(`${this.resourceUrl}/${data.id}`).then(() => {
+        toastsService.alertDeleteSuccess();
+      }).catch((error) => {
+        console.error(error);
+        toastsService.alertDeleteError();
       });
     },
   },

@@ -41,4 +41,20 @@ export default {
       type: 'is-danger',
     });
   },
+  alertDeleteSuccess() {
+    Toast.open({
+      duration: 2000,
+      message: 'Deleted',
+      position: 'is-bottom',
+      type: 'is-success',
+    });
+  },
+  alertDeleteError() {
+    Toast.open({
+      duration: 2000,
+      message: 'Error on delete',
+      position: 'is-bottom',
+      type: 'is-danger',
+    });
+  },
 };

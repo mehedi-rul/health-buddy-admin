@@ -48,13 +48,17 @@ export default {
           sortable: true,
         },
         {
-          property: 'first_name',
-          label: 'First name',
+          property: 'is_active',
+          label: 'Active',
+        },
+        {
+          property: 'username',
+          label: 'Username',
           sortable: true,
         },
         {
-          property: 'last_name',
-          label: 'Last name',
+          property: 'first_name',
+          label: 'First name',
           sortable: true,
         },
         {
