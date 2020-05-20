@@ -29,15 +29,17 @@
 </template>
 
 <script>
-import usersService from '../services/users';
-import searchMixin from '../mixins/search';
-import tableMixin from '../mixins/table';
+import {
+  searchMixin,
+  tableMixin,
+  toastsMixin,
+  usersMixin,
+} from 'admin-buddy';
 
 export default {
-  mixins: [searchMixin, tableMixin],
+  mixins: [toastsMixin, searchMixin, tableMixin, usersMixin],
   data() {
     return {
-      resourceUrl: usersService.getUsersUrl(),
       editRouteName: 'UserEdit',
       searchRouteName: 'UsersAdmin',
       newUserRoute: { name: 'UserEdit', params: { id: 'new' } },
@@ -68,6 +70,14 @@ export default {
         },
       ],
     };
+  },
+  watch: {
+    usersUrl() {
+      this.resourceUrl = this.usersUrl;
+    },
+  },
+  mounted() {
+    this.resourceUrl = this.usersUrl;
   },
 };
 

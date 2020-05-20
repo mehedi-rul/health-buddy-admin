@@ -9,6 +9,7 @@ export default new Vuex.Store({
     api: 'http://localhost:8000/api/',
     authTokenKey: 'healthHuddy:authToken',
     refreshTokenKey: 'healthHuddy:refreshToken',
+    loginAfterRouteName: 'Admin',
   },
   mutations: {
   },

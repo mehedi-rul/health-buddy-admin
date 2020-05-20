@@ -1,11 +1,19 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import userService from '../services/users';
+import { usersMixin } from 'admin-buddy';
+import store from '../store';
 
 Vue.use(VueRouter);
 
+const auth = new Vue({
+  mixins: [
+    usersMixin,
+  ],
+  store,
+});
+
 const checkAuth = (to, from, next) => {
-  userService.getCurrentUser().then(() => {
+  auth.getCurrentUser().then(() => {
     next();
   }).catch(() => {
     next({ path: '/login' });
@@ -13,7 +21,7 @@ const checkAuth = (to, from, next) => {
 };
 
 const checkAdmin = (to, from, next) => {
-  userService.getCurrentUser().then((user) => {
+  auth.getCurrentUser().then((user) => {
     if (user.is_staff) {
       next();
     } else {
@@ -25,7 +33,7 @@ const checkAdmin = (to, from, next) => {
 };
 
 const checkLogged = (to, from, next) => {
-  userService.getCurrentUser().then(() => {
+  auth.getCurrentUser().then(() => {
     next({ path: '/admin' });
     next();
   }).catch(() => {

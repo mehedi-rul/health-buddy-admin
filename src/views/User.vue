@@ -23,9 +23,12 @@
 </template>
 
 <script>
-import usersService from '../services/users';
-import searchMixin from '../mixins/search';
-import formMixin from '../mixins/form';
+import {
+  searchMixin,
+  formMixin,
+  toastsMixin,
+  usersMixin,
+} from 'admin-buddy';
 
 const fields = [
   {
@@ -80,11 +83,9 @@ const passwordFields = [
 ];
 
 export default {
-  mixins: [searchMixin, formMixin],
+  mixins: [searchMixin, formMixin, toastsMixin, usersMixin],
   data() {
     return {
-      resourceUrl: usersService.getUsersUrl(),
-      changePasswordUrl: `${usersService.getUsersUrl()}/change_password`,
       searchRouteName: 'UsersAdmin',
       fields: [...fields],
     };
@@ -99,6 +100,19 @@ export default {
         this.fields = [...fields, ...passwordFields];
       }
     },
+  },
+  computed: {
+    changePasswordUrl() {
+      return `${this.usersUrl}/change_password`;
+    },
+  },
+  watch: {
+    usersUrl() {
+      this.resourceUrl = this.usersUrl;
+    },
+  },
+  mounted() {
+    this.resourceUrl = this.usersUrl;
   },
 };
 

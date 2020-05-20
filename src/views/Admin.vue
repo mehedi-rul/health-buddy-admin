@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import usersService from '../services/users';
+import { usersMixin } from 'admin-buddy';
 
 const links = [
   {
@@ -35,6 +35,7 @@ const adminLinks = [
 ];
 
 export default {
+  mixins: [usersMixin],
   data() {
     return {
       expandOnHover: false,
@@ -46,7 +47,7 @@ export default {
     };
   },
   mounted() {
-    usersService.getCurrentUser().then((user) => {
+    this.getCurrentUser().then((user) => {
       if (user.is_staff) {
         this.links = [...links, ...adminLinks];
       }

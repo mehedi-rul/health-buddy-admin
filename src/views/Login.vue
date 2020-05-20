@@ -1,16 +1,22 @@
 <template>
-  <ilha-login :app-logo="appLogo" :user-service="userService"/>
+  <ilha-login
+    :app-logo="appLogo"
+    :loading="loginLoading"
+    @onLogin="tryLogin($event)"/>
 </template>
 
 <script>
+import { toastsMixin, usersMixin } from 'admin-buddy';
 import appLogo from '../assets/imgs/unicef-eu-asia-logo.png';
-import userService from '../services/users';
 
 export default {
+  mixins: [
+    toastsMixin,
+    usersMixin,
+  ],
   data() {
     return {
       appLogo,
-      userService,
     };
   },
 };
