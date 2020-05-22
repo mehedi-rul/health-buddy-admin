@@ -40,6 +40,9 @@ $link-focus-border: $primary;
 @import "~admin-buddy/src/assets/styles/form";
 @import "~admin-buddy/src/assets/styles/sidebar";
 
+@import "~admin-buddy/src/assets/styles/common";
+@import "~admin-buddy/src/assets/styles/summary-box";
+
 body.login, body.login #app {
   height: 100%;
   width: 100%;
@@ -48,58 +51,5 @@ html {
   background-color: $light;
 }
 
-.modal.is-active {
-  z-index: 999999;
-}
 
-.p-1 {
-  padding: 1em;
-}
-
-.p-2 {
-  padding: 2em;
-}
-
-.p-3 {
-  padding: 3em;
-}
-
-.m-1 {
-  margin: 1em;
-}
-
-.m-2 {
-  margin: 2em;
-}
-
-.m-3 {
-  margin: 3em;
-}
-
-.m-b-1 {
-  margin-bottom: 1em;
-}
-
-.m-t-1 {
-  margin-top: 1em;
-}
-
-.m-l-1 {
-  margin-left: 1em;
-}
-
-.m-r-1 {
-  margin-right: 1em;
-}
-
-
-.form-admin {
-  margin-left: $sidebar-width;
-}
-
-@media screen and (max-width: 1023px) {
-  .form-admin {
-    margin-left: $sidebar-mobile-width;
-  }
-}
 </style>

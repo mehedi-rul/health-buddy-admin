@@ -1,12 +1,14 @@
 <template>
   <section class="users">
     <ilha-header
-      :new-entity-route="newUserRoute"
+      :creation-route="newUserRoute"
       :query="query"
-      @search="search"
-      add-btn-label="New user">
+      @search="search">
       <template v-slot:title>
         Users
+      </template>
+      <template v-slot:creationBtnLabel>
+        New user
       </template>
     </ilha-header>
     <ilha-table
