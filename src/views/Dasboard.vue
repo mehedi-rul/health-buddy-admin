@@ -7,7 +7,12 @@
         <ilha-title>
           Overview
         </ilha-title>
-        <div class="columns m-t-1 m-b-1">
+        <b-loading
+          :is-full-page="false"
+          :active.sync="loading">
+        </b-loading>
+        <div v-if="!loading"
+             class="columns m-t-1 m-b-1">
           <div class="column">
             <ilha-summary-box class="has-background-primary has-text-white">
               <template v-slot:title>
@@ -17,13 +22,13 @@
                 View details
               </template>
               <template v-slot:period>
-                today
+                {{ period }}
               </template>
               <template v-slot:metric>
                 Interact with Bot
               </template>
               <template v-slot:amount>
-                1231
+                {{ interactions }}
               </template>
             </ilha-summary-box>
           </div>
@@ -33,16 +38,16 @@
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
               <template v-slot:details>
-                Total Asks
+                View details
               </template>
               <template v-slot:period>
-                today
+                {{ period }}
               </template>
               <template v-slot:metric>
-                Interact with Bot
+                Total Asks
               </template>
               <template v-slot:amount>
-                1231
+                {{ totalAsks }}
               </template>
             </ilha-summary-box>
           </div>
@@ -55,19 +60,20 @@
                 View details
               </template>
               <template v-slot:period>
-                today
+                {{ period }}
               </template>
               <template v-slot:metric>
                 All flow on Bot
               </template>
               <template v-slot:amount>
-                1231
+                {{ allFlows }}
               </template>
             </ilha-summary-box>
           </div>
         </div>
       </div>
-      <div class="m-t-1">
+      <div v-if="!loading"
+           class="m-t-1">
         <ilha-title>
           Secondary
         </ilha-title>
@@ -107,67 +113,14 @@
 
 <script>
 import { mapState } from 'vuex';
+import dashboardMixin from '../mixins/dashboard';
 
 export default {
-  data() {
-    return {
-      dailyTrafficData: [
-        {
-          label: 'Visitors',
-          value: 90,
-          backgroundColor: '#2FA2F4',
-        },
-        {
-          label: 'Users',
-          value: 10,
-          backgroundColor: '#F8C239',
-        },
-      ],
-      messageMetricsData: [
-        {
-          label: 'Sent',
-          value: 50,
-          backgroundColor: '#374EA2',
-        },
-        {
-          label: 'Received',
-          value: 30,
-          backgroundColor: '#1CABE2',
-        },
-        {
-          label: 'Fail',
-          value: 10,
-          backgroundColor: '#E2231A',
-        },
-      ],
-      reportsData: [
-        {
-          label: 'Fake',
-          value: 57,
-          backgroundColor: '#2FA2F4',
-        },
-        {
-          label: 'Rumors',
-          value: 36,
-          backgroundColor: '#F8C239',
-        },
-        {
-          label: 'New',
-          value: 15,
-          backgroundColor: '#F7652B',
-        },
-      ],
-    };
-  },
+  mixins: [dashboardMixin],
   computed: {
     ...mapState(['serverUrl']),
   },
   methods: {
-    fetchData() {
-      if (!this.serverUrl) {
-        // return;
-      }
-    },
   },
   watch: {
     serverUrl() {
@@ -178,30 +131,16 @@ export default {
     this.fetchData();
   },
 };
-// this.$http.get(`${this.serverUrl}proxy/rapidpro/flows?uuid=ab06f98c-84d5-479e-9511-f03ac61ba233`)
-// .then(({ result }) => {
-// console.log(result);
-// });
 </script>
 
-<style lang="scss" scoped="true">
+<style lang="scss">
+@import "../assets/styles/variables";
+.loading-overlay {
+  left: $sidebar-width;
 
-.summary {
-  border: solid 1px white;
-  border-radius: 5px;
-  &__header {
-    margin: 0;
-    border-bottom: 1px solid white;
-    .column {
-      padding: 0.3em;
-      &:last-child {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-left: 1px solid white;
-      }
-    }
-
+  @media screen and (max-width: 1023px) {
+      left: $sidebar-mobile-width;
   }
 }
+
 </style>
