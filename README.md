@@ -25,5 +25,13 @@ yarn test:unit
 yarn lint
 ```
 
+## Docker
+
+### Docker-compose
+To run the project with Docker you only need to execute the following command at the project root:
+```
+docker-compose up
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
