@@ -2,17 +2,18 @@
   <section class="dashboard">
     <ilha-header>
     </ilha-header>
-    <div class="m-2 m-t-1">
+    <b-loading
+      :is-full-page="false"
+      :active.sync="loading">
+    </b-loading>
+    <div
+      v-if="!loading"
+      class="m-2 m-t-1">
       <div class="m-b-1">
         <ilha-title>
           Overview
         </ilha-title>
-        <b-loading
-          :is-full-page="false"
-          :active.sync="loading">
-        </b-loading>
-        <div v-if="!loading"
-             class="columns m-t-1 m-b-1">
+        <div class="columns m-t-1 m-b-1">
           <div class="column">
             <ilha-summary-box class="has-background-primary has-text-white">
               <template v-slot:title>
@@ -72,8 +73,7 @@
           </div>
         </div>
       </div>
-      <div v-if="!loading"
-           class="m-t-1">
+      <div class="m-t-1">
         <ilha-title>
           Secondary
         </ilha-title>

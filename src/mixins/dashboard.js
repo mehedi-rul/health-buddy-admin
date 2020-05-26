@@ -73,7 +73,7 @@ export default {
         .then(({ data }) => this.countMessages(data, 'incoming'));
     },
     fetchAllFlows() {
-      return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a`)
+      return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a `)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
@@ -95,7 +95,7 @@ export default {
         .then(({ data }) => this.countMessages(data, 'errors'));
     },
     fetchRegisteredFakes() {
-      return this.$http.get(`${this.rapidProUrl}labels?uuid=d6621bb6-9918-4128-80cf-3c2d3b981978`)
+      return this.$http.get(`${this.rapidProUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`)
         .then(({ data }) => this.parseRegisteredFakes(data));
     },
     parseTotalInteractions(data) {

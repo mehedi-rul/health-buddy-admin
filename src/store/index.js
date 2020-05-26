@@ -11,6 +11,11 @@ export default new Vuex.Store({
     refreshTokenKey: 'healthHuddy:refreshToken',
     loginAfterRouteName: 'Admin',
   },
+  getters: {
+    usersUrl(state) {
+      return `${state.api}users`;
+    },
+  },
   mutations: {
   },
   actions: {

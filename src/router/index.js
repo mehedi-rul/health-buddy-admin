@@ -35,7 +35,6 @@ const checkAdmin = (to, from, next) => {
 const checkLogged = (to, from, next) => {
   auth.getCurrentUser().then(() => {
     next({ path: '/admin' });
-    next();
   }).catch(() => {
     next();
   });

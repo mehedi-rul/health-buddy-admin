@@ -49,6 +49,7 @@ body.login, body.login #app {
 }
 html {
   background-color: $light;
+  font-family: 'Oxygen', sans-serif;
 }
 
 
