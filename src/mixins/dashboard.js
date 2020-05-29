@@ -70,7 +70,7 @@ export default {
     },
     fetchTotalAsks() {
       return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.countMessages(data, 'incoming'));
+        .then(({ data }) => this.countMessages(data, 'outgoing'));
     },
     fetchAllFlows() {
       return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a `)
@@ -88,7 +88,7 @@ export default {
     },
     fetchTotalAnswers() {
       return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.countMessages(data, 'outgoing'));
+        .then(({ data }) => this.countMessages(data, 'incoming'));
     },
     fetchTotalErrors() {
       return this.$http.get(`${this.rapidProUrl}channel_stats`)
@@ -127,3 +127,25 @@ export default {
     },
   },
 };
+
+// Interact with Bot -> podemos filtrar por período,
+// mas não escolhemos o canal (web, telegram, etc...)
+
+// Total Asks -> podemos filtrar por período,
+// e podemos escolher o canal (web, telegram, etc...)
+
+// All flow on Bot -> podemos filtrar por período,
+// mas não escolhemos o canal (web, telegram, etc...)
+
+// Daily Traffic -> mudar nome para Total traffic, a princípio
+// poderá ser filtrado por período. Preciso estudar o google analytics
+
+// Message Metrics -> podemos filtrar por período e
+// podemos escolher o canal (web, telegram, etc...)
+
+// New reports registreds -> Os tipos são: Low confidence response,
+// New question e Reported Rumors. Porém por enquanto só existe o
+// Reported Rumors no bot. Não poderá ser filtrado período, nem canal.
+
+// O UUID do Interact with Bot e do All flow on Bot são definidos
+// pelo cliente (unicef). Se houver mudanças, eles precisaram nos informar.

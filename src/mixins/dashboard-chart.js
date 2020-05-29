@@ -43,19 +43,19 @@ export default {
     makeReportsData(totalNew, totalFakes, totalRumors) {
       return [
         {
-          label: 'Fake',
+          label: 'Reported Rumors',
           value: totalFakes,
           backgroundColor: '#F7652B',
         },
         {
-          label: 'New',
-          value: totalNew,
-          backgroundColor: '#2FA2F4',
-        },
-        {
-          label: 'Rumors',
+          label: 'Low Confidence',
           value: totalRumors,
           backgroundColor: '#F8C239',
+        },
+        {
+          label: 'New Questions',
+          value: totalNew,
+          backgroundColor: '#2FA2F4',
         },
       ];
     },

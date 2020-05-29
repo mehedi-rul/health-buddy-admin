@@ -13,61 +13,68 @@
         <ilha-title>
           Overview
         </ilha-title>
-        <div class="columns m-t-1 m-b-1">
-          <div class="column">
-            <ilha-summary-box class="has-background-primary has-text-white">
-              <template v-slot:title>
+        <div class="columns  m-t-1 m-b-1">
+          <div class="column is-3">
+            <ilha-summary-box class="has-background-blue has-text-white">
+              <template v-slot:icon>
                 <ilha-icon type="tag-white" class="icon is-medium"/>
-              </template>
-              <template v-slot:details>
-                View details
               </template>
               <template v-slot:period>
                 {{ period }}
               </template>
               <template v-slot:metric>
-                Interact with Bot
+                <span title="Interact with Bot">Interact with Bot</span>
               </template>
               <template v-slot:amount>
                 {{ interactions }}
               </template>
             </ilha-summary-box>
           </div>
-          <div class="column">
-            <ilha-summary-box class="has-background-warning has-text-white">
-              <template v-slot:title>
+          <div class="column is-3">
+            <ilha-summary-box class="has-background-yellow has-text-white">
+              <template v-slot:icon>
                 <ilha-icon type="users-white" class="icon is-medium"/>
-              </template>
-              <template v-slot:details>
-                View details
               </template>
               <template v-slot:period>
                 {{ period }}
               </template>
               <template v-slot:metric>
-                Total Asks
+                <span title="Total Asks">Total Asks</span>
               </template>
               <template v-slot:amount>
                 {{ totalAsks }}
               </template>
             </ilha-summary-box>
           </div>
-          <div class="column">
-            <ilha-summary-box class="has-background-success has-text-white">
-              <template v-slot:title>
+          <div class="column is-3">
+            <ilha-summary-box class="has-background-green has-text-white">
+              <template v-slot:icon>
                 <ilha-icon type="trend-white" class="icon is-medium"/>
-              </template>
-              <template v-slot:details>
-                View details
               </template>
               <template v-slot:period>
                 {{ period }}
               </template>
               <template v-slot:metric>
-                All flow on Bot
+                <span title="All flow on Bot">All flow on Bot</span>
               </template>
               <template v-slot:amount>
                 {{ allFlows }}
+              </template>
+            </ilha-summary-box>
+          </div>
+          <div class="column is-3">
+            <ilha-summary-box class="has-background-red has-text-white">
+              <template v-slot:icon>
+                <ilha-icon type="trend-white" class="icon is-medium"/>
+              </template>
+              <template v-slot:period>
+                {{ period }}
+              </template>
+              <template v-slot:metric>
+                <span title="Total Traffic">Total Traffic</span>
+              </template>
+              <template v-slot:amount>
+                {{ 0 }}
               </template>
             </ilha-summary-box>
           </div>
@@ -78,16 +85,7 @@
           Secondary
         </ilha-title>
         <div class="columns m-t-1 m-b-1">
-          <div class="column is-one-third ">
-            <ilha-chart-summary-box
-              :chart-data="dailyTrafficData"
-              class="has-background-white">
-              <template v-slot:title>
-                Daily Traffic
-              </template>
-            </ilha-chart-summary-box>
-          </div>
-          <div class="column is-one-third ">
+          <div class="column is-half">
             <ilha-chart-summary-box
               :chart-data="messageMetricsData"
               class="has-background-white">
@@ -96,7 +94,7 @@
               </template>
             </ilha-chart-summary-box>
           </div>
-          <div class="column is-one-third ">
+          <div class="column is-half">
             <ilha-chart-summary-box
               :chart-data="reportsData"
               class="has-background-white">
@@ -140,6 +138,15 @@ export default {
 
   @media screen and (max-width: 1023px) {
       left: $sidebar-mobile-width;
+  }
+}
+
+.dashboard {
+  /deep/ .search-field {
+    opacity: 0;
+    input {
+      display: none;
+    }
   }
 }
 
