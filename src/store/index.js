@@ -15,6 +15,12 @@ export default new Vuex.Store({
     usersUrl(state) {
       return `${state.api}users`;
     },
+    rapidProUrl(state) {
+      return `${state.serverUrl}proxy/rapidpro/`;
+    },
+    googleAnalyticsUrl(state) {
+      return `${state.serverUrl}google_analytics/ga`;
+    },
   },
   mutations: {
   },

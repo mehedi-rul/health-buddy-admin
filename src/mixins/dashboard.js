@@ -1,4 +1,4 @@
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
 export default {
@@ -13,14 +13,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(['serverUrl']),
-    rapidProUrl() {
-      return `${this.serverUrl}proxy/rapidpro/`;
-    },
+    ...mapGetters(['rapidProUrl', 'googleAnalyticsUrl']),
   },
   methods: {
     fetchData() {
-      if (!this.serverUrl) {
+      if (!this.rapidProUrl) {
         return;
       }
       this.loading = true;
@@ -73,11 +70,12 @@ export default {
         .then(({ data }) => this.countMessages(data, 'outgoing'));
     },
     fetchAllFlows() {
-      return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a `)
+      return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a`)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
-      return Promise.resolve(0);
+      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=365daysAgo&end_date=today&metrics=pageviews`)
+        .then(({ data }) => this.parsePageViews(data));
     },
     fetchUsersAccesses() {
       return Promise.resolve(0);
@@ -124,6 +122,9 @@ export default {
     parseRegisteredFakes(data) {
       const { count } = data.results[0] || { count: 0 };
       return count;
+    },
+    parsePageViews(data) {
+      return data.totalsForAllResults['ga:pageviews'];
     },
   },
 };
