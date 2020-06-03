@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    serverUrl: 'http://localhost:8000/',
-    api: 'http://localhost:8000/api/',
+    serverUrl: process.env.VUE_APP_SERVER_URL,
+    api: process.env.VUE_APP_API_URL,
     authTokenKey: 'healthHuddy:authToken',
     refreshTokenKey: 'healthHuddy:refreshToken',
     loginAfterRouteName: 'Admin',
