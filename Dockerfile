@@ -1,14 +1,14 @@
-FROM node:14.3.0-alpine
+FROM node:14.3.0-alpine as builder
 
-WORKDIR /app
-
-COPY package.json ./
-COPY admin-buddy-0.1.0.tgz ./
-
-RUN npm install
+WORKDIR /home/app
 
 COPY . .
 
-EXPOSE 8080
+RUN npm install
 
-CMD ["npm", "run", "serve"]
+RUN npm run build
+
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /home/app/dist /usr/share/nginx/html/health-buddy-admin
