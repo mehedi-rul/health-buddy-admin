@@ -74,7 +74,7 @@
                 <span title="Total Traffic">Total Traffic</span>
               </template>
               <template v-slot:amount>
-                {{ 0 }}
+                {{ pageViews }}
               </template>
             </ilha-summary-box>
           </div>

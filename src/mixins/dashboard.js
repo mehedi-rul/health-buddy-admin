@@ -10,6 +10,7 @@ export default {
       interactions: 0,
       totalAsks: 0,
       allFlows: 0,
+      pageViews: 0,
     };
   },
   computed: {
@@ -28,9 +29,7 @@ export default {
             interactions,
             totalAsks,
             allFlows,
-            visitorsAccesses,
-            usersAccesses,
-            dailyTraffic,
+            pageViews,
             totalAnswers,
             totalErrors,
             registeredFakes,
@@ -38,13 +37,12 @@ export default {
           this.interactions = interactions;
           this.totalAsks = totalAsks;
           this.allFlows = allFlows;
-          this.dailyTrafficData = this.makeDailyTrafficData(visitorsAccesses, usersAccesses);
+          this.pageViews = pageViews;
           this.messageMetricsData = this.makeMessageMetricsData(
             totalAsks,
             totalAnswers,
             totalErrors,
           );
-          console.log(dailyTraffic);
           this.reportsData = this.makeReportsData(0, registeredFakes, 0);
         });
     },
@@ -54,8 +52,6 @@ export default {
         this.fetchTotalAsks(),
         this.fetchAllFlows(),
         this.fetchVisitorsAccesses(),
-        this.fetchUsersAccesses(),
-        this.fetchDailyTraffic(),
         this.fetchTotalAnswers(),
         this.fetchTotalErrors(),
         this.fetchRegisteredFakes(),
@@ -76,13 +72,6 @@ export default {
     fetchVisitorsAccesses() {
       return this.$http.get(`${this.googleAnalyticsUrl}?start_date=365daysAgo&end_date=today&metrics=pageviews`)
         .then(({ data }) => this.parsePageViews(data));
-    },
-    fetchUsersAccesses() {
-      return Promise.resolve(0);
-    },
-    fetchDailyTraffic() {
-      return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.parseDailyTraffic(data));
     },
     fetchTotalAnswers() {
       return this.$http.get(`${this.rapidProUrl}channel_stats`)
@@ -115,9 +104,6 @@ export default {
     parseAllFlows(data) {
       const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
       return runs.completed;
-    },
-    parseDailyTraffic() {
-      return 0;
     },
     parseRegisteredFakes(data) {
       const { count } = data.results[0] || { count: 0 };
