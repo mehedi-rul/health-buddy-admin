@@ -77,6 +77,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "login" */ '../views/ContentManager.vue'),
       },
       {
+        path: 'content-manager/:id',
+        name: 'ArticleEdit',
+        component: () => import(/* webpackChunkName: "login" */ '../views/Article.vue'),
+      },
+      {
         path: 'users',
         name: 'UsersAdmin',
         beforeEnter: checkAdmin,

@@ -5,6 +5,8 @@ import AdminBuddy, { initVeeValidate } from 'admin-buddy';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -14,6 +16,7 @@ initVeeValidate();
 Vue.use(Buefy);
 Vue.use(AdminBuddy);
 Vue.use(VueAxios, axios);
+Vue.use(CKEditor);
 
 
 Vue.config.productionTip = false;
@@ -23,7 +26,7 @@ axios.interceptors.request.use(
     const token = localStorage.getItem(store.state.authTokenKey);
     if (token) {
       // eslint-disable-next-line
-      config.headers['Authorization'] = `Bearer ${ token }`;
+        config.headers['Authorization'] = `Bearer ${token}`;
     }
 
     return config;

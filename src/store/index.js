@@ -15,11 +15,23 @@ export default new Vuex.Store({
     usersUrl(state) {
       return `${state.api}users`;
     },
+    articlesUrl(state) {
+      return `${state.api}articles`;
+    },
+    uploadUrl(state) {
+      return `${state.serverUrl}upload/`;
+    },
     rapidProUrl(state) {
       return `${state.serverUrl}proxy/rapidpro/`;
     },
     googleAnalyticsUrl(state) {
       return `${state.serverUrl}google_analytics/ga`;
+    },
+    uploadHeadersReq(state) {
+      const token = localStorage.getItem(state.authTokenKey);
+      return {
+        Authorization: `Bearer ${token}`,
+      };
     },
   },
   mutations: {
