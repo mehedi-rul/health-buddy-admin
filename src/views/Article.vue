@@ -7,7 +7,6 @@
         Content Manager / Edit
       </template>
     </ilha-header>
-    {{ uploadUrl }}
     <ilha-form
       v-if="uploadUrl && uploadHeadersReq"
       :data="data"
