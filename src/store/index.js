@@ -9,7 +9,7 @@ export default new Vuex.Store({
     api: process.env.VUE_APP_API_URL,
     authTokenKey: 'healthHuddy:authToken',
     refreshTokenKey: 'healthHuddy:refreshToken',
-    loginAfterRouteName: 'Admin',
+    loginAfterRouteName: 'DashboardAdmin',
   },
   getters: {
     usersUrl(state) {
