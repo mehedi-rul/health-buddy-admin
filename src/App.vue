@@ -42,10 +42,6 @@ $link-focus-border: $primary;
 @import "~admin-buddy/src/assets/styles/common";
 @import "~admin-buddy/src/assets/styles/summary-box";
 
-body.login, body.login #app {
-  height: 100%;
-  width: 100%;
-}
 html {
   background-color: $light;
   font-family: 'Oxygen', sans-serif;
@@ -54,6 +50,5 @@ html {
 .menu-header__icon .mdi {
   display: none;
 }
-
 
 </style>

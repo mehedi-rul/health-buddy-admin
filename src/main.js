@@ -15,7 +15,6 @@ Vue.use(Buefy);
 Vue.use(AdminBuddy);
 Vue.use(VueAxios, axios);
 
-
 Vue.config.productionTip = false;
 
 axios.interceptors.request.use(
@@ -30,7 +29,6 @@ axios.interceptors.request.use(
   },
   (error) => Promise.reject(error),
 );
-
 
 new Vue({
   router,

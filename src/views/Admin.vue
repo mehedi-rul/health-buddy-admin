@@ -19,11 +19,6 @@ const links = [
     icon: 'dashboard',
     class: 'dashboard-link',
   },
-  {
-    to: '/admin/content-manager',
-    label: 'Content Manager',
-    icon: 'tables',
-  },
 ];
 
 const adminLinks = [

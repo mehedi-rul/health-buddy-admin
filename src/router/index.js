@@ -57,6 +57,18 @@ const routes = [
     beforeEnter: checkLogged,
   },
   {
+    path: '/reset-password',
+    name: 'PasswordReset',
+    component: () => import('../views/PasswordReset.vue'),
+    beforeEnter: checkLogged,
+  },
+  {
+    path: '/confirm-password-reset',
+    name: 'PasswordResetConfirmation',
+    component: () => import('../views/PasswordResetConfirmation.vue'),
+    beforeEnter: checkLogged,
+  },
+  {
     path: '/admin',
     name: 'Admin',
     beforeEnter: checkAuth,
@@ -70,11 +82,6 @@ const routes = [
         path: 'dashboard',
         name: 'DashboardAdmin',
         component: () => import('../views/Dasboard.vue'),
-      },
-      {
-        path: 'content-manager',
-        name: 'ContentManagerAdmin',
-        component: () => import(/* webpackChunkName: "login" */ '../views/ContentManager.vue'),
       },
       {
         path: 'users',
