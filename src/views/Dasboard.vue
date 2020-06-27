@@ -6,6 +6,17 @@
       :is-full-page="false"
       :active.sync="loading">
     </b-loading>
+    <div class="periods-container m-2 m-t-1 m-b-1">
+      <b-button
+        v-for="(period, i) of periods"
+        :key="i"
+        :outlined="period !== selectedPeriod"
+        @click="changePeriod(period)"
+        type="is-primary"
+        class="periods-container__button">
+        {{ period }}
+      </b-button>
+    </div>
     <div
       v-if="!loading"
       class="m-2 m-t-1">
@@ -20,7 +31,7 @@
                 <ilha-icon type="tag-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                {{ selectedPeriod }}
               </template>
               <template v-slot:metric>
                 <span title="Total number of conversations on the Bot.">Total Interactions</span>
@@ -36,7 +47,7 @@
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                {{ selectedPeriod }}
               </template>
               <template v-slot:metric>
                 <span title="The number of asked questions.">Total questions</span>
@@ -52,7 +63,7 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                {{ selectedPeriod }}
               </template>
               <template v-slot:metric>
                 <span title="Total number of conversations completed on the Bot">
@@ -70,7 +81,7 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                {{ selectedPeriod }}
               </template>
               <template v-slot:metric>
                 <span title="The number of times the website has been accessed">Total Views</span>
@@ -153,6 +164,13 @@ export default {
     input {
       display: none;
     }
+  }
+}
+
+.periods-container {
+  text-align: right;
+  &__button {
+    margin: 0 0.2em;
   }
 }
 
