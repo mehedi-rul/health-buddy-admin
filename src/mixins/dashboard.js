@@ -12,8 +12,7 @@ export default {
       totalAsks: 0,
       allFlows: 0,
       pageViews: 0,
-      // oldestTime: new Date(2020, 4, 25),
-      oldestTime: new Date(2020, 0, 25),
+      oldestTime: new Date(2020, 4, 25),
     };
   },
   computed: {
@@ -22,6 +21,7 @@ export default {
   methods: {
     changePeriod(period) {
       this.selectedPeriod = period;
+      this.fetchData();
     },
     fetchData() {
       if (!this.rapidProUrl) {
@@ -38,12 +38,13 @@ export default {
             registeredFakes,
             newQuestions,
             lowConfidenceResponses,
+            totalAsksByPeriod,
             totalAsks,
             totalAnswers,
             totalErrors,
           ] = results;
           this.interactions = interactions;
-          this.totalAsks = totalAsks;
+          this.totalAsks = totalAsksByPeriod;
           this.allFlows = allFlows;
           this.pageViews = pageViews;
           this.messageMetricsData = this.makeMessageMetricsData(
@@ -68,10 +69,11 @@ export default {
         this.fetchLowConfidenceResponses(),
         this.fetchChannelStats(),
       ]).then((result) => {
+        const totalAsksByPeriod = this.countMessages(result[6], 'incoming', this.getAfterDate());
         const totalAsks = this.countMessages(result[6], 'incoming');
         const totalAnswers = this.countMessages(result[6], 'outgoing');
         const totalErrors = this.countMessages(result[6], 'errors');
-        return [...result.slice(0, 6), totalAsks, totalAnswers, totalErrors];
+        return [...result.slice(0, 6), totalAsksByPeriod, totalAsks, totalAnswers, totalErrors];
       });
     },
     fetchInteractions() {
@@ -128,7 +130,9 @@ export default {
       if (!after) {
         return counts.reduce((current, previous) => current + previous.count, 0);
       }
-      return counts.reduce((current, previous) => current + previous.count, 0);
+      return counts
+        .filter((count) => count.date >= after)
+        .reduce((current, previous) => current + previous.count, 0);
     },
     parseAllFlows(data) {
       const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
@@ -142,7 +146,21 @@ export default {
       return data.totalsForAllResults['ga:pageviews'];
     },
     getAfterDate() {
-      return this.oldestTime.toISOString();
+      const targetDate = new Date();
+      targetDate.setHours(0);
+      targetDate.setMinutes(0);
+      targetDate.setSeconds(0);
+      targetDate.setMilliseconds(0);
+      if (this.selectedPeriod === 'today') {
+        return targetDate.toISOString();
+      }
+      if (this.selectedPeriod === 'month') {
+        targetDate.setMonth(targetDate.getMonth() - 1);
+        return targetDate.toISOString();
+      }
+      targetDate.setFullYear(targetDate.getFullYear() - 1);
+      return targetDate < this.oldestTime
+        ? this.oldestTime.toISOString() : targetDate.toISOString();
     },
   },
 };
