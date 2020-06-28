@@ -31,7 +31,7 @@
                 <ilha-icon type="tag-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ selectedPeriod }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
                 <span title="Total number of conversations on the Bot.">Total Interactions</span>
@@ -47,7 +47,7 @@
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ selectedPeriod }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
                 <span title="The number of asked questions.">Total questions</span>
@@ -63,7 +63,7 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ selectedPeriod }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
                 <span title="Total number of conversations completed on the Bot">
@@ -81,7 +81,7 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ selectedPeriod }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
                 <span title="The number of times the website has been accessed">Total Views</span>

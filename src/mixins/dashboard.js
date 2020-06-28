@@ -12,11 +12,14 @@ export default {
       totalAsks: 0,
       allFlows: 0,
       pageViews: 0,
-      oldestTime: new Date(2020, 4, 25),
+      oldestTime: new Date(2020, 5, 2),
     };
   },
   computed: {
     ...mapGetters(['rapidProUrl', 'googleAnalyticsUrl']),
+    fromDate() {
+      return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
+    },
   },
   methods: {
     changePeriod(period) {
@@ -69,7 +72,7 @@ export default {
         this.fetchLowConfidenceResponses(),
         this.fetchChannelStats(),
       ]).then((result) => {
-        const totalAsksByPeriod = this.countMessages(result[6], 'incoming', this.getAfterDate());
+        const totalAsksByPeriod = this.countMessages(result[6], 'incoming', this.getFormattedStartDate());
         const totalAsks = this.countMessages(result[6], 'incoming');
         const totalAnswers = this.countMessages(result[6], 'outgoing');
         const totalErrors = this.countMessages(result[6], 'errors');
@@ -79,7 +82,7 @@ export default {
     fetchInteractions() {
       const queryParams = [
         'uuid=f7015954-1564-4e44-84f0-124843428498',
-        `after=${this.getAfterDate()}`,
+        `after=${this.getFormattedStartDate()}`,
       ];
       return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
         .then(({ data }) => this.parseTotalInteractions(data));
@@ -87,13 +90,13 @@ export default {
     fetchAllFlows() {
       const queryParams = [
         'uuid=5f80320a-9122-4798-9056-0d999771841a',
-        `after=${this.getAfterDate()}`,
+        `after=${this.getFormattedStartDate()}`,
       ];
       return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
-      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=365daysAgo&end_date=today&metrics=pageviews`)
+      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=${this.getGAStartDate()}&end_date=today&metrics=pageviews`)
         .then(({ data }) => this.parsePageViews(data));
     },
     fetchRegisteredFakes() {
@@ -145,22 +148,31 @@ export default {
     parsePageViews(data) {
       return data.totalsForAllResults['ga:pageviews'];
     },
-    getAfterDate() {
+    getFormattedStartDate() {
+      return this.getStartDate().toISOString();
+    },
+    getStartDate() {
       const targetDate = new Date();
       targetDate.setHours(0);
       targetDate.setMinutes(0);
       targetDate.setSeconds(0);
       targetDate.setMilliseconds(0);
-      if (this.selectedPeriod === 'today') {
-        return targetDate.toISOString();
-      }
+
       if (this.selectedPeriod === 'month') {
         targetDate.setMonth(targetDate.getMonth() - 1);
-        return targetDate.toISOString();
       }
-      targetDate.setFullYear(targetDate.getFullYear() - 1);
-      return targetDate < this.oldestTime
-        ? this.oldestTime.toISOString() : targetDate.toISOString();
+
+      if (this.selectedPeriod === 'year') {
+        targetDate.setFullYear(targetDate.getFullYear() - 1);
+      }
+
+      return targetDate < this.oldestTime ? this.oldestTime : targetDate;
+    },
+    getGAStartDate() {
+      if (this.selectedPeriod === 'today') {
+        return 'today';
+      }
+      return this.selectedPeriod === 'year' ? '365daysAgo' : '30daysAgo';
     },
   },
 };
