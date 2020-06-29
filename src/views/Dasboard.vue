@@ -6,7 +6,7 @@
       :is-full-page="false"
       :active.sync="loading">
     </b-loading>
-    <button @click="downloadPdf">Exportar</button>
+    <button @click="downloadPdf">Exportar PDF</button>
     <div
       v-if="!loading"
       class="m-2 m-t-1" id="painel-graficos">
