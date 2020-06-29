@@ -6,17 +6,26 @@ export default {
   data() {
     return {
       loading: true,
-      period: 'all',
+      selectedPeriod: 'year',
+      periods: ['today', 'month', 'year'],
       interactions: 0,
       totalAsks: 0,
       allFlows: 0,
       pageViews: 0,
+      oldestTime: new Date(2020, 5, 2),
     };
   },
   computed: {
     ...mapGetters(['rapidProUrl', 'googleAnalyticsUrl']),
+    fromDate() {
+      return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
+    },
   },
   methods: {
+    changePeriod(period) {
+      this.selectedPeriod = period;
+      this.fetchData();
+    },
     fetchData() {
       if (!this.rapidProUrl) {
         return;
@@ -27,15 +36,18 @@ export default {
           this.loading = false;
           const [
             interactions,
-            totalAsks,
             allFlows,
             pageViews,
+            registeredFakes,
+            newQuestions,
+            lowConfidenceResponses,
+            totalAsksByPeriod,
+            totalAsks,
             totalAnswers,
             totalErrors,
-            registeredFakes,
           ] = results;
           this.interactions = interactions;
-          this.totalAsks = totalAsks;
+          this.totalAsks = totalAsksByPeriod;
           this.allFlows = allFlows;
           this.pageViews = pageViews;
           this.messageMetricsData = this.makeMessageMetricsData(
@@ -43,53 +55,71 @@ export default {
             totalAnswers,
             totalErrors,
           );
-          this.reportsData = this.makeReportsData(0, registeredFakes, 0);
+          this.reportsData = this.makeReportsData(
+            newQuestions,
+            registeredFakes,
+            lowConfidenceResponses,
+          );
         });
     },
     fetchAll() {
       return Promise.all([
         this.fetchInteractions(),
-        this.fetchTotalAsks(),
         this.fetchAllFlows(),
         this.fetchVisitorsAccesses(),
-        this.fetchTotalAnswers(),
-        this.fetchTotalErrors(),
         this.fetchRegisteredFakes(),
-      ]);
+        this.fetchNewQuestions(),
+        this.fetchLowConfidenceResponses(),
+        this.fetchChannelStats(),
+      ]).then((result) => {
+        const totalAsksByPeriod = this.countMessages(result[6], 'incoming', this.getFormattedStartDate());
+        const totalAsks = this.countMessages(result[6], 'incoming');
+        const totalAnswers = this.countMessages(result[6], 'outgoing');
+        const totalErrors = this.countMessages(result[6], 'errors');
+        return [...result.slice(0, 6), totalAsksByPeriod, totalAsks, totalAnswers, totalErrors];
+      });
     },
     fetchInteractions() {
-      return this.$http.get(`${this.rapidProUrl}flows?uuid=f7015954-1564-4e44-84f0-124843428498`)
+      const queryParams = [
+        'uuid=f7015954-1564-4e44-84f0-124843428498',
+        `after=${this.getFormattedStartDate()}`,
+      ];
+      return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
         .then(({ data }) => this.parseTotalInteractions(data));
     },
-    fetchTotalAsks() {
-      return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.countMessages(data, 'outgoing'));
-    },
     fetchAllFlows() {
-      return this.$http.get(`${this.rapidProUrl}flows?uuid=5f80320a-9122-4798-9056-0d999771841a`)
+      const queryParams = [
+        'uuid=5f80320a-9122-4798-9056-0d999771841a',
+        `after=${this.getFormattedStartDate()}`,
+      ];
+      return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
-      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=365daysAgo&end_date=today&metrics=pageviews`)
+      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=${this.getGAStartDate()}&end_date=today&metrics=pageviews`)
         .then(({ data }) => this.parsePageViews(data));
-    },
-    fetchTotalAnswers() {
-      return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.countMessages(data, 'incoming'));
-    },
-    fetchTotalErrors() {
-      return this.$http.get(`${this.rapidProUrl}channel_stats`)
-        .then(({ data }) => this.countMessages(data, 'errors'));
     },
     fetchRegisteredFakes() {
       return this.$http.get(`${this.rapidProUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`)
         .then(({ data }) => this.parseRegisteredFakes(data));
     },
+    fetchNewQuestions() {
+      return this.$http.get(`${this.rapidProUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`)
+        .then(({ data }) => this.parseRegisteredFakes(data));
+    },
+    fetchLowConfidenceResponses() {
+      return this.$http.get(`${this.rapidProUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`)
+        .then(({ data }) => this.parseRegisteredFakes(data));
+    },
+    fetchChannelStats() {
+      return this.$http.get(`${this.rapidProUrl}channel_stats`)
+        .then(({ data }) => data);
+    },
     parseTotalInteractions(data) {
       const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
       return runs.active + runs.completed + runs.interrupted;
     },
-    countMessages(data, type) {
+    countMessages(data, type, after = undefined) {
       const { results } = data;
       const dailyCountList = results.map((result) => result.daily_count);
       const filteredMessages = dailyCountList.map(
@@ -99,7 +129,13 @@ export default {
         (current, previous) => current.concat(previous.data),
         [],
       );
-      return counts.reduce((current, previous) => current + previous.count, 0);
+
+      if (!after) {
+        return counts.reduce((current, previous) => current + previous.count, 0);
+      }
+      return counts
+        .filter((count) => count.date >= after)
+        .reduce((current, previous) => current + previous.count, 0);
     },
     parseAllFlows(data) {
       const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
@@ -111,6 +147,32 @@ export default {
     },
     parsePageViews(data) {
       return data.totalsForAllResults['ga:pageviews'];
+    },
+    getFormattedStartDate() {
+      return this.getStartDate().toISOString();
+    },
+    getStartDate() {
+      const targetDate = new Date();
+      targetDate.setHours(0);
+      targetDate.setMinutes(0);
+      targetDate.setSeconds(0);
+      targetDate.setMilliseconds(0);
+
+      if (this.selectedPeriod === 'month') {
+        targetDate.setMonth(targetDate.getMonth() - 1);
+      }
+
+      if (this.selectedPeriod === 'year') {
+        targetDate.setFullYear(targetDate.getFullYear() - 1);
+      }
+
+      return targetDate < this.oldestTime ? this.oldestTime : targetDate;
+    },
+    getGAStartDate() {
+      if (this.selectedPeriod === 'today') {
+        return 'today';
+      }
+      return this.selectedPeriod === 'year' ? '365daysAgo' : '30daysAgo';
     },
   },
 };

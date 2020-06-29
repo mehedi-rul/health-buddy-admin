@@ -6,7 +6,18 @@
       :is-full-page="false"
       :active.sync="loading">
     </b-loading>
-    <button @click="downloadPdf">Exportar PDF</button>
+    <div class="periods-container m-2 m-t-1 m-b-1">
+      <b-button
+        v-for="(period, i) of periods"
+        :key="i"
+        :outlined="period !== selectedPeriod"
+        @click="changePeriod(period)"
+        type="is-primary"
+        class="periods-container__button">
+        {{ period }}
+      </b-button>
+      <button class="button is-primary" @click="downloadPdf">Exportar PDF</button>
+    </div>
     <div
       v-if="!loading"
       class="m-2 m-t-1" id="painel-graficos">
@@ -21,10 +32,10 @@
                 <ilha-icon type="tag-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
-                <span title="Interact with Bot">Interact with Bot</span>
+                <span title="Total number of conversations on the Bot.">Total Interactions</span>
               </template>
               <template v-slot:amount>
                 {{ interactions }}
@@ -37,10 +48,10 @@
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
-                <span title="Total Asks">Total Asks</span>
+                <span title="The number of asked questions.">Total questions</span>
               </template>
               <template v-slot:amount>
                 {{ totalAsks }}
@@ -53,10 +64,12 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
-                <span title="All flow on Bot">All flow on Bot</span>
+                <span title="Total number of conversations completed on the Bot">
+                  Total complete Interaction
+                </span>
               </template>
               <template v-slot:amount>
                 {{ allFlows }}
@@ -69,10 +82,10 @@
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
               <template v-slot:period>
-                {{ period }}
+                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
-                <span title="Total Traffic">Total Traffic</span>
+                <span title="The number of times the website has been accessed">Total Views</span>
               </template>
               <template v-slot:amount>
                 {{ pageViews }}
@@ -91,7 +104,9 @@
               :chart-data="messageMetricsData"
               class="has-background-white">
               <template v-slot:title>
-                Message Metrics
+                <span title="Traffic number for incoming, outgoing, and failed messages.">
+                  Message Metrics
+                </span>
               </template>
             </ilha-chart-summary-box>
           </div>
@@ -100,7 +115,9 @@
               :chart-data="reportsData"
               class="has-background-white">
               <template v-slot:title>
-                New Reports Registered
+                <span title="The number of registered reports.">
+                  New Reports Registered
+                </span>
               </template>
             </ilha-chart-summary-box>
           </div>
@@ -160,6 +177,13 @@ export default {
     input {
       display: none;
     }
+  }
+}
+
+.periods-container {
+  text-align: right;
+  &__button {
+    margin: 0 0.2em;
   }
 }
 

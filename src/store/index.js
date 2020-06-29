@@ -9,7 +9,9 @@ export default new Vuex.Store({
     api: process.env.VUE_APP_API_URL,
     authTokenKey: 'healthHuddy:authToken',
     refreshTokenKey: 'healthHuddy:refreshToken',
-    loginAfterRouteName: 'Admin',
+    loginAfterRouteName: 'DashboardAdmin',
+    passwordResetRequestAfterRouteName: 'PasswordResetConfirmation',
+    passwordResetConfirmationAfterRouteName: 'Login',
   },
   getters: {
     usersUrl(state) {
@@ -20,6 +22,12 @@ export default new Vuex.Store({
     },
     googleAnalyticsUrl(state) {
       return `${state.serverUrl}google_analytics/ga`;
+    },
+    passwordResetRequestUrl(state) {
+      return `${state.api}password_reset/`;
+    },
+    passwordResetConfirmationUrl(state, getters) {
+      return `${getters.passwordResetRequestUrl}confirm/`;
     },
   },
   mutations: {

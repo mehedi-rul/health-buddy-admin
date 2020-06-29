@@ -40,7 +40,7 @@ export default {
         },
       ];
     },
-    makeReportsData(totalNew, totalFakes, totalRumors) {
+    makeReportsData(newQuestions, totalFakes, lowConfidenceResponses) {
       return [
         {
           label: 'Reported Rumors',
@@ -49,12 +49,12 @@ export default {
         },
         {
           label: 'Low Confidence',
-          value: totalRumors,
+          value: lowConfidenceResponses,
           backgroundColor: '#F8C239',
         },
         {
           label: 'New Questions',
-          value: totalNew,
+          value: newQuestions,
           backgroundColor: '#2FA2F4',
         },
       ];

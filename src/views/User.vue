@@ -72,6 +72,7 @@ const passwordFields = [
     label: 'Password',
     placeholder: 'New Password',
     rules: 'required|min:8',
+    autocomplete: 'new-password',
   },
   {
     property: 'confirmationPassword',
@@ -79,6 +80,7 @@ const passwordFields = [
     label: 'Confirm Password',
     placeholder: 'Confirm Password',
     rules: 'required|min:8|confirmed:password',
+    autocomplete: 'off',
   },
 ];
 
@@ -93,8 +95,8 @@ export default {
   methods: {
     changePassword() {
     },
-    updatedId() {
-      if (this.id) {
+    updatedData() {
+      if (this.data.id) {
         this.fields = [...fields];
       } else {
         this.fields = [...fields, ...passwordFields];
@@ -110,8 +112,12 @@ export default {
     usersUrl() {
       this.resourceUrl = this.usersUrl;
     },
+    data() {
+      this.updatedData();
+    },
   },
   mounted() {
+    this.data = {};
     this.resourceUrl = this.usersUrl;
   },
 };
