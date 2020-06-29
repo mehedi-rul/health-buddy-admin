@@ -16,10 +16,11 @@
         class="periods-container__button">
         {{ period }}
       </b-button>
+      <button class="button is-primary" @click="downloadPdf">Exportar PDF</button>
     </div>
     <div
       v-if="!loading"
-      class="m-2 m-t-1">
+      class="m-2 m-t-1" id="painel-graficos">
       <div class="m-b-1">
         <ilha-title>
           Overview
@@ -128,6 +129,8 @@
 
 <script>
 import { mapState } from 'vuex';
+import * as JsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import dashboardMixin from '../mixins/dashboard';
 
 export default {
@@ -136,6 +139,16 @@ export default {
     ...mapState(['serverUrl']),
   },
   methods: {
+    downloadPdf() {
+      html2canvas(document.querySelector('#painel-graficos')).then((canvas) => {
+        const img = canvas.toDataURL('image/png');
+        const pdf = new JsPDF('l', 'px', 'a4');
+        const widthWithMargin = pdf.internal.pageSize.getWidth() - 60;
+        const heigthWithMargin = pdf.internal.pageSize.getHeight() - 60;
+        pdf.addImage(img, 'png', 30, 30, widthWithMargin, heigthWithMargin);
+        pdf.save('dashboard.pdf');
+      });
+    },
   },
   watch: {
     serverUrl() {
