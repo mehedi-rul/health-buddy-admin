@@ -185,6 +185,7 @@ export default {
         ['lowConfidenceResponses', this.lowConfidenceResponses],
       ];
       this.exportToCsv('dashboard.csv', rows);
+      this.downloading = false;
     },
     exportToCsv(filename, rows) {
       const csvFile = rows.map((row) => this.processRow(row)).join('\n');
