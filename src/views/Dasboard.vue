@@ -9,9 +9,15 @@
     <div class="periods-container m-2 m-t-1 m-b-1">
       <b-button
         @click="downloadPdf"
-        class="is-primary"
+        class="is-primary periods-container__button"
       >
         Export PDF
+      </b-button>
+      <b-button
+        @click="downloadCSV"
+        class="is-primary periods-container__button"
+      >
+        Export CSV
       </b-button>
     </div>
     <div class="periods-container m-2 m-t-1 m-b-1">
@@ -163,6 +169,53 @@ export default {
           this.downloading = false;
         });
       });
+    },
+    downloadCSV() {
+      this.downloading = true;
+      const rows = [
+        ['metric', 'value'],
+        ['interactions', this.interactions],
+        ['totalAsks', this.totalAsks],
+        ['allFlows', this.allFlows],
+        ['pageViews', this.pageViews],
+        ['totalAnswers', this.totalAnswers],
+        ['totalErrors', this.totalErrors],
+        ['newQuestions', this.newQuestions],
+        ['registeredFakes', this.registeredFakes],
+        ['lowConfidenceResponses', this.lowConfidenceResponses],
+      ];
+      this.exportToCsv('dashboard.csv', rows);
+    },
+    exportToCsv(filename, rows) {
+      const csvFile = rows.map((row) => this.processRow(row)).join('\n');
+
+      const blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },
+    processRow(row) {
+      let finalVal = '';
+      for (let j = 0; j < row.length; j += 1) {
+        let innerValue = row[j] === null ? '' : row[j].toString();
+        if (row[j] instanceof Date) {
+          innerValue = row[j].toLocaleString();
+        }
+        let result = innerValue.replace(/"/g, '""');
+        if (result.search(/("|,|\n)/g) >= 0) {
+          result = `"${result}"`;
+        }
+        if (j > 0) {
+          finalVal += ',';
+        }
+        finalVal += result;
+      }
+      return `${finalVal}`;
     },
   },
   filters: {

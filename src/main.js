@@ -30,6 +30,17 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem(store.state.authTokenKey);
+      localStorage.removeItem(store.state.refreshTokenKey);
+    }
+    return Promise.reject(error);
+  },
+);
+
 new Vue({
   router,
   store,

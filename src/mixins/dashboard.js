@@ -12,6 +12,11 @@ export default {
       totalAsks: 0,
       allFlows: 0,
       pageViews: 0,
+      totalAnswers: 0,
+      totalErrors: 0,
+      newQuestions: 0,
+      registeredFakes: 0,
+      lowConfidenceResponses: 0,
       oldestTime: new Date(2019, 5, 2),
     };
   },
@@ -50,6 +55,11 @@ export default {
           this.totalAsks = totalAsksByPeriod;
           this.allFlows = allFlows;
           this.pageViews = pageViews;
+          this.totalAnswers = totalAnswers;
+          this.totalErrors = totalErrors;
+          this.newQuestions = newQuestions;
+          this.registeredFakes = registeredFakes;
+          this.lowConfidenceResponses = lowConfidenceResponses;
           this.messageMetricsData = this.makeMessageMetricsData(
             totalAsks,
             totalAnswers,
