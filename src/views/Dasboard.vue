@@ -4,8 +4,16 @@
     </ilha-header>
     <b-loading
       :is-full-page="false"
-      :active.sync="loading">
+      :active="loading || downloading">
     </b-loading>
+    <div class="periods-container m-2 m-t-1 m-b-1">
+      <b-button
+        @click="downloadPdf"
+        class="is-primary"
+      >
+        Export PDF
+      </b-button>
+    </div>
     <div class="periods-container m-2 m-t-1 m-b-1">
       <b-button
         v-for="(period, i) of periods"
@@ -16,11 +24,10 @@
         class="periods-container__button">
         {{ period }}
       </b-button>
-      <button class="button is-primary" @click="downloadPdf">Exportar PDF</button>
     </div>
     <div
       v-if="!loading"
-      class="m-2 m-t-1" id="painel-graficos">
+      class="m-2 m-t-1" id="chart-panel">
       <div class="m-b-1">
         <ilha-title>
           Overview
@@ -38,7 +45,7 @@
                 <span title="Total number of conversations on the Bot.">Total Interactions</span>
               </template>
               <template v-slot:amount>
-                {{ interactions }}
+                {{ interactions | toUSD }}
               </template>
             </ilha-summary-box>
           </div>
@@ -54,7 +61,7 @@
                 <span title="The number of asked questions.">Total questions</span>
               </template>
               <template v-slot:amount>
-                {{ totalAsks }}
+                {{ totalAsks | toUSD }}
               </template>
             </ilha-summary-box>
           </div>
@@ -72,7 +79,7 @@
                 </span>
               </template>
               <template v-slot:amount>
-                {{ allFlows }}
+                {{ allFlows | toUSD }}
               </template>
             </ilha-summary-box>
           </div>
@@ -88,7 +95,7 @@
                 <span title="The number of times the website has been accessed">Total Views</span>
               </template>
               <template v-slot:amount>
-                {{ pageViews }}
+                {{ pageViews | toUSD }}
               </template>
             </ilha-summary-box>
           </div>
@@ -138,16 +145,29 @@ export default {
   computed: {
     ...mapState(['serverUrl']),
   },
+  data() {
+    return {
+      downloading: false,
+    };
+  },
   methods: {
     downloadPdf() {
-      html2canvas(document.querySelector('#painel-graficos')).then((canvas) => {
+      this.downloading = true;
+      html2canvas(document.querySelector('#chart-panel')).then((canvas) => {
         const img = canvas.toDataURL('image/png');
         const pdf = new JsPDF('l', 'px', 'a4');
         const widthWithMargin = pdf.internal.pageSize.getWidth() - 60;
         const heigthWithMargin = pdf.internal.pageSize.getHeight() - 60;
         pdf.addImage(img, 'png', 30, 30, widthWithMargin, heigthWithMargin);
-        pdf.save('dashboard.pdf');
+        pdf.save('dashboard.pdf', { returnPromise: true }).then(() => {
+          this.downloading = false;
+        });
       });
+    },
+  },
+  filters: {
+    toUSD(value) {
+      return `${(+value).toLocaleString('en-US')}`;
     },
   },
   watch: {

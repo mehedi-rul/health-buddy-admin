@@ -12,7 +12,7 @@ export default {
       totalAsks: 0,
       allFlows: 0,
       pageViews: 0,
-      oldestTime: new Date(2020, 5, 2),
+      oldestTime: new Date(2019, 5, 2),
     };
   },
   computed: {
