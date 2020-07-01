@@ -14,7 +14,7 @@
     "buefy": "^0.8.17",
     "core-js": "^3.6.5",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^1.5.3",
+    "jspdf": "1.4.1",
     "vee-validate": "^3.3.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
