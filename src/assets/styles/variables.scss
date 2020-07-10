@@ -16,7 +16,7 @@ $info: $primary;
 $info-inverter: findColorInvert($info);
 $text: hsl(0, 0%, 29%);
 $text-invert: findColorInvert($text);
-$sidebar-width: 350px;
+$sidebar-width: 230px;
 $sidebar-mobile-width: 80px;
 
 
@@ -35,5 +35,3 @@ $red-color: #F0506E !default;
 // Warm Grey - #D8D1C9
 // Cool Grey - #777779
 // Dark Blue - #374EA2
-
-$sidebar-width: 230px;
