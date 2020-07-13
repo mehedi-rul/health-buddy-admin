@@ -47,8 +47,4 @@ html {
   font-family: 'Oxygen', sans-serif;
 }
 
-.menu-header__icon .mdi {
-  display: none;
-}
-
 </style>
