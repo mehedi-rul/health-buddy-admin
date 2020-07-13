@@ -6,30 +6,36 @@
       :is-full-page="false"
       :active="loading || downloading">
     </b-loading>
-    <div class="periods-container m-2 m-t-1 m-b-1">
-      <b-button
-        @click="downloadPdf"
-        class="is-primary periods-container__button"
-      >
-        Export PDF
-      </b-button>
-      <b-button
-        @click="downloadCSV"
-        class="is-primary periods-container__button"
-      >
-        Export CSV
-      </b-button>
-    </div>
-    <div class="periods-container m-2 m-t-1 m-b-1">
-      <b-button
-        v-for="(period, i) of periods"
-        :key="i"
-        :outlined="period !== selectedPeriod"
-        @click="changePeriod(period)"
-        type="is-primary"
-        class="periods-container__button">
-        {{ period }}
-      </b-button>
+    <div class="dashboard-actions">
+      <div class="periods-container m-2 m-t-1 m-b-1">
+        <b-button
+          v-for="(period, i) of periods"
+          :key="i"
+          :outlined="period !== selectedPeriod"
+          @click="changePeriod(period)"
+          type="is-primary"
+          class="periods-container__button">
+          {{ period }}
+        </b-button>
+      </div>
+      <div class="periods-container m-2 m-t-1 m-b-1">
+        <b-button
+          @click="downloadPdf"
+          outlined
+          type="is-primary"
+          class="periods-container__button"
+        >
+          Export PDF
+        </b-button>
+        <b-button
+          @click="downloadCSV"
+          outlined
+          type="is-primary"
+          class="periods-container__button"
+        >
+          Export CSV
+        </b-button>
+      </div>
     </div>
     <div
       v-if="!loading"
@@ -245,6 +251,12 @@ export default {
   }
 }
 
+.ilha-sidebar__reduced {
+  .loading-overlay {
+    left: $sidebar-mobile-width;
+  }
+}
+
 .dashboard {
   /deep/ .search-field {
     opacity: 0;
@@ -254,10 +266,16 @@ export default {
   }
 }
 
-.periods-container {
-  text-align: right;
-  &__button {
-    margin: 0 0.2em;
+.dashboard-actions {
+  display: flex;
+  .periods-container {
+    text-align: right;
+    &:last-child {
+      margin-left: auto !important;
+    }
+    &__button {
+      margin: 0 0.2em;
+    }
   }
 }
 
