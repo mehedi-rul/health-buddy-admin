@@ -4,8 +4,13 @@ import dashboardChartMixin from './dashboard-chart';
 export default {
   mixins: [dashboardChartMixin],
   data() {
+    const startPeriod = new Date();
+    const endPeriod = new Date();
+    startPeriod.setFullYear(endPeriod.getFullYear() - 1);
     return {
       loading: true,
+      startPeriod,
+      endPeriod,
       selectedPeriod: 'year',
       periods: ['today', 'month', 'year'],
       interactions: 0,
@@ -82,7 +87,12 @@ export default {
         this.fetchLowConfidenceResponses(),
         this.fetchChannelStats(),
       ]).then((result) => {
-        const totalAsksByPeriod = this.countMessages(result[6], 'incoming', this.getFormattedStartDate());
+        const totalAsksByPeriod = this.countMessages(
+          result[6],
+          'incoming',
+          this.getFormattedStartDate(),
+          this.getFormattedEndDate(),
+        );
         const totalAsks = this.countMessages(result[6], 'incoming');
         const totalAnswers = this.countMessages(result[6], 'outgoing');
         const totalErrors = this.countMessages(result[6], 'errors');
@@ -93,20 +103,27 @@ export default {
       const queryParams = [
         'uuid=f7015954-1564-4e44-84f0-124843428498',
         `after=${this.getFormattedStartDate()}`,
-      ];
-      return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
+        `before=${this.getFormattedEndDate()}`,
+      ].join('&');
+      return this.$http.get(`${this.rapidProUrl}flows?${queryParams}`)
         .then(({ data }) => this.parseTotalInteractions(data));
     },
     fetchAllFlows() {
       const queryParams = [
         'uuid=5f80320a-9122-4798-9056-0d999771841a',
         `after=${this.getFormattedStartDate()}`,
-      ];
-      return this.$http.get(`${this.rapidProUrl}flows?${queryParams.join('&')}`)
+        `before=${this.getFormattedEndDate()}`,
+      ].join('&');
+      return this.$http.get(`${this.rapidProUrl}flows?${queryParams}`)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
-      return this.$http.get(`${this.googleAnalyticsUrl}?start_date=${this.getGAStartDate()}&end_date=today&metrics=pageviews`)
+      const queryParams = [
+        `start_date=${this.getGAStartDate()}`,
+        `end_date=${this.getGAEndDate()}`,
+        'metrics=pageviews',
+      ].join('&');
+      return this.$http.get(`${this.googleAnalyticsUrl}?${queryParams}`)
         .then(({ data }) => this.parsePageViews(data));
     },
     fetchRegisteredFakes() {
@@ -129,7 +146,7 @@ export default {
       const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
       return runs.active + runs.completed + runs.interrupted;
     },
-    countMessages(data, type, after = undefined) {
+    countMessages(data, type, after = undefined, before = undefined) {
       const { results } = data;
       const dailyCountList = results.map((result) => result.daily_count);
       const filteredMessages = dailyCountList.map(
@@ -144,7 +161,12 @@ export default {
         return counts.reduce((current, previous) => current + previous.count, 0);
       }
       return counts
-        .filter((count) => count.date >= after)
+        .filter((count) => {
+          if (!before) {
+            return count.date >= after;
+          }
+          return count.date >= after && count.date <= before;
+        })
         .reduce((current, previous) => current + previous.count, 0);
     },
     parseAllFlows(data) {
@@ -161,28 +183,32 @@ export default {
     getFormattedStartDate() {
       return this.getStartDate().toISOString();
     },
+    getFormattedEndDate() {
+      return this.getEndDate().toISOString();
+    },
     getStartDate() {
-      const targetDate = new Date();
-      targetDate.setHours(0);
-      targetDate.setMinutes(0);
-      targetDate.setSeconds(0);
-      targetDate.setMilliseconds(0);
-
-      if (this.selectedPeriod === 'month') {
-        targetDate.setMonth(targetDate.getMonth() - 1);
-      }
-
-      if (this.selectedPeriod === 'year') {
-        targetDate.setFullYear(targetDate.getFullYear() - 1);
-      }
-
-      return targetDate < this.oldestTime ? this.oldestTime : targetDate;
+      return this.startPeriod;
+    },
+    getEndDate() {
+      return this.endPeriod;
     },
     getGAStartDate() {
-      if (this.selectedPeriod === 'today') {
-        return 'today';
-      }
-      return this.selectedPeriod === 'year' ? '365daysAgo' : '30daysAgo';
+      const diffTime = Math.abs(new Date() - this.startPeriod);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return `${diffDays}daysAgo`;
+    },
+    getGAEndDate() {
+      const diffTime = Math.abs(new Date() - this.endPeriod);
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return `${diffDays}daysAgo`;
+    },
+  },
+  watch: {
+    startPeriod() {
+      this.fetchData();
+    },
+    endPeriod() {
+      this.fetchData();
     },
   },
 };

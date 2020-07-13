@@ -6,35 +6,54 @@
       :is-full-page="false"
       :active="loading || downloading">
     </b-loading>
-    <div class="dashboard-actions">
-      <div class="periods-container m-2 m-t-1 m-b-1">
-        <b-button
-          v-for="(period, i) of periods"
-          :key="i"
-          :outlined="period !== selectedPeriod"
-          @click="changePeriod(period)"
-          type="is-primary"
-          class="periods-container__button">
-          {{ period }}
-        </b-button>
+    <div class="dashboard-actions m-2 m-t-1 m-b-0">
+      <div class="columns">
+        <b-field class="column">
+          <b-datepicker
+            v-model="startPeriod"
+            ref="startDatepicker"
+            expanded
+            placeholder="Start">
+          </b-datepicker>
+          <b-button
+            @click="$refs.startDatepicker.toggle()"
+            icon-left="calendar-today"
+            type="is-primary" />
+        </b-field>
+        <b-field class="column">
+          <b-datepicker
+            v-model="endPeriod"
+            ref="endDatepicker"
+            expanded
+            placeholder="End">
+          </b-datepicker>
+          <b-button
+            @click="$refs.endDatepicker.toggle()"
+            icon-left="calendar-today"
+            type="is-primary" />
+        </b-field>
       </div>
-      <div class="periods-container m-2 m-t-1 m-b-1">
-        <b-button
-          @click="downloadPdf"
-          outlined
-          type="is-primary"
-          class="periods-container__button"
-        >
-          Export PDF
-        </b-button>
-        <b-button
-          @click="downloadCSV"
-          outlined
-          type="is-primary"
-          class="periods-container__button"
-        >
-          Export CSV
-        </b-button>
+      <div class="columns">
+        <div class="column">
+          <b-button
+            @click="downloadPdf"
+            outlined
+            type="is-primary"
+            class="periods-container__button"
+          >
+            Export PDF
+          </b-button>
+        </div>
+        <div class="column">
+          <b-button
+            @click="downloadCSV"
+            outlined
+            type="is-primary"
+            class="periods-container__button"
+          >
+            Export CSV
+          </b-button>
+        </div>
       </div>
     </div>
     <div
@@ -50,9 +69,6 @@
               <template v-slot:icon>
                 <ilha-icon type="tag-white" class="icon is-medium"/>
               </template>
-              <template v-slot:period>
-                <span :title="fromDate">{{ selectedPeriod }}</span>
-              </template>
               <template v-slot:metric>
                 <span title="Total number of conversations on the Bot.">Total Interactions</span>
               </template>
@@ -66,9 +82,6 @@
               <template v-slot:icon>
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
-              <template v-slot:period>
-                <span :title="fromDate">{{ selectedPeriod }}</span>
-              </template>
               <template v-slot:metric>
                 <span title="The number of asked questions.">Total questions</span>
               </template>
@@ -81,9 +94,6 @@
             <ilha-summary-box class="has-background-green has-text-white">
               <template v-slot:icon>
                 <ilha-icon type="trend-white" class="icon is-medium"/>
-              </template>
-              <template v-slot:period>
-                <span :title="fromDate">{{ selectedPeriod }}</span>
               </template>
               <template v-slot:metric>
                 <span title="Total number of conversations completed on the Bot">
@@ -171,9 +181,8 @@ export default {
         const widthWithMargin = pdf.internal.pageSize.getWidth() - 60;
         const heigthWithMargin = pdf.internal.pageSize.getHeight() - 60;
         pdf.addImage(img, 'png', 30, 30, widthWithMargin, heigthWithMargin);
-        pdf.save('dashboard.pdf', { returnPromise: true }).then(() => {
-          this.downloading = false;
-        });
+        pdf.save('dashboard.pdf');
+        this.downloading = false;
       });
     },
     downloadCSV() {
@@ -247,7 +256,7 @@ export default {
   left: $sidebar-width;
 
   @media screen and (max-width: 1023px) {
-      left: $sidebar-mobile-width;
+    left: $sidebar-mobile-width;
   }
 }
 
@@ -268,14 +277,11 @@ export default {
 
 .dashboard-actions {
   display: flex;
-  .periods-container {
-    text-align: right;
-    &:last-child {
-      margin-left: auto !important;
-    }
-    &__button {
-      margin: 0 0.2em;
-    }
+  > div:last-child {
+    margin-left: auto !important;
+  }
+  @media screen and (max-width: 768px) {
+    display: block;
   }
 }
 
