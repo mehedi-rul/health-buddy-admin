@@ -72,7 +72,7 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     beforeEnter: checkAuth,
-    component: () => import(/* webpackChunkName: "login" */ '../views/Admin.vue'),
+    component: () => import('../views/Admin.vue'),
     children: [
       {
         path: '',
@@ -87,13 +87,25 @@ const routes = [
         path: 'users',
         name: 'UsersAdmin',
         beforeEnter: checkAdmin,
-        component: () => import(/* webpackChunkName: "login" */ '../views/Users.vue'),
+        component: () => import('../views/Users.vue'),
       },
       {
         path: 'users/:id',
         name: 'UserEdit',
         beforeEnter: checkAdmin,
-        component: () => import(/* webpackChunkName: "login" */ '../views/User.vue'),
+        component: () => import('../views/User.vue'),
+      },
+      {
+        path: 'flows',
+        name: 'FlowsAdmin',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/Flows.vue'),
+      },
+      {
+        path: 'flows/:id',
+        name: 'FlowEdit',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/Flow.vue'),
       },
     ],
   },

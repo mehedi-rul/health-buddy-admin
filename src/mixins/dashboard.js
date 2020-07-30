@@ -26,7 +26,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['rapidProUrl', 'googleAnalyticsUrl']),
+    ...mapGetters(['rapidProProxyUrl', 'rapidProRunUrl', 'googleAnalyticsUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
@@ -37,7 +37,7 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      if (!this.rapidProUrl) {
+      if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
         return;
       }
       this.loading = true;
@@ -90,8 +90,8 @@ export default {
         const totalAsksByPeriod = this.countMessages(
           result[6],
           'incoming',
-          this.getFormattedStartDate(),
-          this.getFormattedEndDate(),
+          this.getISOStartDate(),
+          this.getISOEndDate(),
         );
         const totalAsks = this.countMessages(result[6], 'incoming');
         const totalAnswers = this.countMessages(result[6], 'outgoing');
@@ -101,20 +101,20 @@ export default {
     },
     fetchInteractions() {
       const queryParams = [
-        'uuid=f7015954-1564-4e44-84f0-124843428498',
-        `after=${this.getFormattedStartDate()}`,
-        `before=${this.getFormattedEndDate()}`,
+        'flow=f7015954-1564-4e44-84f0-124843428498',
+        `start_date=${this.getRapidproStartDate()}`,
+        `end_date=${this.getRapidproEndDate()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProUrl}flows?${queryParams}`)
+      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`)
         .then(({ data }) => this.parseTotalInteractions(data));
     },
     fetchAllFlows() {
       const queryParams = [
-        'uuid=5f80320a-9122-4798-9056-0d999771841a',
-        `after=${this.getFormattedStartDate()}`,
-        `before=${this.getFormattedEndDate()}`,
+        'flow=5f80320a-9122-4798-9056-0d999771841a',
+        `start_date=${this.getRapidproStartDate()}`,
+        `end_date=${this.getRapidproEndDate()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProUrl}flows?${queryParams}`)
+      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`)
         .then(({ data }) => this.parseAllFlows(data));
     },
     fetchVisitorsAccesses() {
@@ -127,24 +127,33 @@ export default {
         .then(({ data }) => this.parsePageViews(data));
     },
     fetchRegisteredFakes() {
-      return this.$http.get(`${this.rapidProUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`)
+      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`)
         .then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchNewQuestions() {
-      return this.$http.get(`${this.rapidProUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`)
+      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`)
         .then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchLowConfidenceResponses() {
-      return this.$http.get(`${this.rapidProUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`)
+      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`)
         .then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchChannelStats() {
-      return this.$http.get(`${this.rapidProUrl}channel_stats`)
+      return this.$http.get(`${this.rapidProProxyUrl}channel_stats`)
         .then(({ data }) => data);
     },
     parseTotalInteractions(data) {
-      const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
-      return runs.active + runs.completed + runs.interrupted;
+      const {
+        active,
+        completed,
+        expired,
+        interrupted,
+      } = data;
+      return (active || 0) + (completed || 0) + (interrupted || 0) + (expired || 0);
+    },
+    parseAllFlows(data) {
+      const { completed } = data;
+      return completed || 0;
     },
     countMessages(data, type, after = undefined, before = undefined) {
       const { results } = data;
@@ -169,10 +178,6 @@ export default {
         })
         .reduce((current, previous) => current + previous.count, 0);
     },
-    parseAllFlows(data) {
-      const { runs } = data.results[0] || { runs: { active: 0, completed: 0, interrupted: 0 } };
-      return runs.completed;
-    },
     parseRegisteredFakes(data) {
       const { count } = data.results[0] || { count: 0 };
       return count;
@@ -180,11 +185,19 @@ export default {
     parsePageViews(data) {
       return data.totalsForAllResults['ga:pageviews'];
     },
-    getFormattedStartDate() {
+    getISOStartDate() {
       return this.getStartDate().toISOString();
     },
-    getFormattedEndDate() {
+    getISOEndDate() {
       return this.getEndDate().toISOString();
+    },
+    getRapidproStartDate() {
+      return this.getStartDate().toISOString().split('T')[0];
+    },
+    getRapidproEndDate() {
+      const endDate = new Date();
+      endDate.setDate(this.getEndDate().getDate() + 1);
+      return endDate.toISOString().split('T')[0];
     },
     getStartDate() {
       return this.startPeriod;

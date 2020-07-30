@@ -8,6 +8,7 @@
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
 @import "assets/styles/variables";
+@import "assets/styles/icon";
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

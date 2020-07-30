@@ -27,6 +27,11 @@ const adminLinks = [
     label: 'Users',
     icon: 'users',
   },
+  {
+    to: '/admin/flows',
+    label: 'Flows',
+    icon: 'flows',
+  },
 ];
 
 export default {
