@@ -90,8 +90,8 @@ export default {
         const totalAsksByPeriod = this.countMessages(
           result[6],
           'incoming',
-          this.getISOStartDate(),
-          this.getISOEndDate(),
+          this.getStartDate(),
+          this.getEndDate(),
         );
         const totalAsks = this.countMessages(result[6], 'incoming');
         const totalAnswers = this.countMessages(result[6], 'outgoing');
@@ -164,7 +164,7 @@ export default {
       const counts = filteredMessages.reduce(
         (current, previous) => current.concat(previous.data),
         [],
-      );
+      ).map((r) => ({ ...r, date: new Date(r.date) }));
 
       if (!after) {
         return counts.reduce((current, previous) => current + previous.count, 0);
