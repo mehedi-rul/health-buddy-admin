@@ -151,6 +151,21 @@
             </ilha-chart-summary-box>
           </div>
         </div>
+        <div class="columns m-t-1 m-b-1">
+          <div class="column is-12">
+            <ilha-chart-summary-box
+              :chart-data="usersLanguageData"
+              :chart-type="'bar'"
+              :background-color="'#78ddf4'"
+              class="has-background-white">
+              <template v-slot:title>
+                <span title="Access per Language.">
+                  Access per Language
+                </span>
+              </template>
+            </ilha-chart-summary-box>
+          </div>
+        </div>
       </div>
     </div>
   </section>

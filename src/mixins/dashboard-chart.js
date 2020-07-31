@@ -4,6 +4,7 @@ export default {
       dailyTrafficData: [],
       messageMetricsData: [],
       reportsData: [],
+      usersLanguageData: [],
     };
   },
   methods: {
@@ -58,6 +59,9 @@ export default {
           backgroundColor: '#2FA2F4',
         },
       ];
+    },
+    makeUsersLanguageDataData(usersPerLanguages) {
+      return usersPerLanguages.map((result) => ({ label: result.language, value: result.count }));
     },
   },
 };

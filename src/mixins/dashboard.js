@@ -1,6 +1,23 @@
 import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
+const enabledLanguages = [
+  'English',
+  'Romanian',
+  'Bulgarian',
+  'Hungarian',
+  'Turkish',
+  'Macedonian',
+  'Greek',
+  'Kazakh',
+  'Italian',
+  'Spanish',
+  'Russian',
+  'Portuguese',
+  'English',
+  'Italian',
+];
+
 export default {
   mixins: [dashboardChartMixin],
   data() {
@@ -51,6 +68,7 @@ export default {
             registeredFakes,
             newQuestions,
             lowConfidenceResponses,
+            usersPerLanguages,
             totalAsksByPeriod,
             totalAsks,
             totalAnswers,
@@ -75,6 +93,7 @@ export default {
             registeredFakes,
             lowConfidenceResponses,
           );
+          this.usersLanguageData = this.makeUsersLanguageDataData(usersPerLanguages);
         });
     },
     fetchAll() {
@@ -85,18 +104,19 @@ export default {
         this.fetchRegisteredFakes(),
         this.fetchNewQuestions(),
         this.fetchLowConfidenceResponses(),
+        this.fetchUsersPerLanguages(),
         this.fetchChannelStats(),
       ]).then((result) => {
         const totalAsksByPeriod = this.countMessages(
-          result[6],
+          result[7],
           'incoming',
           this.getStartDate(),
           this.getEndDate(),
         );
-        const totalAsks = this.countMessages(result[6], 'incoming');
-        const totalAnswers = this.countMessages(result[6], 'outgoing');
-        const totalErrors = this.countMessages(result[6], 'errors');
-        return [...result.slice(0, 6), totalAsksByPeriod, totalAsks, totalAnswers, totalErrors];
+        const totalAsks = this.countMessages(result[7], 'incoming');
+        const totalAnswers = this.countMessages(result[7], 'outgoing');
+        const totalErrors = this.countMessages(result[7], 'errors');
+        return [...result.slice(0, 7), totalAsksByPeriod, totalAsks, totalAnswers, totalErrors];
       });
     },
     fetchInteractions() {
@@ -142,6 +162,10 @@ export default {
       return this.$http.get(`${this.rapidProProxyUrl}channel_stats`)
         .then(({ data }) => data);
     },
+    fetchUsersPerLanguages() {
+      return this.$http.get(`${this.rapidProProxyUrl}groups`)
+        .then(({ data }) => this.parserUserPerLanguage(data));
+    },
     parseTotalInteractions(data) {
       const {
         active,
@@ -185,11 +209,16 @@ export default {
     parsePageViews(data) {
       return data.totalsForAllResults['ga:pageviews'];
     },
-    getISOStartDate() {
-      return this.getStartDate().toISOString();
+    parserUserPerLanguage(data) {
+      const results = ((data || {}).results || []);
+      return results
+        .map((result) => this.makeUserPerLanguageResult(result))
+        .filter((result) => enabledLanguages.indexOf(result.language) !== -1);
     },
-    getISOEndDate() {
-      return this.getEndDate().toISOString();
+    makeUserPerLanguageResult(result) {
+      const count = result.count || 0;
+      const name = result.name || '';
+      return { count, language: name.replace('Language = ', '') };
     },
     getRapidproStartDate() {
       return this.getStartDate().toISOString().split('T')[0];
