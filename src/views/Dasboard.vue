@@ -166,6 +166,18 @@
             </ilha-chart-summary-box>
           </div>
         </div>
+        <div class="m-t-1">
+          <ilha-title>
+            Most viewed
+          </ilha-title>
+          <div class="m-t-1 m-b-1">
+            <ilha-summary-table
+              :url="'https://healthbuddy-develop.ilhasoft.dev/rapidpro/runs/most_accessed/completed'"
+              :format-result-func="formatResultFunc"
+              :per-page="1000"
+              :header="header"/>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -185,6 +197,20 @@ export default {
   data() {
     return {
       downloading: false,
+      header: [
+        {
+          property: 'name',
+          label: 'Nome',
+        },
+        {
+          property: 'completed',
+          label: 'Total Access',
+        },
+      ],
+      formatResultFunc: (data) => {
+        const results = data.data || [];
+        return { ...data, data: { results: results.slice(0, 10), count: 1 } };
+      },
     };
   },
   methods: {

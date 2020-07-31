@@ -2,20 +2,18 @@ import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
 const enabledLanguages = [
-  'English',
-  'Romanian',
-  'Bulgarian',
-  'Hungarian',
-  'Turkish',
-  'Macedonian',
-  'Greek',
-  'Kazakh',
-  'Italian',
-  'Spanish',
-  'Russian',
-  'Portuguese',
-  'English',
-  'Italian',
+  'f8c534b0-4f5b-4e75-9cea-b7c4f0024729',
+  'eda9c80c-e4d1-4c2d-8e6e-274602ec53c5',
+  'c2d8df6b-718c-4a3c-828d-c68ed6800ebf',
+  'bcba9740-2f92-405e-95de-5af9d314ca24',
+  'da96c998-caaa-47d5-a336-cc5b5cc6ab24',
+  '4d3b2408-35fa-4fee-9145-d5fe8b4ec778',
+  '2a76f757-ed89-4be2-a38b-78678fc1d005',
+  '2c949c35-b875-4a3b-b176-a5c61f1f9c5c',
+  'c4c105a4-a288-4733-89fb-318a1b67d345',
+  'cc1f79b2-b1c5-429e-88e6-7578d3757bb2',
+  'f5317699-e004-4030-94be-5084143455de',
+  '4577dd6e-4334-475d-bdd7-7b2240514bfa',
 ];
 
 export default {
@@ -213,12 +211,13 @@ export default {
       const results = ((data || {}).results || []);
       return results
         .map((result) => this.makeUserPerLanguageResult(result))
-        .filter((result) => enabledLanguages.indexOf(result.language) !== -1);
+        .filter((result) => enabledLanguages.indexOf(result.uuid) !== -1);
     },
     makeUserPerLanguageResult(result) {
       const count = result.count || 0;
+      const uuid = result.uuid || '';
       const name = result.name || '';
-      return { count, language: name.replace('Language = ', '') };
+      return { uuid, count, language: name.replace('Language = ', '') };
     },
     getRapidproStartDate() {
       return this.getStartDate().toISOString().split('T')[0];
