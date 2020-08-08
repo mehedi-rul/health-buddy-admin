@@ -55,9 +55,15 @@ export default {
     flowsUrl() {
       this.resourceUrl = this.flowsUrl;
     },
+    data() {
+      if (this.data && !this.data.id) {
+        this.data.id = this.data.uuid;
+      }
+    },
   },
   mounted() {
     this.resourceUrl = this.flowsUrl;
+    this.getId = (data) => data.uuid;
   },
 };
 
