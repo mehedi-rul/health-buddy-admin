@@ -175,7 +175,9 @@
               :url="'https://healthbuddy-develop.ilhasoft.dev/rapidpro/runs/most_accessed/completed'"
               :format-result-func="formatResultFunc"
               :per-page="1000"
-              :header="header"/>
+              :header="header"
+              ref="mostViewed"
+            />
           </div>
         </div>
       </div>
@@ -240,7 +242,17 @@ export default {
         ['registeredFakes', this.registeredFakes],
         ['lowConfidenceResponses', this.lowConfidenceResponses],
       ];
-      this.exportToCsv('dashboard.csv', rows);
+      const accessPerLanguage = [['country', 'access']].concat(
+        this.usersLanguageData.map((data) => [data.label, data.value]),
+      );
+      const mostViewed = [['flow', 'access']].concat(
+        (this.$refs.mostViewed.data || []).map(
+          (data) => [data.name, data.completed],
+        ),
+      );
+      this.exportToCsv('metrics.csv', rows);
+      this.exportToCsv('Access per Language.csv', accessPerLanguage);
+      this.exportToCsv('Most viewed.csv', mostViewed);
       this.downloading = false;
     },
     exportToCsv(filename, rows) {
