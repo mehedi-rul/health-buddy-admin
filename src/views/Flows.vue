@@ -71,6 +71,7 @@ export default {
   },
   mounted() {
     this.resourceUrl = this.flowsUrl;
+    this.otherQueryParams = 'active=true';
     this.formatData = (data) => data.map((flow) => ({ ...flow, id: flow.uuid }));
   },
 };
