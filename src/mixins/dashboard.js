@@ -223,7 +223,7 @@ export default {
       return this.getStartDate().toISOString().split('T')[0];
     },
     getRapidproEndDate() {
-      const endDate = new Date();
+      const endDate = new Date(this.getEndDate().getTime());
       endDate.setDate(this.getEndDate().getDate() + 1);
       return endDate.toISOString().split('T')[0];
     },
