@@ -110,9 +110,6 @@
               <template v-slot:icon>
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
-              <template v-slot:period>
-                <span :title="fromDate">{{ selectedPeriod }}</span>
-              </template>
               <template v-slot:metric>
                 <span title="The number of times the website has been accessed">Total Views</span>
               </template>
@@ -130,6 +127,7 @@
         <div class="columns m-t-1 m-b-1">
           <div class="column is-half">
             <ilha-chart-summary-box
+              ref="messageChart"
               :chart-data="messageMetricsData"
               class="has-background-white">
               <template v-slot:title>
@@ -141,6 +139,7 @@
           </div>
           <div class="column is-half">
             <ilha-chart-summary-box
+              ref="reportChart"
               :chart-data="reportsData"
               class="has-background-white">
               <template v-slot:title>
@@ -154,6 +153,7 @@
         <div class="columns m-t-1 m-b-1">
           <div class="column is-12">
             <ilha-chart-summary-box
+              ref="barChart"
               :chart-data="usersLanguageData"
               :chart-type="'bar'"
               :background-color="'#78ddf4'"
@@ -176,6 +176,7 @@
               :format-result-func="formatResultFunc"
               :per-page="1000"
               :header="header"
+              :mobile-cards="mobileCards"
               ref="mostViewed"
             />
           </div>
@@ -198,6 +199,7 @@ export default {
   },
   data() {
     return {
+      mobileCards: false,
       downloading: false,
       header: [
         {
@@ -217,16 +219,25 @@ export default {
   },
   methods: {
     downloadPdf() {
+      const margin = 60;
+      const contentArea = document.querySelector('#chart-panel');
+      contentArea.parentElement.classList.add('print');
+      const pdf = new JsPDF('p', 'px', [contentArea.clientWidth + margin, contentArea.clientHeight + margin]);
+      const widthWithoutMargin = pdf.internal.pageSize.getWidth() - margin;
+      const heightWithoutMargin = pdf.internal.pageSize.getHeight() - margin;
+      this.$refs.messageChart.$refs.donut.initChart();
+      this.$refs.reportChart.$refs.donut.initChart();
+      this.$refs.barChart.$refs.bar.initChart();
       this.downloading = true;
-      html2canvas(document.querySelector('#chart-panel')).then((canvas) => {
-        const img = canvas.toDataURL('image/png');
-        const pdf = new JsPDF('l', 'px', 'a4');
-        const widthWithMargin = pdf.internal.pageSize.getWidth() - 60;
-        const heigthWithMargin = pdf.internal.pageSize.getHeight() - 60;
-        pdf.addImage(img, 'png', 30, 30, widthWithMargin, heigthWithMargin);
-        pdf.save('dashboard.pdf');
-        this.downloading = false;
-      });
+      setTimeout(() => {
+        html2canvas(contentArea).then((canvas) => {
+          contentArea.parentElement.classList.remove('print');
+          const img = canvas.toDataURL('image/png');
+          pdf.addImage(img, 'png', margin / 2, margin / 2, widthWithoutMargin, heightWithoutMargin);
+          pdf.save('dashboard.pdf');
+          this.downloading = false;
+        });
+      }, 1000);
     },
     downloadCSV() {
       this.downloading = true;

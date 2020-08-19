@@ -48,4 +48,21 @@ html {
   font-family: 'Oxygen', sans-serif;
 }
 
+.print {
+  .loading-overlay {
+    .loading-background {
+      background-color: #FFFFFF;
+    }
+  }
+  #chart-panel {
+    width: 900px;
+    .columns {
+      display: flex !important;
+      .column.is-3 {
+        flex: none;
+        width: 25%;
+      }
+    }
+  }
+}
 </style>
