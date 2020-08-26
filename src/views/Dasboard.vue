@@ -177,6 +177,7 @@
               :per-page="1000"
               :header="header"
               :mobile-cards="mobileCards"
+              :additional-query-params="'is_active=true'"
               ref="mostViewed"
             />
           </div>
