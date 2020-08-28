@@ -19,6 +19,7 @@ const enabledLanguages = [
 export default {
   mixins: [dashboardChartMixin],
   data() {
+    const minDateUserPerLanguage = new Date(2020, 8, 21);
     const startPeriod = new Date();
     const endPeriod = new Date();
     startPeriod.setFullYear(endPeriod.getFullYear() - 1);
@@ -26,6 +27,9 @@ export default {
       loading: true,
       startPeriod,
       endPeriod,
+      startPeriodUserPerLanguage: minDateUserPerLanguage,
+      endPeriodUserPerLanguage: new Date(endPeriod.getTime()),
+      minDateUserPerLanguage,
       selectedPeriod: 'year',
       periods: ['today', 'month', 'year'],
       interactions: 0,
@@ -161,7 +165,11 @@ export default {
         .then(({ data }) => data);
     },
     fetchUsersPerLanguages() {
-      return this.$http.get(`${this.rapidProProxyUrl}groups`)
+      const queryParams = [
+        `start_date=${this.getRapidproStartDateUserPerLanguage()}`,
+        `end_date=${this.getRapidproEndDateUserPerLanguage()}`,
+      ].join('&');
+      return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`)
         .then(({ data }) => this.parserUserPerLanguage(data));
     },
     parseTotalInteractions(data) {
@@ -227,6 +235,14 @@ export default {
       endDate.setDate(this.getEndDate().getDate() + 1);
       return endDate.toISOString().split('T')[0];
     },
+    getRapidproStartDateUserPerLanguage() {
+      return this.startPeriodUserPerLanguage.toISOString().split('T')[0];
+    },
+    getRapidproEndDateUserPerLanguage() {
+      const endDate = new Date(this.endPeriodUserPerLanguage.getTime());
+      endDate.setDate(this.endPeriodUserPerLanguage.getDate() + 1);
+      return endDate.toISOString().split('T')[0];
+    },
     getStartDate() {
       return this.startPeriod;
     },
@@ -249,6 +265,12 @@ export default {
       this.fetchData();
     },
     endPeriod() {
+      this.fetchData();
+    },
+    startPeriodUserPerLanguage() {
+      this.fetchData();
+    },
+    endPeriodUserPerLanguage() {
       this.fetchData();
     },
   },

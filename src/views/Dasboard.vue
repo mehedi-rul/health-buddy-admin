@@ -8,32 +8,6 @@
     </b-loading>
     <div class="dashboard-actions m-2 m-t-1 m-b-0">
       <div class="columns">
-        <b-field class="column">
-          <b-datepicker
-            v-model="startPeriod"
-            ref="startDatepicker"
-            expanded
-            placeholder="Start">
-          </b-datepicker>
-          <b-button
-            @click="$refs.startDatepicker.toggle()"
-            icon-left="calendar-today"
-            type="is-primary" />
-        </b-field>
-        <b-field class="column">
-          <b-datepicker
-            v-model="endPeriod"
-            ref="endDatepicker"
-            expanded
-            placeholder="End">
-          </b-datepicker>
-          <b-button
-            @click="$refs.endDatepicker.toggle()"
-            icon-left="calendar-today"
-            type="is-primary" />
-        </b-field>
-      </div>
-      <div class="columns">
         <div class="column">
           <b-button
             @click="downloadPdf"
@@ -57,13 +31,40 @@
       </div>
     </div>
     <div
-      v-if="!loading"
       class="m-2 m-t-1" id="chart-panel">
       <div class="m-b-1">
         <ilha-title>
           Overview
         </ilha-title>
-        <div class="columns  m-t-1 m-b-1">
+
+        <div class="columns m-t-1 date-filter">
+          <b-field class="column">
+            <b-datepicker
+              v-model="startPeriod"
+              ref="startDatepicker"
+              expanded
+              placeholder="Start">
+            </b-datepicker>
+            <b-button
+              @click="$refs.startDatepicker.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+          <b-field class="column">
+            <b-datepicker
+              v-model="endPeriod"
+              ref="endDatepicker"
+              expanded
+              placeholder="End">
+            </b-datepicker>
+            <b-button
+              @click="$refs.endDatepicker.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+        </div>
+
+        <div class="columns m-b-1">
           <div class="column is-3">
             <ilha-summary-box class="has-background-blue has-text-white">
               <template v-slot:icon>
@@ -119,6 +120,49 @@
             </ilha-summary-box>
           </div>
         </div>
+        <div class="columns m-t-1 date-filter">
+          <b-field class="column">
+            <b-datepicker
+              v-model="startPeriodUserPerLanguage"
+              :min-date="minDateUserPerLanguage"
+              ref="startPeriodUserPerLanguagePicker"
+              expanded
+              placeholder="Start">
+            </b-datepicker>
+            <b-button
+              @click="$refs.startPeriodUserPerLanguagePicker.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+          <b-field class="column">
+            <b-datepicker
+              v-model="endPeriodUserPerLanguage"
+              ref="endPeriodUserPerLanguagePicker"
+              expanded
+              placeholder="End">
+            </b-datepicker>
+            <b-button
+              @click="$refs.endPeriodUserPerLanguagePicker.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+        </div>
+        <div class="columns m-b-1">
+          <div class="column is-12">
+            <ilha-chart-summary-box
+              ref="barChart"
+              :chart-data="usersLanguageData"
+              :chart-type="'bar'"
+              :background-color="'#78ddf4'"
+              class="has-background-white">
+              <template v-slot:title>
+                <span title="Access per Language.">
+                  Access per Language
+                </span>
+              </template>
+            </ilha-chart-summary-box>
+          </div>
+        </div>
       </div>
       <div class="m-t-1">
         <ilha-title>
@@ -145,22 +189,6 @@
               <template v-slot:title>
                 <span title="The number of registered reports.">
                   New Reports Registered
-                </span>
-              </template>
-            </ilha-chart-summary-box>
-          </div>
-        </div>
-        <div class="columns m-t-1 m-b-1">
-          <div class="column is-12">
-            <ilha-chart-summary-box
-              ref="barChart"
-              :chart-data="usersLanguageData"
-              :chart-type="'bar'"
-              :background-color="'#78ddf4'"
-              class="has-background-white">
-              <template v-slot:title>
-                <span title="Access per Language.">
-                  Access per Language
                 </span>
               </template>
             </ilha-chart-summary-box>
@@ -348,5 +376,9 @@ export default {
     display: block;
   }
 }
-
+.date-filter {
+  @media screen and (min-width: 768px) {
+    width: 400px;
+  }
+}
 </style>
