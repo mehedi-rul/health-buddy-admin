@@ -20,6 +20,9 @@ export default new Vuex.Store({
     flowsUrl(state) {
       return `${state.api}flows`;
     },
+    rapidProUrl(state) {
+      return `${state.serverUrl}rapidpro/`;
+    },
     rapidProProxyUrl(state) {
       return `${state.serverUrl}rapidpro/proxy/`;
     },

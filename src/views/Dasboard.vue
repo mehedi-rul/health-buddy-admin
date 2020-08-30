@@ -4,7 +4,7 @@
     </ilha-header>
     <b-loading
       :is-full-page="false"
-      :active="loading || downloading">
+      :active="downloading">
     </b-loading>
     <div class="dashboard-actions m-2 m-t-1 m-b-0">
       <div class="columns">
@@ -66,7 +66,10 @@
 
         <div class="columns m-b-1">
           <div class="column is-3">
-            <ilha-summary-box class="has-background-blue has-text-white">
+            <ilha-summary-box
+              :loading="loading"
+              class="has-background-blue has-text-white"
+            >
               <template v-slot:icon>
                 <ilha-icon type="tag-white" class="icon is-medium"/>
               </template>
@@ -79,7 +82,10 @@
             </ilha-summary-box>
           </div>
           <div class="column is-3">
-            <ilha-summary-box class="has-background-yellow has-text-white">
+            <ilha-summary-box
+              :loading="loading"
+              class="has-background-yellow has-text-white"
+            >
               <template v-slot:icon>
                 <ilha-icon type="users-white" class="icon is-medium"/>
               </template>
@@ -92,7 +98,10 @@
             </ilha-summary-box>
           </div>
           <div class="column is-3">
-            <ilha-summary-box class="has-background-green has-text-white">
+            <ilha-summary-box
+              :loading="loading"
+              class="has-background-green has-text-white"
+            >
               <template v-slot:icon>
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
@@ -107,7 +116,10 @@
             </ilha-summary-box>
           </div>
           <div class="column is-3">
-            <ilha-summary-box class="has-background-red has-text-white">
+            <ilha-summary-box
+              :loading="loading"
+              class="has-background-red has-text-white"
+            >
               <template v-slot:icon>
                 <ilha-icon type="trend-white" class="icon is-medium"/>
               </template>
@@ -151,6 +163,7 @@
           <div class="column is-12">
             <ilha-chart-summary-box
               ref="barChart"
+              :loading="loadingUserPerLanguage"
               :chart-data="usersLanguageData"
               :chart-type="'bar'"
               :background-color="'#78ddf4'"
@@ -172,6 +185,7 @@
           <div class="column is-half">
             <ilha-chart-summary-box
               ref="messageChart"
+              :loading="loadingOtherChartData"
               :chart-data="messageMetricsData"
               class="has-background-white">
               <template v-slot:title>
@@ -184,8 +198,10 @@
           <div class="column is-half">
             <ilha-chart-summary-box
               ref="reportChart"
+              :loading="loadingOtherChartData"
               :chart-data="reportsData"
-              class="has-background-white">
+              class="has-background-white"
+            >
               <template v-slot:title>
                 <span title="The number of registered reports.">
                   New Reports Registered
@@ -253,9 +269,7 @@ export default {
       const pdf = new JsPDF('p', 'px', [contentArea.clientWidth + margin, contentArea.clientHeight + margin]);
       const widthWithoutMargin = pdf.internal.pageSize.getWidth() - margin;
       const heightWithoutMargin = pdf.internal.pageSize.getHeight() - margin;
-      this.$refs.messageChart.$refs.donut.initChart();
-      this.$refs.reportChart.$refs.donut.initChart();
-      this.$refs.barChart.$refs.bar.initChart();
+      this.resizeCharts();
       this.downloading = true;
       setTimeout(() => {
         html2canvas(contentArea).then((canvas) => {
@@ -264,6 +278,7 @@ export default {
           pdf.addImage(img, 'png', margin / 2, margin / 2, widthWithoutMargin, heightWithoutMargin);
           pdf.save('dashboard.pdf');
           this.downloading = false;
+          setTimeout(() => this.resizeCharts(), 0);
         });
       }, 1000);
     },
@@ -325,6 +340,11 @@ export default {
       }
       return `${finalVal}`;
     },
+    resizeCharts() {
+      this.$refs.messageChart.$refs.donut.initChart();
+      this.$refs.reportChart.$refs.donut.initChart();
+      this.$refs.barChart.$refs.bar.initChart();
+    },
   },
   filters: {
     toUSD(value) {
@@ -344,21 +364,9 @@ export default {
 
 <style lang="scss">
 @import "../assets/styles/variables";
-.loading-overlay {
-  left: $sidebar-width;
-
-  @media screen and (max-width: 1023px) {
-    left: $sidebar-mobile-width;
-  }
-}
-
-.ilha-sidebar__reduced {
-  .loading-overlay {
-    left: $sidebar-mobile-width;
-  }
-}
 
 .dashboard {
+  position: relative;
   /deep/ .search-field {
     opacity: 0;
     input {

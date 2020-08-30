@@ -25,6 +25,8 @@ export default {
     startPeriod.setFullYear(endPeriod.getFullYear() - 1);
     return {
       loading: true,
+      loadingUserPerLanguage: true,
+      loadingOtherChartData: true,
       startPeriod,
       endPeriod,
       startPeriodUserPerLanguage: minDateUserPerLanguage,
@@ -45,7 +47,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['rapidProProxyUrl', 'rapidProRunUrl', 'googleAnalyticsUrl']),
+    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'googleAnalyticsUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
@@ -56,69 +58,72 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.fetchFirstSection();
+      this.fetchSecondSection();
+      this.fetchThirdSection();
+    },
+    fetchFirstSection() {
       if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
         return;
       }
       this.loading = true;
-      this.fetchAll()
-        .then((results) => {
-          this.loading = false;
-          const [
-            interactions,
-            allFlows,
-            pageViews,
-            registeredFakes,
-            newQuestions,
-            lowConfidenceResponses,
-            usersPerLanguages,
-            totalAsksByPeriod,
-            totalAsks,
-            totalAnswers,
-            totalErrors,
-          ] = results;
-          this.interactions = interactions;
-          this.totalAsks = totalAsksByPeriod;
-          this.allFlows = allFlows;
-          this.pageViews = pageViews;
-          this.totalAnswers = totalAnswers;
-          this.totalErrors = totalErrors;
-          this.newQuestions = newQuestions;
-          this.registeredFakes = registeredFakes;
-          this.lowConfidenceResponses = lowConfidenceResponses;
-          this.messageMetricsData = this.makeMessageMetricsData(
-            totalAsks,
-            totalAnswers,
-            totalErrors,
-          );
-          this.reportsData = this.makeReportsData(
-            newQuestions,
-            registeredFakes,
-            lowConfidenceResponses,
-          );
-          this.usersLanguageData = this.makeUsersLanguageDataData(usersPerLanguages);
-        });
-    },
-    fetchAll() {
-      return Promise.all([
+      Promise.all([
         this.fetchInteractions(),
         this.fetchAllFlows(),
         this.fetchVisitorsAccesses(),
-        this.fetchRegisteredFakes(),
-        this.fetchNewQuestions(),
-        this.fetchLowConfidenceResponses(),
-        this.fetchUsersPerLanguages(),
         this.fetchChannelStats(),
-      ]).then((result) => {
-        const totalAsksByPeriod = this.countMessages(
-          result[7],
+      ]).then(([interactions, allFlows, pageViews, channelStats]) => {
+        this.loading = false;
+        this.interactions = interactions;
+        this.totalAsks = this.countMessages(
+          channelStats,
           'incoming',
           this.getStartDate(),
           this.getEndDate(),
         );
-        const totalAsks = this.countMessages(result[7], 'incoming');
-        const totalAnswers = this.countMessages(result[7], 'outgoing');
-        const totalErrors = this.countMessages(result[7], 'errors');
-        return [...result.slice(0, 7), totalAsksByPeriod, totalAsks, totalAnswers, totalErrors];
+        this.allFlows = allFlows;
+        this.pageViews = pageViews;
+      });
+    },
+    fetchSecondSection() {
+      if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
+        return;
+      }
+      this.loadingUserPerLanguage = true;
+      this.fetchUsersPerLanguages()
+        .then((result) => {
+          this.loadingUserPerLanguage = false;
+          this.usersLanguageData = this.makeUsersLanguageDataData(result);
+        });
+    },
+    fetchThirdSection() {
+      if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
+        return;
+      }
+      this.loadingOtherChartData = true;
+      Promise.all([
+        this.fetchRegisteredFakes(),
+        this.fetchNewQuestions(),
+        this.fetchLowConfidenceResponses(),
+        this.fetchChannelStats(),
+      ]).then(([registeredFakes, newQuestions, lowConfidenceResponses, channelStatus]) => {
+        this.loadingOtherChartData = false;
+        this.registeredFakes = registeredFakes;
+        this.newQuestions = newQuestions;
+        this.lowConfidenceResponses = lowConfidenceResponses;
+        this.totalAnswers = this.countMessages(channelStatus, 'outgoing');
+        this.totalErrors = this.countMessages(channelStatus, 'errors');
+        const totalAsks = this.countMessages(channelStatus, 'incoming');
+        this.messageMetricsData = this.makeMessageMetricsData(
+          totalAsks,
+          this.totalAnswers,
+          this.totalErrors,
+        );
+        this.reportsData = this.makeReportsData(
+          this.newQuestions,
+          this.registeredFakes,
+          this.lowConfidenceResponses,
+        );
       });
     },
     fetchInteractions() {
@@ -262,16 +267,16 @@ export default {
   },
   watch: {
     startPeriod() {
-      this.fetchData();
+      this.fetchFirstSection();
     },
     endPeriod() {
-      this.fetchData();
+      this.fetchFirstSection();
     },
     startPeriodUserPerLanguage() {
-      this.fetchData();
+      this.fetchSecondSection();
     },
     endPeriodUserPerLanguage() {
-      this.fetchData();
+      this.fetchSecondSection();
     },
   },
 };
