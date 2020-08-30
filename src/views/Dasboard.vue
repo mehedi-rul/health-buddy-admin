@@ -162,10 +162,10 @@
         <div class="columns m-b-1">
           <div class="column is-12">
             <ilha-chart-summary-box
-              ref="barChart"
+              ref="lineChart"
               :loading="loadingUserPerLanguage"
               :chart-data="usersLanguageData"
-              :chart-type="'bar'"
+              :chart-type="'line'"
               :background-color="'#78ddf4'"
               class="has-background-white">
               <template v-slot:title>
@@ -343,7 +343,7 @@ export default {
     resizeCharts() {
       this.$refs.messageChart.$refs.donut.initChart();
       this.$refs.reportChart.$refs.donut.initChart();
-      this.$refs.barChart.$refs.bar.initChart();
+      this.$refs.lineChart.$refs.line.initChart();
     },
   },
   filters: {
