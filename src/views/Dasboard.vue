@@ -37,8 +37,11 @@
           Overview
         </ilha-title>
 
-        <div class="columns m-t-1 date-filter">
-          <b-field class="column">
+        <div
+          v-if="!downloading"
+          class="columns m-t-1 m-b-0 date-filter"
+        >
+          <b-field class="column m-b-0">
             <b-datepicker
               v-model="startPeriod"
               ref="startDatepicker"
@@ -50,7 +53,7 @@
               icon-left="calendar-today"
               type="is-primary" />
           </b-field>
-          <b-field class="column">
+          <b-field class="column m-b-0">
             <b-datepicker
               v-model="endPeriod"
               ref="endDatepicker"
@@ -64,7 +67,7 @@
           </b-field>
         </div>
 
-        <div class="columns m-b-1">
+        <div class="columns m-t-1 m-b-1">
           <div class="column is-3">
             <ilha-summary-box
               :loading="loading"
@@ -132,7 +135,10 @@
             </ilha-summary-box>
           </div>
         </div>
-        <div class="columns m-t-1 date-filter">
+        <div
+          v-if="!downloading"
+          class="columns m-t-1 date-filter"
+        >
           <b-field class="column">
             <b-datepicker
               v-model="startPeriodUserPerLanguage"
