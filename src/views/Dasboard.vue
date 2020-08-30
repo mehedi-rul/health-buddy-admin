@@ -135,6 +135,23 @@
             </ilha-summary-box>
           </div>
         </div>
+        <div class="columns m-b-1">
+          <div class="column is-12">
+            <ilha-chart-summary-box
+              ref="lineChart"
+              :loading="loadingRunsPerDays"
+              :chart-data="runsPerDayData"
+              :chart-type="'line'"
+              :background-color="'#78ddf4'"
+              class="has-background-white">
+              <template v-slot:title>
+                <span title="Total number of conversations on the Bot per Day.">
+                  Interacts with Bot per Day
+                </span>
+              </template>
+            </ilha-chart-summary-box>
+          </div>
+        </div>
         <div
           v-if="!downloading"
           class="columns m-t-1 date-filter"

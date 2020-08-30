@@ -5,6 +5,7 @@ export default {
       messageMetricsData: [],
       reportsData: [],
       usersLanguageData: [],
+      runsPerDayData: [],
     };
   },
   methods: {
@@ -62,6 +63,11 @@ export default {
     },
     makeUsersLanguageDataData(usersPerLanguages) {
       return usersPerLanguages.map((result) => ({ label: result.language, value: result.count }));
+    },
+    makeRunsPerDayData(makeRunsPerDay) {
+      return makeRunsPerDay.reverse().map(
+        (result) => ({ label: result.day, value: result.totalInteractions }),
+      );
     },
   },
 };

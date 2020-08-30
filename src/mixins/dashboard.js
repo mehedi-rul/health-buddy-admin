@@ -25,6 +25,7 @@ export default {
     startPeriod.setFullYear(endPeriod.getFullYear() - 1);
     return {
       loading: true,
+      loadingRunsPerDays: true,
       loadingUserPerLanguage: true,
       loadingOtherChartData: true,
       startPeriod,
@@ -84,6 +85,12 @@ export default {
         this.allFlows = allFlows;
         this.pageViews = pageViews;
       });
+
+      this.loadingRunsPerDays = true;
+      this.fetchInteractionsPerDay().then((result) => {
+        this.loadingRunsPerDays = false;
+        this.runsPerDayData = this.makeRunsPerDayData(result);
+      });
     },
     fetchSecondSection() {
       if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
@@ -135,6 +142,15 @@ export default {
       return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`)
         .then(({ data }) => this.parseTotalInteractions(data));
     },
+    fetchInteractionsPerDay() {
+      const queryParams = [
+        'flow__uuid=f7015954-1564-4e44-84f0-124843428498',
+        `start_date=${this.getRapidproStartDate()}`,
+        `end_date=${this.getRapidproEndDate()}`,
+      ].join('&');
+      return this.$http.get(`${this.rapidProRunUrl}all?${queryParams}`)
+        .then(({ data }) => this.parseRunsByDay(data));
+    },
     fetchAllFlows() {
       const queryParams = [
         'flow=5f80320a-9122-4798-9056-0d999771841a',
@@ -185,6 +201,19 @@ export default {
         interrupted,
       } = data;
       return (active || 0) + (completed || 0) + (interrupted || 0) + (expired || 0);
+    },
+    parseRunsByDay(data) {
+      return data.map((d) => this.parseDayRun(d))
+        .filter((d) => d.date >= this.getStartDate() && d.date <= this.getEndDate());
+    },
+    parseDayRun(data) {
+      const date = new Date(data.day);
+      date.setHours(0, 0, 0);
+      return {
+        totalInteractions: data.completed + data.active + data.expired,
+        day: date.toISOString().split('T')[0],
+        date,
+      };
     },
     parseAllFlows(data) {
       const { completed } = data;
