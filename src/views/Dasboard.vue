@@ -44,6 +44,8 @@
           <b-field class="column m-b-0">
             <b-datepicker
               v-model="startPeriod"
+              :min-date="minDateInteractions"
+              :max-date="endPeriod"
               ref="startDatepicker"
               expanded
               placeholder="Start">
@@ -56,6 +58,7 @@
           <b-field class="column m-b-0">
             <b-datepicker
               v-model="endPeriod"
+              :min-date="startPeriod"
               ref="endDatepicker"
               expanded
               placeholder="End">
@@ -160,6 +163,7 @@
             <b-datepicker
               v-model="startPeriodUserPerLanguage"
               :min-date="minDateUserPerLanguage"
+              :max-date="endPeriodUserPerLanguage"
               ref="startPeriodUserPerLanguagePicker"
               expanded
               placeholder="Start">
@@ -172,6 +176,7 @@
           <b-field class="column">
             <b-datepicker
               v-model="endPeriodUserPerLanguage"
+              :min-date="startPeriodUserPerLanguage"
               ref="endPeriodUserPerLanguagePicker"
               expanded
               placeholder="End">

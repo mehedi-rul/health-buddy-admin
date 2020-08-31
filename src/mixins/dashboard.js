@@ -19,10 +19,10 @@ const enabledLanguages = [
 export default {
   mixins: [dashboardChartMixin],
   data() {
-    const minDateUserPerLanguage = new Date(2020, 8, 21);
-    const startPeriod = new Date();
+    const minDateInteractions = new Date(2020, 2, 17);
+    const minDateUserPerLanguage = new Date(2020, 7, 21);
+    const startPeriod = minDateInteractions;
     const endPeriod = new Date();
-    startPeriod.setFullYear(endPeriod.getFullYear() - 1);
     return {
       loading: true,
       loadingRunsPerDays: true,
@@ -32,6 +32,7 @@ export default {
       endPeriod,
       startPeriodUserPerLanguage: minDateUserPerLanguage,
       endPeriodUserPerLanguage: new Date(endPeriod.getTime()),
+      minDateInteractions,
       minDateUserPerLanguage,
       selectedPeriod: 'year',
       periods: ['today', 'month', 'year'],
