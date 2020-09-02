@@ -141,10 +141,11 @@
         <div class="columns m-b-1">
           <div class="column is-12">
             <ilha-chart-summary-box
-              ref="lineChart"
+              ref="lineChart1"
               :loading="loadingRunsPerDays"
               :chart-data="runsPerDayData"
               :chart-type="'line'"
+              :show-datapoint="showDataPointsIterations"
               :background-color="'#78ddf4'"
               class="has-background-white">
               <template v-slot:title>
@@ -190,9 +191,10 @@
         <div class="columns m-b-1">
           <div class="column is-12">
             <ilha-chart-summary-box
-              ref="lineChart"
+              ref="lineChart2"
               :loading="loadingUserPerLanguage"
               :chart-data="usersLanguageData"
+              :show-datapoint="showDataPointsLanguages"
               :chart-type="'line'"
               :background-color="'#78ddf4'"
               class="has-background-white">
@@ -268,6 +270,12 @@ export default {
   mixins: [dashboardMixin],
   computed: {
     ...mapState(['serverUrl']),
+    showDataPointsIterations() {
+      return this.downloading && this.runsPerDayData.length <= 30;
+    },
+    showDataPointsLanguages() {
+      return this.downloading && this.usersLanguageData.length <= 30;
+    },
   },
   data() {
     return {
@@ -291,24 +299,15 @@ export default {
   },
   methods: {
     downloadPdf() {
-      const margin = 60;
       const contentArea = document.querySelector('#chart-panel');
       contentArea.parentElement.classList.add('print');
-      const pdf = new JsPDF('p', 'px', [contentArea.clientWidth + margin, contentArea.clientHeight + margin]);
-      const widthWithoutMargin = pdf.internal.pageSize.getWidth() - margin;
-      const heightWithoutMargin = pdf.internal.pageSize.getHeight() - margin;
-      this.resizeCharts();
       this.downloading = true;
       setTimeout(() => {
-        html2canvas(contentArea).then((canvas) => {
-          contentArea.parentElement.classList.remove('print');
-          const img = canvas.toDataURL('image/png');
-          pdf.addImage(img, 'png', margin / 2, margin / 2, widthWithoutMargin, heightWithoutMargin);
-          pdf.save('dashboard.pdf');
-          this.downloading = false;
-          setTimeout(() => this.resizeCharts(), 0);
-        });
-      }, 1000);
+        this.resizeCharts();
+        setTimeout(() => {
+          this.buildAndDownloadPDF();
+        }, 1000);
+      }, 10);
     },
     downloadCSV() {
       this.downloading = true;
@@ -350,6 +349,21 @@ export default {
       link.click();
       document.body.removeChild(link);
     },
+    buildAndDownloadPDF() {
+      const margin = 60;
+      const contentArea = document.querySelector('#chart-panel');
+      html2canvas(contentArea).then((canvas) => {
+        const pdf = new JsPDF('p', 'px', [contentArea.clientWidth + margin, contentArea.clientHeight + margin]);
+        const widthWithoutMargin = pdf.internal.pageSize.getWidth() - margin;
+        const heightWithoutMargin = pdf.internal.pageSize.getHeight() - margin;
+        contentArea.parentElement.classList.remove('print');
+        const img = canvas.toDataURL('image/png');
+        pdf.addImage(img, 'png', margin / 2, margin / 2, widthWithoutMargin, heightWithoutMargin);
+        pdf.save('dashboard.pdf');
+        this.downloading = false;
+        setTimeout(() => this.resizeCharts(), 0);
+      });
+    },
     processRow(row) {
       let finalVal = '';
       for (let j = 0; j < row.length; j += 1) {
@@ -371,7 +385,8 @@ export default {
     resizeCharts() {
       this.$refs.messageChart.$refs.donut.initChart();
       this.$refs.reportChart.$refs.donut.initChart();
-      this.$refs.lineChart.$refs.line.initChart();
+      this.$refs.lineChart1.$refs.line.initChart();
+      this.$refs.lineChart2.$refs.line.initChart();
     },
   },
   filters: {
