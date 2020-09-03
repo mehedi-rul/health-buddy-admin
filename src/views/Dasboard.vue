@@ -150,7 +150,7 @@
               class="has-background-white">
               <template v-slot:title>
                 <span title="Total number of conversations on the Bot per Day.">
-                  Interacts with Bot per Day
+                  Total Interacts with Bot per Day
                 </span>
               </template>
             </ilha-chart-summary-box>
