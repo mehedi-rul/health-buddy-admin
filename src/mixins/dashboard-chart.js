@@ -65,7 +65,7 @@ export default {
       return usersPerLanguages.map((result) => ({ label: result.language, value: result.count }));
     },
     makeRunsPerDayData(makeRunsPerDay) {
-      return makeRunsPerDay.reverse().map(
+      return makeRunsPerDay.map(
         (result) => ({ label: result.day, value: result.totalInteractions }),
       );
     },

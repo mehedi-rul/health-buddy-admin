@@ -204,16 +204,12 @@ export default {
       return (active || 0) + (completed || 0) + (interrupted || 0) + (expired || 0);
     },
     parseRunsByDay(data) {
-      return data.map((d) => this.parseDayRun(d))
-        .filter((d) => d.date >= this.getStartDate() && d.date <= this.getEndDate());
+      return data.map((d) => this.parseDayRun(d));
     },
     parseDayRun(data) {
-      const date = new Date(data.day);
-      date.setHours(0, 0, 0);
       return {
         totalInteractions: data.completed + data.active + data.expired,
-        day: date.toISOString().split('T')[0],
-        date,
+        day: data.day.split('T')[0],
       };
     },
     parseAllFlows(data) {
