@@ -248,7 +248,7 @@
             <ilha-summary-table
               :url="'https://healthbuddy-develop.ilhasoft.dev/rapidpro/runs/most_accessed/completed'"
               :format-result-func="formatResultFunc"
-              :per-page="1000"
+              :per-page="mostViewedTotalRow"
               :header="header"
               :mobile-cards="mobileCards"
               ref="mostViewed"
@@ -293,7 +293,7 @@ export default {
       ],
       formatResultFunc: (data) => {
         const results = data.data || [];
-        return { ...data, data: { results: results.slice(0, 10), count: 1 } };
+        return { ...data, data: { results, count: results.length } };
       },
     };
   },
@@ -302,6 +302,7 @@ export default {
       const contentArea = document.querySelector('#chart-panel');
       contentArea.parentElement.classList.add('print');
       this.downloading = true;
+      this.mostViewedTotalRow = 1000;
       setTimeout(() => {
         this.resizeCharts();
         setTimeout(() => {
@@ -361,6 +362,7 @@ export default {
         pdf.addImage(img, 'png', margin / 2, margin / 2, widthWithoutMargin, heightWithoutMargin);
         pdf.save('dashboard.pdf');
         this.downloading = false;
+        this.mostViewedTotalRow = 10;
         setTimeout(() => this.resizeCharts(), 0);
       });
     },

@@ -46,6 +46,7 @@ export default {
       registeredFakes: 0,
       lowConfidenceResponses: 0,
       oldestTime: new Date(2019, 5, 2),
+      mostViewedTotalRow: 10,
     };
   },
   computed: {
