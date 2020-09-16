@@ -5,6 +5,7 @@ export default {
       messageMetricsData: [],
       reportsData: [],
       usersLanguageData: [],
+      interactionsByChannelData: [],
       runsPerDayData: [],
     };
   },
@@ -39,6 +40,35 @@ export default {
           label: 'Received',
           value: totalReceived,
           backgroundColor: '#1CABE2',
+        },
+      ];
+    },
+    makeInteractionsByChannelData(web, mobile, app, facebook, telegram) {
+      return [
+        {
+          label: 'Web',
+          value: web,
+          backgroundColor: '#80bd41',
+        },
+        {
+          label: 'Web mobile',
+          value: mobile,
+          backgroundColor: '#f7c10c',
+        },
+        {
+          label: 'App',
+          value: app,
+          backgroundColor: '#4bace2',
+        },
+        {
+          label: 'Facebook',
+          value: facebook,
+          backgroundColor: '#e64d35',
+        },
+        {
+          label: 'Telegram',
+          value: telegram,
+          backgroundColor: '#182a6d',
         },
       ];
     },

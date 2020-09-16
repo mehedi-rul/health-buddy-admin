@@ -212,7 +212,7 @@
           Secondary
         </ilha-title>
         <div class="columns m-t-1 m-b-1">
-          <div class="column is-half">
+          <div class="column is-4">
             <ilha-chart-summary-box
               ref="messageChart"
               :loading="loadingOtherChartData"
@@ -225,7 +225,7 @@
               </template>
             </ilha-chart-summary-box>
           </div>
-          <div class="column is-half">
+          <div class="column is-4">
             <ilha-chart-summary-box
               ref="reportChart"
               :loading="loadingOtherChartData"
@@ -235,6 +235,20 @@
               <template v-slot:title>
                 <span title="The number of registered reports.">
                   New Reports Registered
+                </span>
+              </template>
+            </ilha-chart-summary-box>
+          </div>
+          <div class="column is-4">
+            <ilha-chart-summary-box
+              ref="interactionsByChannelChart"
+              :loading="loadingOtherChartData"
+              :chart-data="interactionsByChannelData"
+              class="has-background-white"
+            >
+              <template v-slot:title>
+                <span title="The number of registered reports.">
+                  Interaction by Channel
                 </span>
               </template>
             </ilha-chart-summary-box>

@@ -133,6 +133,7 @@ export default {
           this.registeredFakes,
           this.lowConfidenceResponses,
         );
+        this.interactionsByChannelData = this.makeInteractionsByChannelData(100, 200, 300, 50, 25);
       });
     },
     fetchInteractions() {
