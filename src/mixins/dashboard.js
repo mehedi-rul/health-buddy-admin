@@ -81,6 +81,7 @@ export default {
         this.totalAsks = this.countMessages(
           channelStats,
           'incoming',
+          undefined,
           this.getStartDate(),
           this.getEndDate(),
         );
@@ -133,7 +134,24 @@ export default {
           this.registeredFakes,
           this.lowConfidenceResponses,
         );
-        this.interactionsByChannelData = this.makeInteractionsByChannelData(100, 200, 300, 50, 25);
+        const totalWeb = this.countMessages(channelStatus, 'outgoing', 'EX')
+          + this.countMessages(channelStatus, 'errors', 'EX')
+          + this.countMessages(channelStatus, 'incoming', 'EX');
+        const totalMobile = 0;
+        const totalApp = 0;
+        const totalFacebook = this.countMessages(channelStatus, 'outgoing', 'FB')
+          + this.countMessages(channelStatus, 'errors', 'FB')
+          + this.countMessages(channelStatus, 'incoming', 'FB');
+        const totalTelegram = this.countMessages(channelStatus, 'outgoing', 'TG')
+          + this.countMessages(channelStatus, 'errors', 'TG')
+          + this.countMessages(channelStatus, 'incoming', 'TG');
+        this.interactionsByChannelData = this.makeInteractionsByChannelData(
+          totalWeb,
+          totalMobile,
+          totalApp,
+          totalFacebook,
+          totalTelegram,
+        );
       });
     },
     fetchInteractions() {
@@ -218,8 +236,10 @@ export default {
       const { completed } = data;
       return completed || 0;
     },
-    countMessages(data, type, after = undefined, before = undefined) {
-      const { results } = data;
+    countMessages(data, type, channelType = undefined, after = undefined, before = undefined) {
+      const resultsUnfiltered = data.results;
+      const results = channelType
+        ? resultsUnfiltered.filter((r) => r.channel_type === channelType) : resultsUnfiltered;
       const dailyCountList = results.map((result) => result.daily_count);
       const filteredMessages = dailyCountList.map(
         (dc) => dc.find((d) => d.name.toLowerCase() === type),
