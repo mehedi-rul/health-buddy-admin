@@ -285,7 +285,7 @@ export default {
     },
     getRapidproEndDate() {
       const endDate = new Date(this.getEndDate().getTime());
-      endDate.setDate(this.getEndDate().getDate() + 1);
+      // endDate.setDate(this.getEndDate().getDate() + 1);
       return endDate.toISOString().split('T')[0];
     },
     getRapidproStartDateUserPerLanguage() {
@@ -293,7 +293,7 @@ export default {
     },
     getRapidproEndDateUserPerLanguage() {
       const endDate = new Date(this.endPeriodUserPerLanguage.getTime());
-      endDate.setDate(this.endPeriodUserPerLanguage.getDate() + 1);
+      // endDate.setDate(this.endPeriodUserPerLanguage.getDate() + 1);
       return endDate.toISOString().split('T')[0];
     },
     getStartDate() {
