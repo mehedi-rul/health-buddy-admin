@@ -50,7 +50,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'googleAnalyticsUrl']),
+    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'rapidProGroupsUrl', 'googleAnalyticsUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
@@ -211,7 +211,7 @@ export default {
         `start_date=${this.getRapidproStartDateUserPerLanguage()}`,
         `end_date=${this.getRapidproEndDateUserPerLanguage()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`)
+      return this.$http.get(`${this.rapidProGroupsUrl}?${queryParams}`)
         .then(({ data }) => this.parserUserPerLanguage(data));
     },
     parseTotalInteractions(data) {
@@ -269,16 +269,34 @@ export default {
       return data.totalsForAllResults['ga:pageviews'];
     },
     parserUserPerLanguage(data) {
-      const results = ((data || {}).results || []);
-      return results
-        .map((result) => this.makeUserPerLanguageResult(result))
-        .filter((result) => enabledLanguages.indexOf(result.uuid) !== -1);
+      const results = data || [];
+      const formattedResults = results.map((result) => this.makeUserPerLanguageResult(result));
+      const grouped = formattedResults.reduce((previous, current) => {
+        if (enabledLanguages.indexOf(current.uuid) === -1) {
+          return previous;
+        }
+        if (!previous[current.language]) {
+          // eslint-disable-next-line
+          previous[current.language] = { color: '#F8C239', data: [] };
+          // eslint-disable-next-line
+        }
+        // eslint-disable-next-line
+        previous[current.language].data.push({ uuid: current.uuid, value: current.count, label: current.day });
+        return previous;
+      }, {});
+      return grouped;
     },
     makeUserPerLanguageResult(result) {
       const count = result.count || 0;
-      const uuid = result.uuid || '';
-      const name = result.name || '';
-      return { uuid, count, language: name.replace('Language = ', '') };
+      const uuid = result.group.uuid || '';
+      const name = result.group.name || '';
+      const day = new Date(result.day) || '';
+      return {
+        uuid,
+        count,
+        day,
+        language: name.replace('Language = ', ''),
+      };
     },
     getRapidproStartDate() {
       return this.getStartDate().toISOString().split('T')[0];
