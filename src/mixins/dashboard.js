@@ -272,24 +272,25 @@ export default {
       const results = data || [];
       const formattedResults = results.map((result) => this.makeUserPerLanguageResult(result));
       const grouped = formattedResults.reduce((previous, current) => {
-        if (!previous[current.uuid]) {
+        if (enabledLanguages.indexOf(current.uuid) === -1) {
+          return previous;
+        }
+        if (!previous[current.language]) {
           // eslint-disable-next-line
-          previous[current.uuid] = { ...current };
+          previous[current.language] = { color: '#F8C239', data: [] };
           // eslint-disable-next-line
-          delete previous[current.uuid].day;
         }
         // eslint-disable-next-line
-        // previous[current.uuid].count += current.count;
+        previous[current.language].data.push({ uuid: current.uuid, value: current.count, label: current.day });
         return previous;
       }, {});
-      return Object.values(grouped)
-        .filter((result) => enabledLanguages.indexOf(result.uuid) !== -1);
+      return grouped;
     },
     makeUserPerLanguageResult(result) {
       const count = result.count || 0;
       const uuid = result.group.uuid || '';
       const name = result.group.name || '';
-      const day = result.day || '';
+      const day = new Date(result.day) || '';
       return {
         uuid,
         count,

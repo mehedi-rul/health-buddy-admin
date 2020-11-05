@@ -92,7 +92,14 @@ export default {
       ];
     },
     makeUsersLanguageDataData(usersPerLanguages) {
-      return usersPerLanguages.map((result) => ({ label: result.language, value: result.count }));
+      Object.values(usersPerLanguages).forEach((languageData) => {
+        languageData.data.sort((d1, d2) => d1.label - d2.label);
+        languageData.data.forEach((data) => {
+          // eslint-disable-next-line
+          data.label = data.label.toISOString().split('T')[0];
+        });
+      });
+      return usersPerLanguages;
     },
     makeRunsPerDayData(makeRunsPerDay) {
       return makeRunsPerDay.map(
