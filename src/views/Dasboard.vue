@@ -1,32 +1,34 @@
 <template>
   <section class="dashboard">
-    <ilha-header>
-    </ilha-header>
-    <b-loading
-      :is-full-page="false"
-      :active="downloading">
-    </b-loading>
-    <div class="dashboard-actions m-2 m-t-1 m-b-0">
-      <div class="columns">
-        <div class="column">
-          <b-button
-            @click="downloadPdf"
-            outlined
-            type="is-primary"
-            class="periods-container__button"
-          >
-            Export PDF
-          </b-button>
-        </div>
-        <div class="column">
-          <b-button
-            @click="downloadCSV"
-            outlined
-            type="is-primary"
-            class="periods-container__button"
-          >
-            Export CSV
-          </b-button>
+    <div v-if="this.$route.name !== 'IframeDashboard'">
+      <ilha-header>
+      </ilha-header>
+      <b-loading
+        :is-full-page="false"
+        :active="downloading">
+      </b-loading>
+      <div class="dashboard-actions m-2 m-t-1 m-b-0">
+        <div class="columns">
+          <div class="column">
+            <b-button
+              @click="downloadPdf"
+              outlined
+              type="is-primary"
+              class="periods-container__button"
+            >
+              Export PDF
+            </b-button>
+          </div>
+          <div class="column">
+            <b-button
+              @click="downloadCSV"
+              outlined
+              type="is-primary"
+              class="periods-container__button"
+            >
+              Export CSV
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -260,7 +262,7 @@
           </ilha-title>
           <div class="m-t-1 m-b-1">
             <ilha-summary-table
-              :url="'https://healthbuddy-develop.ilhasoft.dev/rapidpro/runs/most_accessed/completed'"
+              :url="summaryTableUrl"
               :format-result-func="formatResultFunc"
               :per-page="mostViewedTotalRow"
               :header="header"
@@ -309,6 +311,8 @@ export default {
         const results = data.data || [];
         return { ...data, data: { results, count: results.length } };
       },
+      token: this.$route.query.token,
+      summaryTableUrl: this.buildSummaryTableUrl(this.$route.query.token),
     };
   },
   methods: {
@@ -404,6 +408,13 @@ export default {
       this.$refs.lineChart1.$refs.line.initChart();
       this.$refs.lineChart2.$refs.line.initChart();
     },
+    buildSummaryTableUrl(token) {
+      let url = `${process.env.VUE_APP_SERVER_URL}rapidpro/runs/most_accessed/completed`;
+      if (token) {
+        url += `?token=${token}&`;
+      }
+      return url;
+    },
   },
   filters: {
     toUSD(value) {
@@ -412,11 +423,11 @@ export default {
   },
   watch: {
     serverUrl() {
-      this.fetchData();
+      this.fetchData(this.token);
     },
   },
   mounted() {
-    this.fetchData();
+    this.fetchData(this.token);
   },
 };
 </script>

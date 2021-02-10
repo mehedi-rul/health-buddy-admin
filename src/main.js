@@ -19,13 +19,17 @@ Vue.config.productionTip = false;
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(store.state.authTokenKey);
-    if (token) {
-      // eslint-disable-next-line
-      config.headers['Authorization'] = `Bearer ${ token }`;
-    }
+    try {
+      const token = localStorage.getItem(store.state.authTokenKey);
+      if (token) {
+        // eslint-disable-next-line
+        config.headers['Authorization'] = `Bearer ${ token }`;
+      }
 
-    return config;
+      return config;
+    } catch (error) {
+      return Promise.reject(error);
+    }
   },
   (error) => Promise.reject(error),
 );
@@ -33,7 +37,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error.status === 401) {
       localStorage.removeItem(store.state.authTokenKey);
       localStorage.removeItem(store.state.refreshTokenKey);
     }
