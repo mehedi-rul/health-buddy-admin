@@ -35,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'googleAnalyticsUrl']),
+    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'rapidProGroupsUrl', 'googleAnalyticsUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
