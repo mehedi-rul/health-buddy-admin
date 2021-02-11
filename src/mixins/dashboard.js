@@ -1,21 +1,6 @@
 import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
-const enabledLanguages = [
-  'f8c534b0-4f5b-4e75-9cea-b7c4f0024729',
-  'eda9c80c-e4d1-4c2d-8e6e-274602ec53c5',
-  'c2d8df6b-718c-4a3c-828d-c68ed6800ebf',
-  'bcba9740-2f92-405e-95de-5af9d314ca24',
-  'da96c998-caaa-47d5-a336-cc5b5cc6ab24',
-  '4d3b2408-35fa-4fee-9145-d5fe8b4ec778',
-  '2a76f757-ed89-4be2-a38b-78678fc1d005',
-  '2c949c35-b875-4a3b-b176-a5c61f1f9c5c',
-  'c4c105a4-a288-4733-89fb-318a1b67d345',
-  'cc1f79b2-b1c5-429e-88e6-7578d3757bb2',
-  'f5317699-e004-4030-94be-5084143455de',
-  '4577dd6e-4334-475d-bdd7-7b2240514bfa',
-];
-
 export default {
   mixins: [dashboardChartMixin],
   data() {
@@ -191,16 +176,19 @@ export default {
         .then(({ data }) => this.parsePageViews(data));
     },
     fetchRegisteredFakes() {
-      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`)
-        .then(({ data }) => this.parseRegisteredFakes(data));
+      return this.$http.get(
+        `${this.rapidProProxyUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`,
+      ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchNewQuestions() {
-      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`)
-        .then(({ data }) => this.parseRegisteredFakes(data));
+      return this.$http.get(
+        `${this.rapidProProxyUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`,
+      ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchLowConfidenceResponses() {
-      return this.$http.get(`${this.rapidProProxyUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`)
-        .then(({ data }) => this.parseRegisteredFakes(data));
+      return this.$http.get(
+        `${this.rapidProProxyUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`,
+      ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchChannelStats() {
       return this.$http.get(`${this.rapidProProxyUrl}channel_stats`)
@@ -211,7 +199,7 @@ export default {
         `start_date=${this.getRapidproStartDateUserPerLanguage()}`,
         `end_date=${this.getRapidproEndDateUserPerLanguage()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProGroupsUrl}?${queryParams}`)
+      return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`)
         .then(({ data }) => this.parserUserPerLanguage(data));
     },
     parseTotalInteractions(data) {
@@ -269,33 +257,17 @@ export default {
       return data.totalsForAllResults['ga:pageviews'];
     },
     parserUserPerLanguage(data) {
-      const results = data || [];
-      const formattedResults = results.map((result) => this.makeUserPerLanguageResult(result));
-      const grouped = formattedResults.reduce((previous, current) => {
-        if (enabledLanguages.indexOf(current.uuid) === -1) {
-          return previous;
-        }
-        if (!previous[current.language]) {
-          // eslint-disable-next-line
-          previous[current.language] = { color: '#F8C239', data: [] };
-          // eslint-disable-next-line
-        }
-        // eslint-disable-next-line
-        previous[current.language].data.push({ uuid: current.uuid, value: current.count, label: current.day });
-        return previous;
-      }, {});
-      return grouped;
+      const results = ((data || {}).results || []);
+      return results
+        .map((result) => this.makeUserPerLanguageResult(result))
+        .filter((result) => result.name.includes('Language = '));
     },
     makeUserPerLanguageResult(result) {
       const count = result.count || 0;
-      const uuid = result.group.uuid || '';
-      const name = result.group.name || '';
-      const day = new Date(result.day) || '';
+      const uuid = result.uuid || '';
+      const name = result.name || '';
       return {
-        uuid,
-        count,
-        day,
-        language: name.replace('Language = ', ''),
+        uuid, count, name, language: name.replace('Language = ', ''),
       };
     },
     getRapidproStartDate() {

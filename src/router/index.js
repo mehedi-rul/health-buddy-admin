@@ -69,6 +69,11 @@ const routes = [
     beforeEnter: checkLogged,
   },
   {
+    path: '/iframe-dashboard',
+    name: 'IframeDashboard',
+    component: () => import('../views/Dasboard.vue'),
+  },
+  {
     path: '/admin',
     name: 'Admin',
     beforeEnter: checkAuth,

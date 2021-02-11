@@ -19,13 +19,23 @@ Vue.config.productionTip = false;
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(store.state.authTokenKey);
-    if (token) {
-      // eslint-disable-next-line
-      config.headers['Authorization'] = `Bearer ${ token }`;
-    }
+    try {
+      let token = localStorage.getItem(store.state.authTokenKey);
 
-    return config;
+      const currentHash = window.location.hash;
+      if (currentHash.includes('#/iframe-dashboard?token=')) {
+        token = currentHash.replace('#/iframe-dashboard?token=', '');
+      }
+
+      if (token) {
+        // eslint-disable-next-line
+        config.headers['Authorization'] = `Bearer ${ token }`;
+      }
+
+      return config;
+    } catch (error) {
+      return Promise.reject(error);
+    }
   },
   (error) => Promise.reject(error),
 );
@@ -33,7 +43,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error.status === 401) {
       localStorage.removeItem(store.state.authTokenKey);
       localStorage.removeItem(store.state.refreshTokenKey);
     }

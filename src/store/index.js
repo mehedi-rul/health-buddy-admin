@@ -29,9 +29,6 @@ export default new Vuex.Store({
     rapidProRunUrl(state) {
       return `${state.serverUrl}rapidpro/runs/`;
     },
-    rapidProGroupsUrl(state) {
-      return `${state.serverUrl}rapidpro/groups_count/`;
-    },
     googleAnalyticsUrl(state) {
       return `${state.serverUrl}google_analytics/ga`;
     },
