@@ -20,7 +20,13 @@ Vue.config.productionTip = false;
 axios.interceptors.request.use(
   (config) => {
     try {
-      const token = localStorage.getItem(store.state.authTokenKey);
+      let token = localStorage.getItem(store.state.authTokenKey);
+
+      const currentHash = window.location.hash;
+      if (currentHash.includes('#/iframe-dashboard?token=')) {
+        token = currentHash.replace('#/iframe-dashboard?token=', '');
+      }
+
       if (token) {
         // eslint-disable-next-line
         config.headers['Authorization'] = `Bearer ${ token }`;

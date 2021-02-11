@@ -41,25 +41,25 @@ export default {
     },
   },
   methods: {
-    changePeriod(period, token = null) {
+    changePeriod(period) {
       this.selectedPeriod = period;
-      this.fetchData(token);
+      this.fetchData();
     },
-    fetchData(token = null) {
-      this.fetchFirstSection(token);
-      this.fetchSecondSection(token);
-      this.fetchThirdSection(token);
+    fetchData() {
+      this.fetchFirstSection();
+      this.fetchSecondSection();
+      this.fetchThirdSection();
     },
-    fetchFirstSection(token = null) {
+    fetchFirstSection() {
       if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
         return;
       }
       this.loading = true;
       Promise.all([
-        this.fetchInteractions(token),
-        this.fetchAllFlows(token),
-        this.fetchVisitorsAccesses(token),
-        this.fetchChannelStats(token),
+        this.fetchInteractions(),
+        this.fetchAllFlows(),
+        this.fetchVisitorsAccesses(),
+        this.fetchChannelStats(),
       ]).then(([interactions, allFlows, pageViews, channelStats]) => {
         this.loading = false;
         this.interactions = interactions;
@@ -75,32 +75,32 @@ export default {
       });
 
       this.loadingRunsPerDays = true;
-      this.fetchInteractionsPerDay(token).then((result) => {
+      this.fetchInteractionsPerDay().then((result) => {
         this.loadingRunsPerDays = false;
         this.runsPerDayData = this.makeRunsPerDayData(result);
       });
     },
-    fetchSecondSection(token) {
+    fetchSecondSection() {
       if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
         return;
       }
       this.loadingUserPerLanguage = true;
-      this.fetchUsersPerLanguages(token)
+      this.fetchUsersPerLanguages()
         .then((result) => {
           this.loadingUserPerLanguage = false;
           this.usersLanguageData = this.makeUsersLanguageDataData(result);
         });
     },
-    fetchThirdSection(token) {
+    fetchThirdSection() {
       if (!this.rapidProProxyUrl || !this.rapidProRunUrl) {
         return;
       }
       this.loadingOtherChartData = true;
       Promise.all([
-        this.fetchRegisteredFakes(token),
-        this.fetchNewQuestions(token),
-        this.fetchLowConfidenceResponses(token),
-        this.fetchChannelStats(token),
+        this.fetchRegisteredFakes(),
+        this.fetchNewQuestions(),
+        this.fetchLowConfidenceResponses(),
+        this.fetchChannelStats(),
       ]).then(([registeredFakes, newQuestions, lowConfidenceResponses, channelStatus]) => {
         this.loadingOtherChartData = false;
         this.registeredFakes = registeredFakes;
@@ -139,89 +139,68 @@ export default {
         );
       });
     },
-    fetchInteractions(token) {
+    fetchInteractions() {
       const queryParams = [
         'flow=f7015954-1564-4e44-84f0-124843428498',
         `start_date=${this.getRapidproStartDate()}`,
         `end_date=${this.getRapidproEndDate()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => this.parseTotalInteractions(data));
+      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`)
+        .then(({ data }) => this.parseTotalInteractions(data));
     },
-    fetchInteractionsPerDay(token) {
+    fetchInteractionsPerDay() {
       const queryParams = [
         'flow__uuid=f7015954-1564-4e44-84f0-124843428498',
         `start_date=${this.getRapidproStartDate()}`,
         `end_date=${this.getRapidproEndDate()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProRunUrl}all?${queryParams}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => this.parseRunsByDay(data));
+      return this.$http.get(`${this.rapidProRunUrl}all?${queryParams}`)
+        .then(({ data }) => this.parseRunsByDay(data));
     },
-    fetchAllFlows(token) {
+    fetchAllFlows() {
       const queryParams = [
         'flow=5f80320a-9122-4798-9056-0d999771841a',
         `start_date=${this.getRapidproStartDate()}`,
         `end_date=${this.getRapidproEndDate()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => this.parseAllFlows(data));
+      return this.$http.get(`${this.rapidProRunUrl}?${queryParams}`)
+        .then(({ data }) => this.parseAllFlows(data));
     },
-    fetchVisitorsAccesses(token) {
+    fetchVisitorsAccesses() {
       const queryParams = [
         `start_date=${this.getGAStartDate()}`,
         `end_date=${this.getGAEndDate()}`,
         'metrics=pageviews',
       ].join('&');
-      return this.$http.get(`${this.googleAnalyticsUrl}?${queryParams}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => this.parsePageViews(data));
+      return this.$http.get(`${this.googleAnalyticsUrl}?${queryParams}`)
+        .then(({ data }) => this.parsePageViews(data));
     },
-    fetchRegisteredFakes(token) {
+    fetchRegisteredFakes() {
       return this.$http.get(
         `${this.rapidProProxyUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
-    fetchNewQuestions(token) {
+    fetchNewQuestions() {
       return this.$http.get(
         `${this.rapidProProxyUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
-    fetchLowConfidenceResponses(token) {
+    fetchLowConfidenceResponses() {
       return this.$http.get(
         `${this.rapidProProxyUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
-    fetchChannelStats(token) {
-      return this.$http.get(`${this.rapidProProxyUrl}channel_stats`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => data);
+    fetchChannelStats() {
+      return this.$http.get(`${this.rapidProProxyUrl}channel_stats`)
+        .then(({ data }) => data);
     },
-    fetchUsersPerLanguages(token) {
+    fetchUsersPerLanguages() {
       const queryParams = [
         `start_date=${this.getRapidproStartDateUserPerLanguage()}`,
         `end_date=${this.getRapidproEndDateUserPerLanguage()}`,
       ].join('&');
-      return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(({ data }) => this.parserUserPerLanguage(data));
+      return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`)
+        .then(({ data }) => this.parserUserPerLanguage(data));
     },
     parseTotalInteractions(data) {
       const {

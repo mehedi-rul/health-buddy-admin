@@ -423,11 +423,11 @@ export default {
   },
   watch: {
     serverUrl() {
-      this.fetchData(this.token);
+      this.fetchData();
     },
   },
   mounted() {
-    this.fetchData(this.token);
+    this.fetchData();
   },
 };
 </script>
