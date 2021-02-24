@@ -186,7 +186,7 @@
             <ilha-chart-summary-box
               ref="lineChart2"
               :loading="loadingUserPerLanguage"
-              :chart-data="filterLanguagesData()"
+              :chart-data="filterLanguagesData"
               :show-datapoint="showDataPointsLanguages"
               :chart-type="this.languagesGroup.length === 1 ? 'bar' : 'line'"
               :background-color="'#78ddf4'"
@@ -283,6 +283,15 @@ export default {
     showDataPointsLanguages() {
       return this.downloading && this.usersLanguageData.length <= 30;
     },
+    filterLanguagesData() {
+      if (this.languagesGroup.length === 0) {
+        return this.usersLanguageData;
+      }
+
+      return this.usersLanguageData.filter(
+        (language) => this.languagesGroup.includes(language.label),
+      );
+    },
   },
   data() {
     return {
@@ -308,15 +317,6 @@ export default {
     };
   },
   methods: {
-    filterLanguagesData() {
-      if (this.languagesGroup.length === 0) {
-        return this.usersLanguageData;
-      }
-
-      return this.usersLanguageData.filter(
-        (language) => this.languagesGroup.includes(language.label),
-      );
-    },
     downloadPdf() {
       const contentArea = document.querySelector('#chart-panel');
       contentArea.parentElement.classList.add('print');
@@ -407,7 +407,11 @@ export default {
       this.$refs.messageChart.$refs.donut.initChart();
       this.$refs.reportChart.$refs.donut.initChart();
       this.$refs.lineChart1.$refs.line.initChart();
-      this.$refs.lineChart2.$refs.line.initChart();
+      if (this.languagesGroup.length !== 1) {
+        this.$refs.lineChart2.$refs.line.initChart();
+      } else {
+        this.$refs.lineChart2.$refs.bar.initChart();
+      }
     },
     buildSummaryTableUrl(token) {
       let url = `${process.env.VUE_APP_SERVER_URL}rapidpro/runs/most_accessed/completed`;
