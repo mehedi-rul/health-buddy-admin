@@ -15,7 +15,7 @@
       :edit-route-name="editRouteName"
       :header="header"
       :loading="loading"
-      :data="data"
+      :data="computedData"
       :current-page="currentPage"
       :total-rows="totalRows"
       :sort-field="sortField"
@@ -40,6 +40,14 @@ import {
 
 export default {
   mixins: [toastsMixin, searchMixin, tableMixin, usersMixin],
+  computed: {
+    computedData() {
+      return this.data.map((user) => {
+        const type = user.is_staff ? 'Admin' : 'Viewer';
+        return { ...user, is_staff: type };
+      });
+    },
+  },
   data() {
     return {
       editRouteName: 'UserEdit',
@@ -54,6 +62,10 @@ export default {
         {
           property: 'is_active',
           label: 'Active',
+        },
+        {
+          property: 'is_staff',
+          label: 'Permission',
         },
         {
           property: 'username',
