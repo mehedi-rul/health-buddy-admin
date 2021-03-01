@@ -18,6 +18,11 @@
 <!--          v-if="id"-->
 <!--          :url="changePasswordUrl"></ilha-password-updater-btn>-->
 <!--      </template>-->
+    <template v-slot:button>
+      <b-checkbox v-model="isAdmin" class="is-pulled-left m-t-1">
+        Admin
+      </b-checkbox>
+    </template>
     </ilha-form>
   </section>
 </template>
@@ -29,6 +34,7 @@ import {
   toastsMixin,
   usersMixin,
 } from 'admin-buddy';
+import axios from 'axios';
 
 const fields = [
   {
@@ -106,6 +112,15 @@ export default {
   computed: {
     changePasswordUrl() {
       return `${this.usersUrl}/change_password`;
+    },
+    isAdmin: {
+      get() {
+        return this.data.is_staff;
+      },
+      set(newRole) {
+        axios.put(`${this.usersUrl}/${this.data.id}/change_permission`);
+        return newRole;
+      },
     },
   },
   watch: {
