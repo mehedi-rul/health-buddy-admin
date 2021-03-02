@@ -163,31 +163,22 @@
           class="columns m-t-1 date-filter"
         >
           <b-field class="column">
-            <b-datepicker
-              v-model="startPeriodUserPerLanguage"
-              :min-date="minDateUserPerLanguage"
-              :max-date="endPeriodUserPerLanguage"
-              ref="startPeriodUserPerLanguagePicker"
-              expanded
-              placeholder="Start">
-            </b-datepicker>
-            <b-button
-              @click="$refs.startPeriodUserPerLanguagePicker.toggle()"
-              icon-left="calendar-today"
-              type="is-primary" />
-          </b-field>
-          <b-field class="column">
-            <b-datepicker
-              v-model="endPeriodUserPerLanguage"
-              :min-date="startPeriodUserPerLanguage"
-              ref="endPeriodUserPerLanguagePicker"
-              expanded
-              placeholder="End">
-            </b-datepicker>
-            <b-button
-              @click="$refs.endPeriodUserPerLanguagePicker.toggle()"
-              icon-left="calendar-today"
-              type="is-primary" />
+            <b-dropdown v-model="languagesGroup" multiple aria-role="list">
+              <template #trigger>
+                <b-button
+                    type="is-primary"
+                    icon-right="menu-down">
+                    Selected ({{ languagesGroup.length }})
+                </b-button>
+              </template>
+              <b-dropdown-item
+                v-for="(language, index) in this.usersLanguageData"
+                :key="index"
+                :value="language.label"
+                aria-role="listitem">
+                <span>{{language.label}}</span>
+              </b-dropdown-item>
+            </b-dropdown>
           </b-field>
         </div>
         <div class="columns m-b-1">
@@ -195,9 +186,9 @@
             <ilha-chart-summary-box
               ref="lineChart2"
               :loading="loadingUserPerLanguage"
-              :chart-data="usersLanguageData"
+              :chart-data="filterLanguagesData"
               :show-datapoint="showDataPointsLanguages"
-              :chart-type="'line'"
+              :chart-type="this.languagesGroup.length === 1 ? 'bar' : 'line'"
               :background-color="'#78ddf4'"
               class="has-background-white">
               <template v-slot:title>
@@ -292,6 +283,15 @@ export default {
     showDataPointsLanguages() {
       return this.downloading && this.usersLanguageData.length <= 30;
     },
+    filterLanguagesData() {
+      if (this.languagesGroup.length === 0) {
+        return this.usersLanguageData;
+      }
+
+      return this.usersLanguageData.filter(
+        (language) => this.languagesGroup.includes(language.label),
+      );
+    },
   },
   data() {
     return {
@@ -313,6 +313,7 @@ export default {
       },
       token: this.$route.query.token,
       summaryTableUrl: this.buildSummaryTableUrl(this.$route.query.token),
+      languagesGroup: [],
     };
   },
   methods: {
@@ -406,7 +407,11 @@ export default {
       this.$refs.messageChart.$refs.donut.initChart();
       this.$refs.reportChart.$refs.donut.initChart();
       this.$refs.lineChart1.$refs.line.initChart();
-      this.$refs.lineChart2.$refs.line.initChart();
+      if (this.languagesGroup.length !== 1) {
+        this.$refs.lineChart2.$refs.line.initChart();
+      } else {
+        this.$refs.lineChart2.$refs.bar.initChart();
+      }
     },
     buildSummaryTableUrl(token) {
       let url = `${process.env.VUE_APP_SERVER_URL}rapidpro/runs/most_accessed/completed`;
