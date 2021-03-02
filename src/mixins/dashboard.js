@@ -7,14 +7,18 @@ export default {
     const minDateInteractions = new Date(2020, 2, 17);
     const minDateUserPerLanguage = new Date(2020, 7, 21);
     const startPeriod = minDateInteractions;
+    const startPeriodThird = minDateInteractions;
     const endPeriod = new Date();
+    const endPeriodThird = new Date();
     return {
       loading: true,
       loadingRunsPerDays: true,
       loadingUserPerLanguage: true,
       loadingOtherChartData: true,
       startPeriod,
+      startPeriodThird,
       endPeriod,
+      endPeriodThird,
       startPeriodUserPerLanguage: minDateUserPerLanguage,
       endPeriodUserPerLanguage: new Date(endPeriod.getTime()),
       minDateInteractions,
@@ -192,7 +196,10 @@ export default {
     },
     fetchChannelStats() {
       return this.$http.get(`${this.rapidProProxyUrl}channel_stats`)
-        .then(({ data }) => data);
+        .then(({ data }) => {
+          this.filterChannelStatsByDate(data, this.startPeriodThird, this.endPeriodThird);
+          return data;
+        });
     },
     fetchUsersPerLanguages() {
       const queryParams = [
@@ -201,6 +208,19 @@ export default {
       ].join('&');
       return this.$http.get(`${this.rapidProProxyUrl}groups?${queryParams}`)
         .then(({ data }) => this.parserUserPerLanguage(data));
+    },
+    filterChannelStatsByDate(data, start, end) {
+      const { results } = data;
+      results.forEach((result) => {
+        result.daily_count.forEach((countType) => {
+          // eslint-disable-next-line no-param-reassign
+          countType.data = countType.data.filter((date) => {
+            const currentDate = new Date(date.date);
+            currentDate.setHours(0, 0, 0, 0);
+            return currentDate >= start && currentDate <= end;
+          });
+        });
+      });
     },
     parseTotalInteractions(data) {
       const {
@@ -309,6 +329,12 @@ export default {
     },
     endPeriod() {
       this.fetchFirstSection();
+    },
+    startPeriodThird() {
+      this.fetchThirdSection();
+    },
+    endPeriodThird() {
+      this.fetchThirdSection();
     },
     startPeriodUserPerLanguage() {
       this.fetchSecondSection();
