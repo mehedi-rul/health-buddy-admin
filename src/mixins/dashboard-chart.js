@@ -92,6 +92,9 @@ export default {
       ];
     },
     makeUsersLanguageDataData(usersPerLanguages) {
+      usersPerLanguages.sort(
+        (languageA, languageB) => languageA.language.localeCompare(languageB.language),
+      );
       return usersPerLanguages.map((result) => ({ label: result.language, value: result.count }));
     },
     makeRunsPerDayData(makeRunsPerDay) {
