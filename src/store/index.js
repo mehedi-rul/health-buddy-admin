@@ -38,6 +38,9 @@ export default new Vuex.Store({
     passwordResetConfirmationUrl(state, getters) {
       return `${getters.passwordResetRequestUrl}confirm/`;
     },
+    rapidProLabelsCountUrl(state) {
+      return `${state.serverUrl}rapidpro/labels_count/`;
+    },
   },
   mutations: {
   },

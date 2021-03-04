@@ -39,7 +39,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'rapidProGroupsUrl', 'googleAnalyticsUrl']),
+    ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'rapidProGroupsUrl', 'googleAnalyticsUrl', 'rapidProLabelsCountUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
@@ -180,18 +180,33 @@ export default {
         .then(({ data }) => this.parsePageViews(data));
     },
     fetchRegisteredFakes() {
+      const queryParams = [
+        `start_date=${this.getThirdSectionStartDate()}`,
+        `end_date=${this.getThirdSectionEndDate()}`,
+        'label__uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f',
+      ].join('&');
       return this.$http.get(
-        `${this.rapidProProxyUrl}labels?uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f`,
+        `${this.rapidProLabelsCountUrl}?${queryParams}`,
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchNewQuestions() {
+      const queryParams = [
+        `start_date=${this.getThirdSectionStartDate()}`,
+        `end_date=${this.getThirdSectionEndDate()}`,
+        'label__uuid=69361321-fbfd-4389-b114-22b047d20b43',
+      ].join('&');
       return this.$http.get(
-        `${this.rapidProProxyUrl}labels?uuid=69361321-fbfd-4389-b114-22b047d20b43`,
+        `${this.rapidProLabelsCountUrl}?${queryParams}`,
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchLowConfidenceResponses() {
+      const queryParams = [
+        `start_date=${this.getThirdSectionStartDate()}`,
+        `end_date=${this.getThirdSectionEndDate()}`,
+        'label__uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09',
+      ].join('&');
       return this.$http.get(
-        `${this.rapidProProxyUrl}labels?uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09`,
+        `${this.rapidProLabelsCountUrl}?${queryParams}`,
       ).then(({ data }) => this.parseRegisteredFakes(data));
     },
     fetchChannelStats() {
@@ -270,7 +285,7 @@ export default {
         .reduce((current, previous) => current + previous.count, 0);
     },
     parseRegisteredFakes(data) {
-      const { count } = data.results[0] || { count: 0 };
+      const { count } = data[0] || { count: 0 };
       return count;
     },
     parsePageViews(data) {
@@ -289,6 +304,12 @@ export default {
       return {
         uuid, count, name, language: name.replace('Language = ', ''),
       };
+    },
+    getThirdSectionStartDate() {
+      return this.startPeriodThird.toISOString().split('T')[0];
+    },
+    getThirdSectionEndDate() {
+      return this.endPeriodThird.toISOString().split('T')[0];
     },
     getRapidproStartDate() {
       return this.getStartDate().toISOString().split('T')[0];
