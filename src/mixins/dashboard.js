@@ -8,8 +8,10 @@ export default {
     const minDateUserPerLanguage = new Date(2020, 7, 21);
     const startPeriod = minDateInteractions;
     const startPeriodThird = minDateInteractions;
+    const startPeriodViewed = minDateInteractions;
     const endPeriod = new Date();
     const endPeriodThird = new Date();
+    const endPeriodViewed = new Date();
     return {
       loading: true,
       loadingRunsPerDays: true,
@@ -17,8 +19,10 @@ export default {
       loadingOtherChartData: true,
       startPeriod,
       startPeriodThird,
+      startPeriodViewed,
       endPeriod,
       endPeriodThird,
+      endPeriodViewed,
       startPeriodUserPerLanguage: minDateUserPerLanguage,
       endPeriodUserPerLanguage: new Date(endPeriod.getTime()),
       minDateInteractions,
@@ -42,6 +46,18 @@ export default {
     ...mapGetters(['rapidProUrl', 'rapidProProxyUrl', 'rapidProRunUrl', 'rapidProGroupsUrl', 'googleAnalyticsUrl', 'rapidProLabelsCountUrl']),
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
+    },
+    summary() {
+      const { token } = this.$route.query;
+      const queryParams = [
+        `start_date=${this.getStartPeriodViewedDate()}`,
+        `end_date=${this.getEndPeriodViewedDate()}`,
+      ].join('&');
+      let url = `${process.env.VUE_APP_SERVER_URL}rapidpro/runs/most_accessed/completed?${queryParams}&`;
+      if (token) {
+        url += `token=${token}&`;
+      }
+      return url;
     },
   },
   methods: {
@@ -310,6 +326,12 @@ export default {
     },
     getThirdSectionEndDate() {
       return this.endPeriodThird.toISOString().split('T')[0];
+    },
+    getStartPeriodViewedDate() {
+      return this.startPeriodViewed.toISOString().split('T')[0];
+    },
+    getEndPeriodViewedDate() {
+      return this.endPeriodViewed.toISOString().split('T')[0];
     },
     getRapidproStartDate() {
       return this.getStartDate().toISOString().split('T')[0];

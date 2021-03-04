@@ -226,7 +226,6 @@
             <b-datepicker
               v-model="endPeriodThird"
               :min-date="startPeriodThird"
-              :max-date="endPeriodThird"
               ref="endDatepickerThird"
               expanded
               placeholder="End">
@@ -284,9 +283,41 @@
           <ilha-title>
             Most viewed
           </ilha-title>
+          <div
+            v-if="!downloading"
+            class="columns m-t-1 m-b-0 date-filter"
+          >
+            <b-field class="column m-b-0">
+              <b-datepicker
+                v-model="startPeriodViewed"
+                :min-date="minDateInteractions"
+                :max-date="endPeriodViewed"
+                ref="startDatepickerViewed"
+                expanded
+                placeholder="Start">
+              </b-datepicker>
+              <b-button
+                @click="$refs.startDatepickerViewed.toggle()"
+                icon-left="calendar-today"
+                type="is-primary" />
+            </b-field>
+            <b-field class="column m-b-0">
+              <b-datepicker
+                v-model="endPeriodViewed"
+                :min-date="startPeriodViewed"
+                ref="endDatepickerViewed"
+                expanded
+                placeholder="End">
+              </b-datepicker>
+              <b-button
+                @click="$refs.endDatepickerViewed.toggle()"
+                icon-left="calendar-today"
+                type="is-primary" />
+            </b-field>
+          </div>
           <div class="m-t-1 m-b-1">
             <ilha-summary-table
-              :url="summaryTableUrl"
+              :url="summary"
               :format-result-func="formatResultFunc"
               :per-page="mostViewedTotalRow"
               :header="header"
@@ -345,7 +376,6 @@ export default {
         return { ...data, data: { results, count: results.length } };
       },
       token: this.$route.query.token,
-      summaryTableUrl: this.buildSummaryTableUrl(this.$route.query.token),
       languagesGroup: [],
     };
   },
@@ -445,13 +475,6 @@ export default {
       } else {
         this.$refs.lineChart2.$refs.bar.initChart();
       }
-    },
-    buildSummaryTableUrl(token) {
-      let url = `${process.env.VUE_APP_SERVER_URL}rapidpro/runs/most_accessed/completed`;
-      if (token) {
-        url += `?token=${token}&`;
-      }
-      return url;
     },
   },
   filters: {
