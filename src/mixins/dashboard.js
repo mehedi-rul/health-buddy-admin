@@ -47,7 +47,7 @@ export default {
     fromDate() {
       return `from ${this.getStartDate().toLocaleDateString('en-US')}`;
     },
-    summary() {
+    summaryTableUrl() {
       const { token } = this.$route.query;
       const queryParams = [
         `start_date=${this.getStartPeriodViewedDate()}`,

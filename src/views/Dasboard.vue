@@ -317,7 +317,7 @@
           </div>
           <div class="m-t-1 m-b-1">
             <ilha-summary-table
-              :url="summary"
+              :url="summaryTableUrl"
               :format-result-func="formatResultFunc"
               :per-page="mostViewedTotalRow"
               :header="header"
