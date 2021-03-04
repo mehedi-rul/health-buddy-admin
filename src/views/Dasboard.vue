@@ -204,6 +204,39 @@
         <ilha-title>
           Secondary
         </ilha-title>
+        <div
+          v-if="!downloading"
+          class="columns m-t-1 m-b-0 date-filter"
+        >
+          <b-field class="column m-b-0">
+            <b-datepicker
+              v-model="startPeriodThird"
+              :min-date="minDateInteractions"
+              :max-date="endPeriodThird"
+              ref="startDatepickerThird"
+              expanded
+              placeholder="Start">
+            </b-datepicker>
+            <b-button
+              @click="$refs.startDatepickerThird.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+          <b-field class="column m-b-0">
+            <b-datepicker
+              v-model="endPeriodThird"
+              :min-date="startPeriodThird"
+              :max-date="endPeriodThird"
+              ref="endDatepickerThird"
+              expanded
+              placeholder="End">
+            </b-datepicker>
+            <b-button
+              @click="$refs.endDatepickerThird.toggle()"
+              icon-left="calendar-today"
+              type="is-primary" />
+          </b-field>
+        </div>
         <div class="columns m-t-1 m-b-1">
           <div class="column is-4">
             <ilha-chart-summary-box
