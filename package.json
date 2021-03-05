@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "admin-buddy": "file:admin-buddy-0.1.0.tgz",
+    "admin-buddy": "file:admin-buddy-v0.1.0.tgz",
     "axios": "^0.19.2",
     "buefy": "^0.8.17",
     "core-js": "^3.6.5",
