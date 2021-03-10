@@ -1,3 +1,8 @@
+v1.3.1
+
+Modified:
+- Labels endpoint query parameter
+
 v1.3.0
 
 Added:
