@@ -2,6 +2,10 @@
 import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
+const registeredFakesLabelUuid = 'f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f';
+const newQuestionsLabelUuid = '69361321-fbfd-4389-b114-22b047d20b43';
+const lowConfidenceResponsesLabelUuid = '9a9707f2-21fd-46f2-85ef-e34db3c35d09';
+
 export default {
   mixins: [dashboardChartMixin],
   data() {
@@ -118,9 +122,9 @@ export default {
       }
       this.loadingOtherChartData = true;
       Promise.all([
-        this.fetchRegisteredFakes(),
-        this.fetchNewQuestions(),
-        this.fetchLowConfidenceResponses(),
+        this.fetchLabelById(registeredFakesLabelUuid),
+        this.fetchLabelById(newQuestionsLabelUuid),
+        this.fetchLabelById(lowConfidenceResponsesLabelUuid),
         this.fetchChannelStats(),
       ]).then(([registeredFakes, newQuestions, lowConfidenceResponses, channelStatus]) => {
         this.loadingOtherChartData = false;
@@ -196,31 +200,11 @@ export default {
       return this.$http.get(`${this.googleAnalyticsUrl}?${queryParams}`)
         .then(({ data }) => this.parsePageViews(data));
     },
-    fetchRegisteredFakes() {
+    fetchLabelById(uuid) {
       const queryParams = [
         `start_date=${this.getThirdSectionStartDate()}`,
         `end_date=${this.getThirdSectionEndDate()}`,
-        'uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f',
-      ].join('&');
-      return this.$http.get(
-        `${this.rapidProLabelsCountUrl}?${queryParams}`,
-      ).then(({ data }) => this.parseRegisteredFakes(data));
-    },
-    fetchNewQuestions() {
-      const queryParams = [
-        `start_date=${this.getThirdSectionStartDate()}`,
-        `end_date=${this.getThirdSectionEndDate()}`,
-        'uuid=69361321-fbfd-4389-b114-22b047d20b43',
-      ].join('&');
-      return this.$http.get(
-        `${this.rapidProLabelsCountUrl}?${queryParams}`,
-      ).then(({ data }) => this.parseRegisteredFakes(data));
-    },
-    fetchLowConfidenceResponses() {
-      const queryParams = [
-        `start_date=${this.getThirdSectionStartDate()}`,
-        `end_date=${this.getThirdSectionEndDate()}`,
-        'uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09',
+        `uuid=${uuid}`,
       ].join('&');
       return this.$http.get(
         `${this.rapidProLabelsCountUrl}?${queryParams}`,
