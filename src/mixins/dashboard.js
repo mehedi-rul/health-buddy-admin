@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { mapGetters } from 'vuex';
 import dashboardChartMixin from './dashboard-chart';
 
@@ -199,7 +200,7 @@ export default {
       const queryParams = [
         `start_date=${this.getThirdSectionStartDate()}`,
         `end_date=${this.getThirdSectionEndDate()}`,
-        'label__uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f',
+        'uuid=f5b6ad36-6ec7-4bf1-913c-a3484e7c5b3f',
       ].join('&');
       return this.$http.get(
         `${this.rapidProLabelsCountUrl}?${queryParams}`,
@@ -209,7 +210,7 @@ export default {
       const queryParams = [
         `start_date=${this.getThirdSectionStartDate()}`,
         `end_date=${this.getThirdSectionEndDate()}`,
-        'label__uuid=69361321-fbfd-4389-b114-22b047d20b43',
+        'uuid=69361321-fbfd-4389-b114-22b047d20b43',
       ].join('&');
       return this.$http.get(
         `${this.rapidProLabelsCountUrl}?${queryParams}`,
@@ -219,7 +220,7 @@ export default {
       const queryParams = [
         `start_date=${this.getThirdSectionStartDate()}`,
         `end_date=${this.getThirdSectionEndDate()}`,
-        'label__uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09',
+        'uuid=9a9707f2-21fd-46f2-85ef-e34db3c35d09',
       ].join('&');
       return this.$http.get(
         `${this.rapidProLabelsCountUrl}?${queryParams}`,
@@ -301,8 +302,8 @@ export default {
         .reduce((current, previous) => current + previous.count, 0);
     },
     parseRegisteredFakes(data) {
-      const { count } = data[0] || { count: 0 };
-      return count;
+      const { msg_count } = data[0] || { count: 0 };
+      return msg_count;
     },
     parsePageViews(data) {
       return data.totalsForAllResults['ga:pageviews'];
