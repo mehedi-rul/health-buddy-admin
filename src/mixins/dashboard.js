@@ -302,7 +302,7 @@ export default {
         .reduce((current, previous) => current + previous.count, 0);
     },
     parseRegisteredFakes(data) {
-      const { msg_count } = data[0] || { count: 0 };
+      const { msg_count } = data[0] || { msg_count: 0 };
       return msg_count;
     },
     parsePageViews(data) {
