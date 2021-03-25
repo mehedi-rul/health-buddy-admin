@@ -192,7 +192,7 @@
               :background-color="'#78ddf4'"
               class="has-background-white">
               <template v-slot:title>
-                <span title="Number of users access per language">
+                <span title="Number of users access per language.">
                   Access per Language
                 </span>
               </template>
@@ -258,7 +258,7 @@
               class="has-background-white"
             >
               <template v-slot:title>
-                <span title="The number of registered reports grouped by report type(Question, level of confidence, etc)">
+                <span title="The number of registered reports grouped by report type(Question, level of confidence, etc).">
                   New Reports Registered
                 </span>
               </template>
