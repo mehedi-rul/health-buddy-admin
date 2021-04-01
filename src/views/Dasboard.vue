@@ -280,7 +280,7 @@
           </div>
         </div>
         <div class="m-t-1">
-          <ilha-title title="Topics that reporters are searching for.">
+          <ilha-title title="Topics that reporters are searching for, ordered by amount per topic in a period of time.">
             Most viewed
           </ilha-title>
           <div
