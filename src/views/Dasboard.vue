@@ -201,7 +201,7 @@
         </div>
       </div>
       <div class="m-t-1">
-        <ilha-title>
+        <ilha-title title="Statistics about message, channels, reports, etc.">
           Secondary
         </ilha-title>
         <div
@@ -280,7 +280,7 @@
           </div>
         </div>
         <div class="m-t-1">
-          <ilha-title>
+          <ilha-title title="Topics that reporters are searching for.">
             Most viewed
           </ilha-title>
           <div
