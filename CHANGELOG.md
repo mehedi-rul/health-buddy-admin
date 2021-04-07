@@ -1,3 +1,8 @@
+v1.3.2
+
+Modified:
+- Labels for titles
+
 v1.3.1
 
 Modified:
