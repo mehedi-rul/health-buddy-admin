@@ -135,8 +135,8 @@ export default {
         this.totalErrors = this.countMessages(channelStatus, 'errors');
         const totalAsks = this.countMessages(channelStatus, 'incoming');
         this.messageMetricsData = this.makeMessageMetricsData(
-          totalAsks,
           this.totalAnswers,
+          totalAsks,
           this.totalErrors,
         );
         this.reportsData = this.makeReportsData(
