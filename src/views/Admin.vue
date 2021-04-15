@@ -19,6 +19,11 @@ const links = [
     icon: 'dashboard',
     class: 'dashboard-link',
   },
+  {
+    to: '/admin/poll-dashboard',
+    label: 'Poll Dashboard',
+    icon: 'powerbi',
+  },
 ];
 
 const adminLinks = [
@@ -31,11 +36,6 @@ const adminLinks = [
     to: '/admin/flows',
     label: 'Flows',
     icon: 'flows',
-  },
-  {
-    to: '/admin/poll-dashboard',
-    label: 'Poll Dashboard',
-    icon: 'powerbi',
   },
 ];
 

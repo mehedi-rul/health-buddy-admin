@@ -1,3 +1,9 @@
+
+v1.4.1
+
+Modified:
+- Poll Dashboard permission for non-admins
+
 v1.4.0
 
 Added:
