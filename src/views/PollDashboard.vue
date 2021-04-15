@@ -4,9 +4,6 @@
   </section>
 </template>
 
-<script>
-</script>
-
 <style lang="scss" scoped="true">
   .powerbi {
     height: 100vh;
