@@ -113,10 +113,10 @@ const routes = [
         component: () => import('../views/Flow.vue'),
       },
       {
-        path: 'powerbi',
-        name: 'PowerBi',
+        path: 'poll-dashboard',
+        name: 'Poll Dashboard',
         beforeEnter: checkAdmin,
-        component: () => import('../views/PowerBi.vue'),
+        component: () => import('../views/PollDashboard.vue'),
       },
     ],
   },

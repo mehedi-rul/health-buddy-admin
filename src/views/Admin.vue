@@ -33,8 +33,8 @@ const adminLinks = [
     icon: 'flows',
   },
   {
-    to: '/admin/powerbi',
-    label: 'PowerBi',
+    to: '/admin/poll-dashboard',
+    label: 'Poll Dashboard',
     icon: 'powerbi',
   },
 ];
