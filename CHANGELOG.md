@@ -1,3 +1,11 @@
+v1.4.0
+
+Added:
+- Poll Dashboard using Power Bi
+
+Fixed:
+- Incorrect incoming and outgoing labels
+
 v1.3.2
 
 Modified:
