@@ -112,6 +112,12 @@ const routes = [
         beforeEnter: checkAdmin,
         component: () => import('../views/Flow.vue'),
       },
+      {
+        path: 'poll-dashboard',
+        name: 'Poll Dashboard',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/PollDashboard.vue'),
+      },
     ],
   },
 ];

@@ -32,6 +32,11 @@ const adminLinks = [
     label: 'Flows',
     icon: 'flows',
   },
+  {
+    to: '/admin/poll-dashboard',
+    label: 'Poll Dashboard',
+    icon: 'powerbi',
+  },
 ];
 
 export default {
