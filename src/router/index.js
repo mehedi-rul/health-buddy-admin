@@ -112,6 +112,12 @@ const routes = [
         beforeEnter: checkAdmin,
         component: () => import('../views/Flow.vue'),
       },
+      {
+        path: 'powerbi',
+        name: 'PowerBi',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/PowerBi.vue'),
+      },
     ],
   },
 ];

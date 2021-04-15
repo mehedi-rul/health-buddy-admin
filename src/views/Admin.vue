@@ -32,6 +32,11 @@ const adminLinks = [
     label: 'Flows',
     icon: 'flows',
   },
+  {
+    to: '/admin/powerbi',
+    label: 'PowerBi',
+    icon: 'powerbi',
+  },
 ];
 
 export default {
