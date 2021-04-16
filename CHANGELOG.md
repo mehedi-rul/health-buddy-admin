@@ -1,3 +1,8 @@
+v1.4.2
+
+Modified:
+- Poll Dashboard permission
+
 v1.4.1
 
 Modified:
