@@ -364,7 +364,7 @@ export default {
       header: [
         {
           property: 'name',
-          label: 'Nome',
+          label: 'Name',
         },
         {
           property: 'completed',

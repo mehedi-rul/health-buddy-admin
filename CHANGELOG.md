@@ -1,3 +1,8 @@
+v1.4.3
+
+Fixed:
+- Label translation from "Nome" to "Name"
+
 v1.4.2
 
 Modified:
