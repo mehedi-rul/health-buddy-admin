@@ -52,6 +52,11 @@ axios.interceptors.response.use(
 );
 
 new Vue({
+  data() {
+    return {
+      link: '',
+    };
+  },
   router,
   store,
   render: (h) => h(App),

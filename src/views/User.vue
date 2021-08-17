@@ -19,9 +19,18 @@
 <!--          :url="changePasswordUrl"></ilha-password-updater-btn>-->
 <!--      </template>-->
     <template v-slot:button>
-      <b-checkbox v-model="isAdmin" class="is-pulled-left m-t-1">
-        Admin
-      </b-checkbox>
+      <div class="user_active_button_hb">
+        <div>
+          <b-checkbox v-model="isActive" class="is-pulled-left m-t-1" v-if="data.is_active == false">
+            Active
+          </b-checkbox>
+        </div>
+        <div>
+          <b-checkbox v-model="isAdmin" class="is-pulled-left m-t-1">
+            Admin
+          </b-checkbox>
+        </div>
+      </div>
     </template>
     </ilha-form>
   </section>
@@ -48,16 +57,16 @@ const fields = [
   {
     property: 'first_name',
     type: 'text',
-    label: 'First name',
-    placeholder: 'First name',
+    label: 'Name',
+    placeholder: 'Name',
     maxlength: 30,
     rules: 'required',
   },
   {
     property: 'last_name',
     type: 'text',
-    label: 'Last name',
-    placeholder: 'Last name',
+    label: 'Agency',
+    placeholder: 'Add Agency name',
     maxlength: 30,
     rules: 'required',
   },
@@ -66,6 +75,12 @@ const fields = [
     type: 'email',
     label: 'Email',
     placeholder: 'Email',
+    maxlength: 30,
+    rules: 'required|email',
+  },
+  {
+    property: 'email',
+    type: 'email',
     maxlength: 30,
     rules: 'required|email',
   },
@@ -122,6 +137,16 @@ export default {
         return newRole;
       },
     },
+    isActive: {
+      get() {
+        console.log(this.data.is_active);
+        return this.data.is_active;
+      },
+      set(newRole) {
+        axios.patch(`${this.usersUrl}/${this.data.id}/active_user`);
+        return newRole;
+      },
+    },
   },
   watch: {
     usersUrl() {
@@ -136,5 +161,10 @@ export default {
     this.resourceUrl = this.usersUrl;
   },
 };
-
 </script>
+
+<style scoped>
+.user_active_button_hb{
+  display: grid;
+}
+</style>

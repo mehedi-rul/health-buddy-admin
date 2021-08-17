@@ -6,4 +6,67 @@ i.ilha-icon {
   &.powerbi {
     background-image: url('assets/icons/powerbi.svg');
   }
+  &.poll {
+    background-image: url('assets/icons/poll.svg') !important;
+  }
+  &.managePoll {
+    background-image: url('assets/icons/managePoll.svg') !important;
+  }
+  &.managePolls {
+    background-image: url('assets/icons/managePolls.svg') !important;
+  }
 }
+.sub_poll .mdi-poll:before{
+  color: #3FABE3;
+}
+.menu-list a.is-active {
+  background-color: #1CABE200 !important;
+  color: #4a4a4a !important ;
+}
+.is-active .menu-list li a{
+  padding-left: .5em;
+}
+.menu-list li ul{
+  border-left: 0px solid #dbdbdb !important;
+  margin: 0.75em;
+  padding-left: 1em;
+}
+.active__status .b-tooltip{
+  display: none !important;
+}
+.unActive_status span,.active__status .checkbox__body,.unActive_status .checkbox__body{
+  display: none;
+}
+.active__checkbox .checkbox__body{
+  display: block !important;
+}
+.unActive_status .b-tooltip {
+  display: block !important;
+  position: absolute;
+}
+@media only screen and (max-width: 767px) {
+  .unActive_status .b-tooltip {
+    position: relative;
+  }
+}
+.active__checkbox span{
+  display: none;
+}
+.active__checkbox .active__checkbox{
+  display: block !important;
+}
+.active__status .active__checkbox{
+  display: none;
+}
+.unActive_status .b-tooltip::after {
+  z-index: 99;
+}
+.unActive_status .tag{
+  background-color: #fff0 !important;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+// .is-active .icon {
+//   transform: rotate(92deg);
+// }

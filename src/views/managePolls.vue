@@ -5,17 +5,17 @@
       :query="query"
       @search="search">
       <template v-slot:title>
-        Users
+        Polls
       </template>
       <template v-slot:creationBtnLabel>
-        New user
+        New Poll
       </template>
     </ilha-header>
-    <ilha-table
+    <managetable
       :edit-route-name="editRouteName"
       :header="header"
       :loading="loading"
-      :data="computedData"
+      :data="data"
       :current-page="currentPage"
       :total-rows="totalRows"
       :sort-field="sortField"
@@ -26,7 +26,7 @@
       @onDelete="requestDelete"
       can-edit
       can-delete
-    ></ilha-table>
+    ></managetable>
   </section>
 </template>
 
@@ -37,70 +37,70 @@ import {
   toastsMixin,
   usersMixin,
 } from 'admin-buddy';
-
+import { mapGetters } from 'vuex';
+import ManageTable from './manage-table.vue'
 export default {
   mixins: [toastsMixin, searchMixin, tableMixin, usersMixin],
   computed: {
-    computedData() {
-      return this.data.map((user) => {
-        const type = user.is_staff ? 'Admin' : 'Viewer';
-        return { ...user, is_staff: type };
-      });
-    },
+    ...mapGetters(['pollsUrl']),
+  },
+  components: {
+    managetable : ManageTable,
   },
   data() {
     return {
-      editRouteName: 'UserEdit',
-      searchRouteName: 'UsersAdmin',
-      newUserRoute: { name: 'UserEdit', params: { id: 'new' } },
+      editRouteName: 'ManageEdit',
+      searchRouteName: 'ManageAdmin',
+      newUserRoute: { name: 'ManageEdit', params: { id: 'new' } },
+      data_a: 'acive',
       header: [
         {
           property: 'id',
-          label: '#',
+          label: 'SI',
           sortable: true,
+          classWidth: 'active__status'
+        },
+        {
+          property: 'name',
+          label: 'Poll Name',
+          sortable: true,
+          classWidth: 'active__status'
+        },
+        {
+          property: 'link',
+          label: 'Poll Link',
+          sortable: true,
+          classWidth: 'unActive_status'
+        },
+        {
+          property: 'author',
+          label: 'Added by',
+          sortable: true,
+          classWidth: 'active__status'
         },
         {
           property: 'is_active',
-          label: 'Active',
-        },
-        {
-          property: 'is_staff',
-          label: 'Permission',
-        },
-        {
-          property: 'username',
-          label: 'Username',
+          label: 'Status',
           sortable: true,
-        },
-        {
-          property: 'first_name',
-          label: 'Name',
-          sortable: true,
-        },
-        {
-          property: 'last_name',
-          label: 'Agency',
-          sortable: true,
-        },
-        {
-          property: 'email',
-          label: 'Email',
-          sortable: true,
+          classWidth: 'active__status active__checkbox' 
         },
       ],
     };
   },
   watch: {
     usersUrl() {
-      this.resourceUrl = this.usersUrl;
+      this.resourceUrl = this.pollsUrl;
     },
   },
   mounted() {
-    this.resourceUrl = this.usersUrl;
+    this.resourceUrl = this.pollsUrl;
+    //this.otherQueryParams = 'is_active=true';
+    this.formatData = (data) => data.map((poll) => ({ ...poll, id: poll.id }));
   },
 };
 
 </script>
 
 <style lang="scss" scoped="true">
+
 </style>

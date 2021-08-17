@@ -14,6 +14,9 @@ export default new Vuex.Store({
     passwordResetConfirmationAfterRouteName: 'Login',
   },
   getters: {
+    pollsUrl(state) {
+      return `${state.api}polls`;
+    },
     usersUrl(state) {
       return `${state.api}users`;
     },

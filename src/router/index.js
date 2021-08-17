@@ -89,6 +89,18 @@ const routes = [
         component: () => import('../views/Dasboard.vue'),
       },
       {
+        path: 'manage-polls',
+        name: 'ManageAdmin',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/managePolls.vue'),
+      },
+      {
+        path: 'manage-polls/:id',
+        name: 'ManageEdit',
+        beforeEnter: checkAdmin,
+        component: () => import('../views/managePoll.vue'),
+      },
+      {
         path: 'users',
         name: 'UsersAdmin',
         beforeEnter: checkAdmin,
@@ -113,9 +125,14 @@ const routes = [
         component: () => import('../views/Flow.vue'),
       },
       {
-        path: 'poll-dashboard',
-        name: 'Poll Dashboard',
-        component: () => import('../views/PollDashboard.vue'),
+        path: 'active-poll/:id',
+        name: 'Active_polls',
+        component: () => import('../views/activePoll.vue'),
+      },
+      {
+        path: 'archived-polls/:id',
+        name: 'Archived_polls',
+        component: () => import('../views/archivedPolls.vue'),
       },
     ],
   },
