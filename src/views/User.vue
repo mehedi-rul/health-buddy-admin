@@ -139,7 +139,6 @@ export default {
     },
     isActive: {
       get() {
-        console.log(this.data.is_active);
         return this.data.is_active;
       },
       set(newRole) {

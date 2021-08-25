@@ -25,6 +25,7 @@ import {
   usersMixin,
 } from 'admin-buddy';
 import { mapGetters } from 'vuex';
+
 const fields = [
   {
     property: 'name',
@@ -43,7 +44,7 @@ const fields = [
     rules: 'required',
   },
   {
-    property: 'is_active=false',
+    property: 'is_active',
     type: 'checkbox',
     label: 'Active Mode',
   },
@@ -64,11 +65,6 @@ export default {
   watch: {
     pollsUrl() {
       this.resourceUrl = this.pollsUrl;
-    },
-    data() {
-      if (this.data && !this.data.id) {
-        this.data.id = this.data.id;
-      }
     },
   },
   mounted() {
