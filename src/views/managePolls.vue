@@ -38,14 +38,15 @@ import {
   usersMixin,
 } from 'admin-buddy';
 import { mapGetters } from 'vuex';
-import ManageTable from './manage-table.vue'
+import ManageTable from './manage-table.vue';
+
 export default {
   mixins: [toastsMixin, searchMixin, tableMixin, usersMixin],
   computed: {
     ...mapGetters(['pollsUrl']),
   },
   components: {
-    managetable : ManageTable,
+    managetable: ManageTable,
   },
   data() {
     return {
@@ -58,31 +59,31 @@ export default {
           property: 'id',
           label: 'SI',
           sortable: true,
-          classWidth: 'active__status'
+          classWidth: 'active__status',
         },
         {
           property: 'name',
           label: 'Poll Name',
           sortable: true,
-          classWidth: 'active__status'
+          classWidth: 'active__status',
         },
         {
           property: 'link',
           label: 'Poll Link',
           sortable: true,
-          classWidth: 'unActive_status'
+          classWidth: 'unActive_status',
         },
         {
           property: 'author',
           label: 'Added by',
           sortable: true,
-          classWidth: 'active__status'
+          classWidth: 'active__status',
         },
         {
           property: 'is_active',
           label: 'Status',
           sortable: true,
-          classWidth: 'active__status active__checkbox' 
+          classWidth: 'active__status active__checkbox',
         },
       ],
     };
@@ -94,7 +95,6 @@ export default {
   },
   mounted() {
     this.resourceUrl = this.pollsUrl;
-    //this.otherQueryParams = 'is_active=true';
     this.formatData = (data) => data.map((poll) => ({ ...poll, id: poll.id }));
   },
 };
