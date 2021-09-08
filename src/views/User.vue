@@ -78,12 +78,6 @@ const fields = [
     maxlength: 30,
     rules: 'required|email',
   },
-  {
-    property: 'email',
-    type: 'email',
-    maxlength: 30,
-    rules: 'required|email',
-  },
 ];
 
 const passwordFields = [
