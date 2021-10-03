@@ -67,7 +67,7 @@ export default {
           backgroundColor: '#182a6d',
         },
         {
-          label: 'Vibar',
+          label: 'Viber',
           value: totalViber,
           backgroundColor: '#80bd41',
         },
