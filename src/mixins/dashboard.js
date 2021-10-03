@@ -164,9 +164,9 @@ export default {
         + this.countMessages(channelStatus, 'errors', 'VP')
         + this.countMessages(channelStatus, 'incoming', 'VP');
         
-        // const totalVk = this.countMessages(channelStatus, 'outgoing', 'VK')
-        // + this.countMessages(channelStatus, 'errors', 'VK')
-        // + this.countMessages(channelStatus, 'incoming', 'VK');                   
+        const totalVk = this.countMessages(channelStatus, 'outgoing', 'VK')
+        + this.countMessages(channelStatus, 'errors', 'VK')
+        + this.countMessages(channelStatus, 'incoming', 'VK'); 
 
         this.interactionsByChannelData = this.makeInteractionsByChannelData(
           
@@ -174,10 +174,9 @@ export default {
           totalWeb,
           totalMobile,
           totalFacebook,
-          // totalVk,
           totalTelegram,
           totalViber,
-  
+          totalVk,
         );
       });
     },

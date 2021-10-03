@@ -43,7 +43,7 @@ export default {
         },
       ];
     },
-    makeInteractionsByChannelData(totalWeb, totalMobile, totalFacebook, totalTelegram, totalViber,) {
+    makeInteractionsByChannelData(totalWeb, totalMobile, totalFacebook, totalTelegram, totalViber, totalVk) {
       return [
         
         {
@@ -71,11 +71,11 @@ export default {
           value: totalViber,
           backgroundColor: '#80bd41',
         },
-        // {
-        //   label: 'VK',
-        //   value: vk,
-        //   backgroundColor: '#FA2540',
-        // },
+        {
+          label: 'VK',
+          value: totalVk,
+          backgroundColor: '#FA2540',
+        },
         
       ];
     },
