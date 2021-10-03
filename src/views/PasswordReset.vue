@@ -7,7 +7,7 @@
 
 <script>
 import { toastsMixin, usersMixin } from 'admin-buddy';
-import appLogo from '../assets/imgs/unicef-eu-asia-logo.png';
+import appLogo from '../assets/imgs/health-buddy-logo.png';
 
 export default {
   mixins: [
