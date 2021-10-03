@@ -144,23 +144,40 @@ export default {
           this.registeredFakes,
           this.lowConfidenceResponses,
         );
-        const totalWeb = this.countMessages(channelStatus, 'outgoing', 'EX')
-          + this.countMessages(channelStatus, 'errors', 'EX')
-          + this.countMessages(channelStatus, 'incoming', 'EX');
-        const totalMobile = 0;
-        const totalApp = 0;
-        const totalFacebook = this.countMessages(channelStatus, 'outgoing', 'FB')
-          + this.countMessages(channelStatus, 'errors', 'FB')
-          + this.countMessages(channelStatus, 'incoming', 'FB');
+        const totalWeb = this.countMessages(channelStatus, 'outgoing', 'EX2')
+        + this.countMessages(channelStatus, 'errors', 'EX2')
+        + this.countMessages(channelStatus, 'incoming', 'EX2');   
+
+        const totalFacebook = this.countMessages(channelStatus, 'outgoing', 'FBA')
+        + this.countMessages(channelStatus, 'errors', 'FBA')
+        + this.countMessages(channelStatus, 'incoming', 'FBA');
+
+        const totalMobile = this.countMessages(channelStatus, 'outgoing', 'EX1')
+        + this.countMessages(channelStatus, 'errors', 'EX1')
+        + this.countMessages(channelStatus, 'incoming', 'EX1');
+
         const totalTelegram = this.countMessages(channelStatus, 'outgoing', 'TG')
-          + this.countMessages(channelStatus, 'errors', 'TG')
-          + this.countMessages(channelStatus, 'incoming', 'TG');
+        + this.countMessages(channelStatus, 'errors', 'TG')
+        + this.countMessages(channelStatus, 'incoming', 'TG');
+
+        const totalViber = this.countMessages(channelStatus, 'outgoing', 'VP')
+        + this.countMessages(channelStatus, 'errors', 'VP')
+        + this.countMessages(channelStatus, 'incoming', 'VP');
+        
+        // const totalVk = this.countMessages(channelStatus, 'outgoing', 'VK')
+        // + this.countMessages(channelStatus, 'errors', 'VK')
+        // + this.countMessages(channelStatus, 'incoming', 'VK');                   
+
         this.interactionsByChannelData = this.makeInteractionsByChannelData(
+          
+
           totalWeb,
           totalMobile,
-          totalApp,
           totalFacebook,
+          // totalVk,
           totalTelegram,
+          totalViber,
+  
         );
       });
     },
@@ -262,8 +279,25 @@ export default {
     },
     countMessages(data, type, channelType = undefined, after = undefined, before = undefined) {
       const resultsUnfiltered = data.results;
-      const results = channelType
+      let results = channelType
         ? resultsUnfiltered.filter((r) => r.channel_type === channelType) : resultsUnfiltered;
+
+      if(channelType){
+        if(channelType == 'EX1'){
+          results = resultsUnfiltered.filter((r) => r.name === "HealthBuddy Mobile app") 
+        }
+        else if(channelType == "EX2"){
+          results = resultsUnfiltered.filter((r) => r.name === "WEB");
+        }
+        else{
+          results = resultsUnfiltered.filter((r) => r.channel_type === channelType);
+        }
+      }
+      else{
+        results = resultsUnfiltered;
+      }
+
+
       const dailyCountList = results.map((result) => result.daily_count);
       const filteredMessages = dailyCountList.map(
         (dc) => dc.find((d) => d.name.toLowerCase() === type),
@@ -296,15 +330,17 @@ export default {
       const results = ((data || {}).results || []);
       return results
         .map((result) => this.makeUserPerLanguageResult(result))
-        .filter((result) => result.name.includes('Language = '));
+        .filter((result) => result.name.includes('Language =') || result.name.includes('language ='));
+        
     },
     makeUserPerLanguageResult(result) {
       const count = result.count || 0;
       const uuid = result.uuid || '';
       const name = result.name || '';
       return {
-        uuid, count, name, language: name.replace('Language = ', ''),
+        uuid, count, name, language: name.substring(0, 1) == 'l' ? name.replace('language = ', '') : name.replace('Language = ', '')
       };
+      
     },
     getThirdSectionStartDate() {
       return this.startPeriodThird.toISOString().split('T')[0];

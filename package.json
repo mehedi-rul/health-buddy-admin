@@ -12,12 +12,14 @@
     "admin-buddy": "file:admin-buddy-v0.4.0.tgz",
     "axios": "^0.19.2",
     "buefy": "^0.8.17",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf": "1.4.1",
     "vee-validate": "^3.3.0",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
+    "vue-chartjs": "^3.5.1",
     "vue-router": "^3.1.6",
     "vuex": "^3.1.3"
   },
@@ -35,7 +37,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   },

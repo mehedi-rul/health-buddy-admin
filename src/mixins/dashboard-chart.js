@@ -43,33 +43,40 @@ export default {
         },
       ];
     },
-    makeInteractionsByChannelData(web, mobile, app, facebook, telegram) {
+    makeInteractionsByChannelData(totalWeb, totalMobile, totalFacebook, totalTelegram, totalViber,) {
       return [
+        
         {
           label: 'Web',
-          value: web,
-          backgroundColor: '#80bd41',
-        },
-        {
-          label: 'Web mobile',
-          value: mobile,
-          backgroundColor: '#f7c10c',
-        },
-        {
-          label: 'App',
-          value: app,
+          value: totalWeb,
           backgroundColor: '#4bace2',
         },
         {
+          label: 'Mobile app',
+          value: totalMobile,
+          backgroundColor: '#f7c10c',
+        },
+        {
           label: 'Facebook',
-          value: facebook,
+          value: totalFacebook,
           backgroundColor: '#e64d35',
         },
         {
           label: 'Telegram',
-          value: telegram,
+          value: totalTelegram,
           backgroundColor: '#182a6d',
         },
+        {
+          label: 'Vibar',
+          value: totalViber,
+          backgroundColor: '#80bd41',
+        },
+        // {
+        //   label: 'VK',
+        //   value: vk,
+        //   backgroundColor: '#FA2540',
+        // },
+        
       ];
     },
     makeReportsData(newQuestions, totalFakes, lowConfidenceResponses) {
